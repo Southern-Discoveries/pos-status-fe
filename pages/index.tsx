@@ -120,11 +120,24 @@ export default function Home() {
       <div className="flex h-screen">
         <Sidebar />
 
-        <div className="flex-1 flex flex-col">
-          <Navbar />
-          <div className="flex-1 overflow-auto sm:px-10 pb-4 sm:pb-10">
+        <div className="flex flex-row h-full">
+          <div className="w-1/2 overflow-auto sm:px-10 pb-4 sm:pb-10">
             <div className="max-w-[800px] mx-auto mt-4 sm:mt-12">
               <Chat
+                name={"Traning"}
+                messages={messages}
+                loading={loading}
+                onSend={handleSend}
+                onReset={handleReset}
+              />
+              <div ref={messagesEndRef} />
+            </div>
+          </div>
+
+          <div className="w-1/2 overflow-auto sm:px-10 pb-4 sm:pb-10">
+            <div className="max-w-[800px] mx-auto mt-4 sm:mt-12">
+              <Chat
+                name={"Chat"}
                 messages={messages}
                 loading={loading}
                 onSend={handleSend}

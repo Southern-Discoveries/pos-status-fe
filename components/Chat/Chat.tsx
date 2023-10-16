@@ -6,16 +6,18 @@ import { ChatMessage } from "./ChatMessage";
 import { ResetChat } from "./ResetChat";
 
 interface Props {
+  name: String,
   messages: Message[];
   loading: boolean;
   onSend: (message: Message) => void;
   onReset: () => void;
 }
 
-export const Chat: FC<Props> = ({ messages, loading, onSend, onReset }) => {
+export const Chat: FC<Props> = ({ name, messages, loading, onSend, onReset }) => {
   return (
     <>
       <div className="flex flex-row justify-between items-center mb-4 sm:mb-8">
+        <div>{name}</div>
         <ResetChat onReset={onReset} />
       </div>
 

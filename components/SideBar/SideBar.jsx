@@ -120,7 +120,7 @@ const Sidebar = () => {
                     className="mb-2 text-lg font-semibold cursor-pointer"
                     onClick={toggleAudienceSection}
                 >
-                    Target {audienceSectionOpen ? "▼" : "►"}
+                    Audience {audienceSectionOpen ? "▼" : "►"}
                 </h3>
                 {audienceSectionOpen && (
                     <div>
