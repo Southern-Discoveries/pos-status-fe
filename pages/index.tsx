@@ -4,6 +4,7 @@ import { Navbar } from "@/components/Layout/Navbar";
 import { Message } from "@/types";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
+import Sidebar from "@/components/SideBar/SideBar";
 
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -116,21 +117,24 @@ export default function Home() {
         />
       </Head>
 
-      <div className="flex flex-col h-screen">
-        <Navbar />
+      <div className="flex h-screen">
+        <Sidebar />
 
-        <div className="flex-1 overflow-auto sm:px-10 pb-4 sm:pb-10">
-          <div className="max-w-[800px] mx-auto mt-4 sm:mt-12">
-            <Chat
-              messages={messages}
-              loading={loading}
-              onSend={handleSend}
-              onReset={handleReset}
-            />
-            <div ref={messagesEndRef} />
+        <div className="flex-1 flex flex-col">
+          <Navbar />
+          <div className="flex-1 overflow-auto sm:px-10 pb-4 sm:pb-10">
+            <div className="max-w-[800px] mx-auto mt-4 sm:mt-12">
+              <Chat
+                messages={messages}
+                loading={loading}
+                onSend={handleSend}
+                onReset={handleReset}
+              />
+              <div ref={messagesEndRef} />
+            </div>
           </div>
+          <Footer />
         </div>
-        <Footer />
       </div>
     </>
   );
