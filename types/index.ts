@@ -8,3 +8,17 @@ export interface Message {
 }
 
 export type Role = "assistant" | "user";
+
+export interface PostOption {
+  task: string;
+  platform: string;
+  engine: string;
+  targets: [string];
+  audiences: [string];
+}
+
+export interface Post {
+  options: PostOption;
+  content: string;
+  data: [string];
+}

@@ -1,39 +1,117 @@
 import { Chat } from "@/components/Chat/Chat";
 import { Footer } from "@/components/Layout/Footer";
 import { Navbar } from "@/components/Layout/Navbar";
-import { Message } from "@/types";
+import { Message, PostOption } from "@/types";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 import Sidebar from "@/components/SideBar/SideBar";
 
 export default function Home() {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [chatMessages, setChatMessages] = useState<Message[]>([]);
+
+  const [chatLoading, setChatLoading] = useState<boolean>(false);
+  const [trainingLoading, setTrainingLoading] = useState<boolean>(false);
+
+  const [trainingMessages, setTrainingMessages] = useState<Message[]>([]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const [options, setOptions] = useState<PostOption>();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleSend = async (message: Message) => {
-    const updatedMessages = [...messages, message];
+  const handleTrainingSend = async (message: Message) => {
+    const updatedMessages = [...trainingMessages, message];
 
-    setMessages(updatedMessages);
-    setLoading(true);
+    setTrainingMessages(updatedMessages);
+    setTrainingLoading(true);
 
-    const response = await fetch("/api/chat", {
+    // const response = await fetch("/api/training", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   },
+    //   body: JSON.stringify({
+    //     trainingMessages: updatedMessages
+    //   })
+    // });
+
+    // if (!response.ok) {
+    //   setTrainingLoading(false);
+    //   throw new Error(response.statusText);
+    // }
+
+    // const data = response.body;
+
+    // if (!data) {
+    //   return;
+    // }
+
+    // setTrainingLoading(false);
+
+    // const reader = data.getReader();
+    // const decoder = new TextDecoder();
+    // let done = false;
+    // let isFirst = true;
+
+    // while (!done) {
+    //   const { value, done: doneReading } = await reader.read();
+    //   done = doneReading;
+    //   const chunkValue = decoder.decode(value);
+
+    //   if (isFirst) {
+    //     isFirst = false;
+    //     setTrainingMessages((trainingMessages) => [
+    //       ...trainingMessages,
+    //       {
+    //         role: "assistant",
+    //         content: chunkValue
+    //       }
+    //     ]);
+    //   } else {
+    //     setTrainingMessages((trainingMessages) => {
+    //       const lastMessage = trainingMessages[trainingMessages.length - 1];
+    //       const updatedMessage = {
+    //         ...lastMessage,
+    //         content: lastMessage.content + chunkValue
+    //       };
+    //       return [...trainingMessages.slice(0, -1), updatedMessage];
+    //     });
+    //   }
+    // }
+  };
+
+  const handleChatSend = async (message: Message) => {
+
+
+    const updatedMessages = [...chatMessages, message];
+
+    setChatMessages(updatedMessages);
+    setChatLoading(true);
+
+    console.log("options: ", options);
+    console.log("updatedMessages: ", updatedMessages);
+
+    let request_body = {
+      content: message.content,
+      options: options,
+      data: [""]
+    }
+
+    console.log("request_body: ", request_body);
+
+    const response = await fetch("http://localhost:5000/api/post/stream", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        messages: updatedMessages
-      })
+      body: JSON.stringify(request_body)
     });
 
     if (!response.ok) {
-      setLoading(false);
+      setChatLoading(false);
       throw new Error(response.statusText);
     }
 
@@ -43,7 +121,7 @@ export default function Home() {
       return;
     }
 
-    setLoading(false);
+    setChatLoading(false);
 
     const reader = data.getReader();
     const decoder = new TextDecoder();
@@ -57,46 +135,37 @@ export default function Home() {
 
       if (isFirst) {
         isFirst = false;
-        setMessages((messages) => [
-          ...messages,
+        setChatMessages((chatMessages) => [
+          ...chatMessages,
           {
             role: "assistant",
             content: chunkValue
           }
         ]);
       } else {
-        setMessages((messages) => {
-          const lastMessage = messages[messages.length - 1];
+        setChatMessages((chatMessages) => {
+          const lastMessage = chatMessages[chatMessages.length - 1];
           const updatedMessage = {
             ...lastMessage,
             content: lastMessage.content + chunkValue
           };
-          return [...messages.slice(0, -1), updatedMessage];
+          return [...chatMessages.slice(0, -1), updatedMessage];
         });
       }
     }
+
   };
 
   const handleReset = () => {
-    setMessages([
-      {
-        role: "assistant",
-        content: `Hi there! I'm Chatbot UI, an AI assistant. I can help you with things like answering questions, providing information, and helping with tasks. How can I help you?`
-      }
-    ]);
+    setChatMessages([]);
   };
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [chatMessages]);
 
   useEffect(() => {
-    setMessages([
-      {
-        role: "assistant",
-        content: `Hi there! I'm Chatbot UI, an AI assistant. I can help you with things like answering questions, providing information, and helping with tasks. How can I help you?`
-      }
-    ]);
+    setChatMessages([]);
   }, []);
 
   return (
@@ -118,16 +187,16 @@ export default function Home() {
       </Head>
 
       <div className="flex h-screen">
-        <Sidebar />
+        <Sidebar setOptions={setOptions} />
 
         <div className="flex flex-row h-full">
           <div className="w-1/2 overflow-auto sm:px-10 pb-4 sm:pb-10">
             <div className="max-w-[800px] mx-auto mt-4 sm:mt-12">
               <Chat
                 name={"Traning"}
-                messages={messages}
-                loading={loading}
-                onSend={handleSend}
+                messages={trainingMessages}
+                loading={trainingLoading}
+                onSend={handleTrainingSend}
                 onReset={handleReset}
               />
               <div ref={messagesEndRef} />
@@ -138,9 +207,9 @@ export default function Home() {
             <div className="max-w-[800px] mx-auto mt-4 sm:mt-12">
               <Chat
                 name={"Chat"}
-                messages={messages}
-                loading={loading}
-                onSend={handleSend}
+                messages={chatMessages}
+                loading={chatLoading}
+                onSend={handleChatSend}
                 onReset={handleReset}
               />
               <div ref={messagesEndRef} />

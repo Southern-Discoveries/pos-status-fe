@@ -1,21 +1,38 @@
 // Sidebar.js
 import React, { useState, useEffect } from "react";
 import ButtonList from "./ButtonList";
+import { PostOption } from "@/types";
 
-const Sidebar = () => {
+const Sidebar = ({ setOptions }) => {
     const [selectedTask, setSelectedTask] = useState(null);
+    const [selectedEngine, setSelectedEngine] = useState(null);
+    const [selectedPlatform, setSelectedPlatform] = useState(null);
+
     const [selectedTargets, setSelectedTargets] = useState([]);
     const [selectedAudiences, setSelectedAudiences] = useState([]);
-    const [selectedPlatforms, setSelectedPlatforms] = useState([]);
+
     const [taskSectionOpen, setTaskSectionOpen] = useState(true);
     const [targetSectionOpen, setTargetSectionOpen] = useState(true);
     const [audienceSectionOpen, setAudienceSectionOpen] = useState(true);
     const [platformSectionOpen, setPlatformSectionOpen] = useState(true);
+    const [engineSectionOpen, setEngineSectionOpen] = useState(true);
 
     const [taskOptions, setTaskOptions] = useState([]);
     const [targetOptions, setTargetOptions] = useState([]);
     const [audienceOptions, setAudienceOptions] = useState([]);
     const [platformOptions, setPlatformOptions] = useState([]);
+    const [engineOptions, setEngineOptions] = useState([{ name: "OpenAI" }, { name: "Bard" }]);
+
+    useEffect(() => {
+        let new_option = {
+            task: selectedTask ? selectedTask[0].name : null,
+            platform: selectedPlatform ? selectedPlatform[0].name : null,
+            engine: selectedEngine ? selectedEngine[0].name : null,
+            audiences: selectedAudiences.map((ele) => ele.name),
+            targets: selectedTargets.map((ele) => ele.name),
+        }
+        setOptions(new_option);
+    }, [selectedTask, selectedPlatform, selectedEngine, selectedAudiences, selectedAudiences])
 
 
     // Fetch data from the API and update the state when the component mounts
@@ -75,10 +92,24 @@ const Sidebar = () => {
         setPlatformSectionOpen(!platformSectionOpen);
     };
 
+    const toggleEngineSection = () => {
+        setEngineSectionOpen(!engineSectionOpen);
+    };
+
     // Handle the click of a Task button
     const handleTaskClick = (task) => {
-        setSelectedTask(task);
+        setSelectedTask([task]);
     };
+
+    // Handle the click of a Platform button
+    const handlePlatformClick = (platform) => {
+        setSelectedPlatform([platform])
+    };
+
+    const handleEngineClick = (engine) => {
+        setSelectedEngine([engine]);
+    };
+
 
     // Handle the click of a Target button
     const handleTargetClick = (target) => {
@@ -98,14 +129,6 @@ const Sidebar = () => {
         }
     };
 
-    // Handle the click of a Platform button
-    const handlePlatformClick = (platform) => {
-        if (selectedPlatforms.includes(platform)) {
-            setSelectedPlatforms(selectedPlatforms.filter((item) => item !== platform));
-        } else {
-            setSelectedPlatforms([...selectedPlatforms, platform]);
-        }
-    };
 
     return (
         <div className="w-1/6 bg-gray-200 p-4 h-screen">
@@ -169,8 +192,24 @@ const Sidebar = () => {
                 {platformSectionOpen && (
                     <ButtonList
                         items={platformOptions}
-                        selectedItems={selectedPlatforms}
+                        selectedItems={selectedPlatform}
                         onItemClick={handlePlatformClick}
+                    />
+                )}
+            </div>
+
+            <div className="mb-4">
+                <h3
+                    className="mb-2 text-lg font-semibold cursor-pointer"
+                    onClick={toggleEngineSection}
+                >
+                    Engine {engineSectionOpen ? "▼" : "►"}
+                </h3>
+                {engineSectionOpen && (
+                    <ButtonList
+                        items={engineOptions}
+                        selectedItems={selectedEngine}
+                        onItemClick={handleEngineClick}
                     />
                 )}
             </div>
