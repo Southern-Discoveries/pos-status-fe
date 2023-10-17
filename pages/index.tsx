@@ -26,68 +26,11 @@ export default function Home() {
     const updatedMessages = [...trainingMessages, message];
 
     setTrainingMessages(updatedMessages);
-    setTrainingLoading(true);
-
-    // const response = await fetch("/api/training", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify({
-    //     trainingMessages: updatedMessages
-    //   })
-    // });
-
-    // if (!response.ok) {
-    //   setTrainingLoading(false);
-    //   throw new Error(response.statusText);
-    // }
-
-    // const data = response.body;
-
-    // if (!data) {
-    //   return;
-    // }
-
-    // setTrainingLoading(false);
-
-    // const reader = data.getReader();
-    // const decoder = new TextDecoder();
-    // let done = false;
-    // let isFirst = true;
-
-    // while (!done) {
-    //   const { value, done: doneReading } = await reader.read();
-    //   done = doneReading;
-    //   const chunkValue = decoder.decode(value);
-
-    //   if (isFirst) {
-    //     isFirst = false;
-    //     setTrainingMessages((trainingMessages) => [
-    //       ...trainingMessages,
-    //       {
-    //         role: "assistant",
-    //         content: chunkValue
-    //       }
-    //     ]);
-    //   } else {
-    //     setTrainingMessages((trainingMessages) => {
-    //       const lastMessage = trainingMessages[trainingMessages.length - 1];
-    //       const updatedMessage = {
-    //         ...lastMessage,
-    //         content: lastMessage.content + chunkValue
-    //       };
-    //       return [...trainingMessages.slice(0, -1), updatedMessage];
-    //     });
-    //   }
-    // }
   };
 
+
   const handleChatSend = async (message: Message) => {
-
-
     const updatedMessages = [...chatMessages, message];
-
     setChatMessages(updatedMessages);
     setChatLoading(true);
 
@@ -97,10 +40,8 @@ export default function Home() {
     let request_body = {
       content: message.content,
       options: options,
-      data: [""]
+      data: trainingMessages.map(element => element.content),
     }
-
-    console.log("request_body: ", request_body);
 
     const response = await fetch("http://localhost:5000/api/post/stream", {
       method: "POST",
@@ -156,7 +97,11 @@ export default function Home() {
 
   };
 
-  const handleReset = () => {
+  const handleTrainingReset = () => {
+    setTrainingMessages([]);
+  };
+
+  const handleChatReset = () => {
     setChatMessages([]);
   };
 
@@ -191,26 +136,26 @@ export default function Home() {
 
         <div className="flex flex-row h-full">
           <div className="w-1/2 overflow-auto sm:px-10 pb-4 sm:pb-10">
-            <div className="max-w-[800px] mx-auto mt-4 sm:mt-12">
+            <div className="min-w-[800px] max-w-[1000px] mx-auto mt-4 sm:mt-12">
               <Chat
                 name={"Traning"}
                 messages={trainingMessages}
                 loading={trainingLoading}
                 onSend={handleTrainingSend}
-                onReset={handleReset}
+                onReset={handleTrainingReset}
               />
               <div ref={messagesEndRef} />
             </div>
           </div>
 
           <div className="w-1/2 overflow-auto sm:px-10 pb-4 sm:pb-10">
-            <div className="max-w-[800px] mx-auto mt-4 sm:mt-12">
+            <div className="min-w-[800px] max-w-[1000px] mx-auto mt-4 sm:mt-12">
               <Chat
                 name={"Chat"}
                 messages={chatMessages}
                 loading={chatLoading}
                 onSend={handleChatSend}
-                onReset={handleReset}
+                onReset={handleChatReset}
               />
               <div ref={messagesEndRef} />
             </div>
@@ -218,6 +163,7 @@ export default function Home() {
           <Footer />
         </div>
       </div>
+
     </>
   );
 }
