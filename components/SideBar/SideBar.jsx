@@ -1,5 +1,5 @@
 // Sidebar.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Sidebar = () => {
     const [selectedTask, setSelectedTask] = useState(null);
@@ -7,15 +7,56 @@ const Sidebar = () => {
     const [selectedAudiences, setSelectedAudiences] = useState([]);
     const [selectedPlatforms, setSelectedPlatforms] = useState([]);
     const [taskSectionOpen, setTaskSectionOpen] = useState(true);
-    const [targetSectionOpen, setTargetSectionOpen] = useState(false);
-    const [audienceSectionOpen, setAudienceSectionOpen] = useState(false);
-    const [platformSectionOpen, setPlatformSectionOpen] = useState(false);
+    const [targetSectionOpen, setTargetSectionOpen] = useState(true);
+    const [audienceSectionOpen, setAudienceSectionOpen] = useState(true);
+    const [platformSectionOpen, setPlatformSectionOpen] = useState(true);
 
-    // Simulated data for buttons (Replace with actual data from your database)
-    const taskOptions = ["Task 1", "Task 2", "Task 3"];
-    const targetOptions = ["Target 1", "Target 2", "Target 3"];
-    const audienceOptions = ["Audience 1", "Audience 2", "Audience 3"];
-    const platformOptions = ["Platform 1", "Platform 2", "Platform 3"];
+    const [taskOptions, setTaskOptions] = useState([]);
+    const [targetOptions, setTargetOptions] = useState([]);
+    const [audienceOptions, setAudienceOptions] = useState([]);
+    const [platformOptions, setPlatformOptions] = useState([]);
+
+
+    // Fetch data from the API and update the state when the component mounts
+    useEffect(() => {
+        // Define the API endpoints
+        const taskEndpoint = "http://localhost:5000/api/task";
+        const targetEndpoint = "http://localhost:5000/api/target";
+        const audienceEndpoint = "http://localhost:5000/api/audience";
+        const platformEndpoint = "http://localhost:5000/api/platform";
+
+        // Fetch task data
+        fetch(taskEndpoint)
+            .then((response) => response.json())
+            .then((data) => {
+                setTaskOptions(data)
+            })
+            .catch((error) => console.error("Error fetching task data: " + error));
+
+        // Fetch target data
+        fetch(targetEndpoint)
+            .then((response) => response.json())
+            .then((data) => {
+                setTargetOptions(data)
+            })
+            .catch((error) => console.error("Error fetching target data: " + error));
+
+        // Fetch audience data
+        fetch(audienceEndpoint)
+            .then((response) => response.json())
+            .then((data) => {
+                setAudienceOptions(data)
+            })
+            .catch((error) => console.error("Error fetching audience data: " + error));
+
+        // Fetch platform data
+        fetch(platformEndpoint)
+            .then((response) => response.json())
+            .then((data) => {
+                setPlatformOptions(data)
+            })
+            .catch((error) => console.error("Error fetching platform data: " + error));
+    }, []);
 
     const toggleTaskSection = () => {
         setTaskSectionOpen(!taskSectionOpen);
@@ -80,12 +121,12 @@ const Sidebar = () => {
                     <div>
                         {taskOptions.map((task) => (
                             <button
-                                key={task}
+                                key={task.name}
                                 onClick={() => handleTaskClick(task)}
                                 className={`w-full py-2 text-left rounded ${selectedTask === task ? "bg-blue-500 text-white" : "hover:bg-gray-300"
                                     }`}
                             >
-                                {task}
+                                {task.name}
                             </button>
                         ))}
                     </div>
@@ -103,12 +144,12 @@ const Sidebar = () => {
                     <div>
                         {targetOptions.map((target) => (
                             <button
-                                key={target}
+                                key={target.name}
                                 onClick={() => handleTargetClick(target)}
                                 className={`w-full py-2 text-left rounded ${selectedTargets.includes(target) ? "bg-blue-500 text-white" : "hover:bg-gray-300"
                                     }`}
                             >
-                                {target}
+                                {target.name}
                             </button>
                         ))}
                     </div>
@@ -126,12 +167,12 @@ const Sidebar = () => {
                     <div>
                         {audienceOptions.map((audience) => (
                             <button
-                                key={audience}
+                                key={audience.name}
                                 onClick={() => handleAudienceClick(audience)}
                                 className={`w-full py-2 text-left rounded ${selectedAudiences.includes(audience) ? "bg-blue-500 text-white" : "hover:bg-gray-300"
                                     }`}
                             >
-                                {audience}
+                                {audience.name}
                             </button>
                         ))}
                     </div>
@@ -150,12 +191,12 @@ const Sidebar = () => {
                     <div>
                         {platformOptions.map((platform) => (
                             <button
-                                key={platform}
+                                key={platform.name}
                                 onClick={() => handlePlatformClick(platform)}
                                 className={`w-full py-2 text-left rounded ${selectedPlatforms.includes(platform) ? "bg-blue-500 text-white" : "hover:bg-gray-300"
                                     }`}
                             >
-                                {platform}
+                                {platform.name}
                             </button>
                         ))}
                     </div>
