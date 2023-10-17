@@ -1,5 +1,6 @@
 // Sidebar.js
 import React, { useState, useEffect } from "react";
+import ButtonList from "./ButtonList";
 
 const Sidebar = () => {
     const [selectedTask, setSelectedTask] = useState(null);
@@ -118,18 +119,11 @@ const Sidebar = () => {
                     Task {taskSectionOpen ? "▼" : "►"}
                 </h3>
                 {taskSectionOpen && (
-                    <div>
-                        {taskOptions.map((task) => (
-                            <button
-                                key={task.name}
-                                onClick={() => handleTaskClick(task)}
-                                className={`w-full py-2 text-left rounded ${selectedTask === task ? "bg-blue-500 text-white" : "hover:bg-gray-300"
-                                    }`}
-                            >
-                                {task.name}
-                            </button>
-                        ))}
-                    </div>
+                    <ButtonList
+                        items={taskOptions}
+                        selectedItems={selectedTask}
+                        onItemClick={handleTaskClick}
+                    />
                 )}
             </div>
 
@@ -141,18 +135,11 @@ const Sidebar = () => {
                     Target {targetSectionOpen ? "▼" : "►"}
                 </h3>
                 {targetSectionOpen && (
-                    <div>
-                        {targetOptions.map((target) => (
-                            <button
-                                key={target.name}
-                                onClick={() => handleTargetClick(target)}
-                                className={`w-full py-2 text-left rounded ${selectedTargets.includes(target) ? "bg-blue-500 text-white" : "hover:bg-gray-300"
-                                    }`}
-                            >
-                                {target.name}
-                            </button>
-                        ))}
-                    </div>
+                    <ButtonList
+                        items={targetOptions}
+                        selectedItems={selectedTargets}
+                        onItemClick={handleTargetClick}
+                    />
                 )}
             </div>
 
@@ -164,21 +151,13 @@ const Sidebar = () => {
                     Audience {audienceSectionOpen ? "▼" : "►"}
                 </h3>
                 {audienceSectionOpen && (
-                    <div>
-                        {audienceOptions.map((audience) => (
-                            <button
-                                key={audience.name}
-                                onClick={() => handleAudienceClick(audience)}
-                                className={`w-full py-2 text-left rounded ${selectedAudiences.includes(audience) ? "bg-blue-500 text-white" : "hover:bg-gray-300"
-                                    }`}
-                            >
-                                {audience.name}
-                            </button>
-                        ))}
-                    </div>
+                    <ButtonList
+                        items={audienceOptions}
+                        selectedItems={selectedAudiences}
+                        onItemClick={handleAudienceClick}
+                    />
                 )}
             </div>
-
 
             <div className="mb-4">
                 <h3
@@ -188,18 +167,11 @@ const Sidebar = () => {
                     Platform {platformSectionOpen ? "▼" : "►"}
                 </h3>
                 {platformSectionOpen && (
-                    <div>
-                        {platformOptions.map((platform) => (
-                            <button
-                                key={platform.name}
-                                onClick={() => handlePlatformClick(platform)}
-                                className={`w-full py-2 text-left rounded ${selectedPlatforms.includes(platform) ? "bg-blue-500 text-white" : "hover:bg-gray-300"
-                                    }`}
-                            >
-                                {platform.name}
-                            </button>
-                        ))}
-                    </div>
+                    <ButtonList
+                        items={platformOptions}
+                        selectedItems={selectedPlatforms}
+                        onItemClick={handlePlatformClick}
+                    />
                 )}
             </div>
         </div>
