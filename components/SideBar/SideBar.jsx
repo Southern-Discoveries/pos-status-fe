@@ -21,9 +21,9 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
     const [targetOptions, setTargetOptions] = useState([]);
     const [audienceOptions, setAudienceOptions] = useState([]);
     const [platformOptions, setPlatformOptions] = useState([]);
-    const [engineOptions, setEngineOptions] = useState([{ name: "OpenAI" }, { name: "Bard" }]);
+    const [engineOptions, setEngineOptions] = useState([]);
 
-    const [model, setModel] = useState('gpt-3.5-turbo'); // Initial model
+    const [model, setModel] = useState(); // Initial model
     const [temperature, setTemperature] = useState(0.7); // Initial temperature
 
     useEffect(() => {
@@ -53,6 +53,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
         const targetEndpoint = "http://localhost:5000/api/target";
         const audienceEndpoint = "http://localhost:5000/api/audience";
         const platformEndpoint = "http://localhost:5000/api/platform";
+        const engineEndpoint = "http://localhost:5000/api/engine";
 
         // Fetch task data
         fetch(taskEndpoint)
@@ -85,6 +86,14 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
                 setPlatformOptions(data)
             })
             .catch((error) => console.error("Error fetching platform data: " + error));
+
+        // Fetch engine data
+        fetch(engineEndpoint)
+            .then((response) => response.json())
+            .then((data) => {
+                setEngineOptions(data)
+            })
+            .catch((error) => console.error("Error fetching engine data: " + error));
     }, []);
 
     const toggleTaskSection = () => {
@@ -142,10 +151,9 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
 
     const getModelOptions = () => {
         if (selectedEngine) {
-            if (selectedEngine[0].name === "OpenAI") {
-                return ["gpt-3.5-turbo", "gpt-4"];
-            } else if (selectedEngine[0].name === "Bard") {
-                return ["models/chat-bison-001"];
+            let engine = engineOptions.find(obj => obj.name == selectedEngine[0].name)
+            if (engine) {
+                return engine.models;
             }
         }
         return [];
@@ -155,16 +163,16 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
         // Update the selected model in the component's state
         setModel(selectedModel);
         // You can also perform other actions, like making API requests, based on the selected model.
-      };
-    
-      const handleTemperatureChange = (newTemperature) => {
+    };
+
+    const handleTemperatureChange = (newTemperature) => {
         // Ensure the temperature is within the range 0.1 to 1.0
         const parsedTemperature = parseFloat(newTemperature);
         if (parsedTemperature >= 0.1 && parsedTemperature <= 1.0) {
-          setTemperature(parsedTemperature);
-          // You can also perform other actions based on the new temperature.
+            setTemperature(parsedTemperature);
+            // You can also perform other actions based on the new temperature.
         }
-      };
+    };
 
 
     return (
