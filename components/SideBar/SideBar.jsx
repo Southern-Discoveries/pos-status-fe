@@ -23,6 +23,9 @@ const Sidebar = ({ setOptions }) => {
     const [platformOptions, setPlatformOptions] = useState([]);
     const [engineOptions, setEngineOptions] = useState([{ name: "OpenAI" }, { name: "Bard" }]);
 
+    const [model, setModel] = useState('gpt-3.5-turbo'); // Initial model
+    const [temperature, setTemperature] = useState(0.7); // Initial temperature
+
     useEffect(() => {
         let new_option = {
             task: selectedTask ? selectedTask[0].name : null,
@@ -129,6 +132,32 @@ const Sidebar = ({ setOptions }) => {
         }
     };
 
+    const getModelOptions = () => {
+        if (selectedEngine) {
+            if (selectedEngine[0].name === "OpenAI") {
+                return ["gpt-3.5-turbo", "gpt-4"];
+            } else if (selectedEngine[0].name === "Bard") {
+                return ["models/chat-bison-001"];
+            }
+        }
+        return [];
+    };
+
+    const handleModelChange = (selectedModel) => {
+        // Update the selected model in the component's state
+        setModel(selectedModel);
+        // You can also perform other actions, like making API requests, based on the selected model.
+      };
+    
+      const handleTemperatureChange = (newTemperature) => {
+        // Ensure the temperature is within the range 0.1 to 1.0
+        const parsedTemperature = parseFloat(newTemperature);
+        if (parsedTemperature >= 0.1 && parsedTemperature <= 1.0) {
+          setTemperature(parsedTemperature);
+          // You can also perform other actions based on the new temperature.
+        }
+      };
+
 
     return (
         <div className="w-1/6 bg-gray-200 p-4 h-screen">
@@ -213,6 +242,38 @@ const Sidebar = ({ setOptions }) => {
                     />
                 )}
             </div>
+
+            <div className="bg-gray-100 p-4">
+                <div className="flex justify-center items-center">
+                    <label htmlFor="modelSelect" className="mr-2">Model:</label>
+                    <select
+                        id="modelSelect"
+                        className="px-2 py-1 border rounded"
+                        onChange={(e) => handleModelChange(e.target.value)}
+                        value={model}
+                    >
+                        {getModelOptions().map((option) => (
+                            <option key={option} value={option}>
+                                {option}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="flex justify-center items-center mt-2">
+                    <label htmlFor="temperatureInput" className="mr-2">Temperature:</label>
+                    <input
+                        id="temperatureInput"
+                        type="number"
+                        step="0.1"
+                        min="0.1"
+                        max="1.0"
+                        value={temperature}
+                        onChange={(e) => handleTemperatureChange(e.target.value)}
+                        className="px-2 py-1 border rounded"
+                    />
+                </div>
+            </div>
+
         </div>
     );
 };
