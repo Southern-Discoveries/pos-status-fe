@@ -34,9 +34,6 @@ export default function Home() {
     setChatMessages(updatedMessages);
     setChatLoading(true);
 
-    console.log("options: ", options);
-    console.log("updatedMessages: ", updatedMessages);
-
     let request_body = {
       content: message.content,
       options: options,
@@ -116,7 +113,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Chatbot UI</title>
+        <title>Mediator - Grindy Marketing System</title>
         <meta
           name="description"
           content="A simple chatbot starter kit for OpenAI's chat model using Next.js, TypeScript, and Tailwind CSS."
@@ -138,7 +135,7 @@ export default function Home() {
           <div className="w-1/2 overflow-auto sm:px-10 pb-4 sm:pb-10">
             <div className="min-w-[800px] max-w-[1000px] mx-auto mt-4 sm:mt-12">
               <Chat
-                name={"Traning"}
+                name={"Training"}
                 messages={trainingMessages}
                 loading={trainingLoading}
                 onSend={handleTrainingSend}

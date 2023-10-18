@@ -132,7 +132,7 @@ const Sidebar = ({ setOptions }) => {
 
     return (
         <div className="w-1/6 bg-gray-200 p-4 h-screen">
-            <h2 className="mb-4 text-xl font-bold">Menu</h2>
+            <h2 className="mb-4 text-xl font-bold">Option</h2>
 
             <div className="mb-4">
                 <h3
