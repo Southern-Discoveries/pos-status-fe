@@ -1,7 +1,7 @@
 import { Chat } from "@/components/Chat/Chat";
 import { Footer } from "@/components/Layout/Footer";
 import { Navbar } from "@/components/Layout/Navbar";
-import { Message, PostOption } from "@/types";
+import { Message, PostOption, EngineConfig } from "@/types";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 import Sidebar from "@/components/SideBar/SideBar";
@@ -16,7 +16,8 @@ export default function Home() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const [options, setOptions] = useState<PostOption>();
+  const [postConfig, setPostConfig] = useState<PostOption>();
+  const [engineConfig, setEngineConfig] = useState<EngineConfig>();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -36,11 +37,14 @@ export default function Home() {
 
     let request_body = {
       content: message.content,
-      options: options,
+      post: postConfig,
+      engine: engineConfig,
       data: trainingMessages.map(element => element.content),
     }
 
-    const response = await fetch("http://localhost:5000/api/post/stream", {
+    console.log("request_body: ", request_body);
+
+    const response = await fetch("http://localhost:5000/api/post/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -129,7 +133,7 @@ export default function Home() {
       </Head>
 
       <div className="flex h-screen">
-        <Sidebar setOptions={setOptions} />
+        <Sidebar setPostConfig={setPostConfig} setEngineConfig={setEngineConfig} />
 
         <div className="flex flex-row h-full">
           <div className="w-1/2 overflow-auto sm:px-10 pb-4 sm:pb-10">

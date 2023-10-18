@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import ButtonList from "./ButtonList";
 import { PostOption } from "@/types";
 
-const Sidebar = ({ setOptions }) => {
+const Sidebar = ({ setPostConfig, setEngineConfig }) => {
     const [selectedTask, setSelectedTask] = useState(null);
     const [selectedEngine, setSelectedEngine] = useState(null);
     const [selectedPlatform, setSelectedPlatform] = useState(null);
@@ -27,15 +27,23 @@ const Sidebar = ({ setOptions }) => {
     const [temperature, setTemperature] = useState(0.7); // Initial temperature
 
     useEffect(() => {
-        let new_option = {
+        let new_config = {
             task: selectedTask ? selectedTask[0].name : null,
             platform: selectedPlatform ? selectedPlatform[0].name : null,
-            engine: selectedEngine ? selectedEngine[0].name : null,
-            audiences: selectedAudiences.map((ele) => ele.name),
             targets: selectedTargets.map((ele) => ele.name),
+            audiences: selectedAudiences.map((ele) => ele.name),
         }
-        setOptions(new_option);
-    }, [selectedTask, selectedPlatform, selectedEngine, selectedAudiences, selectedAudiences])
+        setPostConfig(new_config);
+    }, [selectedTask, selectedPlatform, selectedAudiences, selectedAudiences])
+
+    useEffect(() => {
+        let new_config = {
+            engine: selectedEngine ? selectedEngine[0].name : null,
+            model: model,
+            temperature: temperature,
+        }
+        setEngineConfig(new_config);
+    }, [selectedEngine, model, temperature])
 
 
     // Fetch data from the API and update the state when the component mounts
