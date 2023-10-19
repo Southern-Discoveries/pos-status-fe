@@ -23,6 +23,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
     const [platformOptions, setPlatformOptions] = useState([]);
     const [engineOptions, setEngineOptions] = useState([]);
 
+    const [modelOptions, setModelOptions] = useState([]);
     const [model, setModel] = useState(); // Initial model
     const [temperature, setTemperature] = useState(0.7); // Initial temperature
 
@@ -37,11 +38,17 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
     }, [selectedTask, selectedPlatform, selectedAudiences, selectedAudiences])
 
     useEffect(() => {
+        if (selectedEngine) {
+            setModelOptions(selectedEngine[0].models);
+            setModel(selectedEngine[0].models[0])
+        }
+
         let new_config = {
             engine: selectedEngine ? selectedEngine[0].name : null,
             model: model,
             temperature: temperature,
         }
+
         setEngineConfig(new_config);
     }, [selectedEngine, model, temperature])
 
@@ -147,16 +154,6 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
         } else {
             setSelectedAudiences([...selectedAudiences, audience]);
         }
-    };
-
-    const getModelOptions = () => {
-        if (selectedEngine) {
-            let engine = engineOptions.find(obj => obj.name == selectedEngine[0].name)
-            if (engine) {
-                return engine.models;
-            }
-        }
-        return [];
     };
 
     const handleModelChange = (selectedModel) => {
@@ -268,7 +265,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
                         onChange={(e) => handleModelChange(e.target.value)}
                         value={model}
                     >
-                        {getModelOptions().map((option) => (
+                        {modelOptions.map((option) => (
                             <option key={option} value={option}>
                                 {option}
                             </option>
