@@ -56,11 +56,11 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
     // Fetch data from the API and update the state when the component mounts
     useEffect(() => {
         // Define the API endpoints
-        const taskEndpoint = "http://localhost:5000/api/task";
-        const targetEndpoint = "http://localhost:5000/api/target";
-        const audienceEndpoint = "http://localhost:5000/api/audience";
-        const platformEndpoint = "http://localhost:5000/api/platform";
-        const engineEndpoint = "http://localhost:5000/api/engine";
+        const taskEndpoint = "/api/ai/task";
+        const targetEndpoint = "/api/ai/target";
+        const audienceEndpoint = "/api/ai/audience";
+        const platformEndpoint = "/api/ai/platform";
+        const engineEndpoint = "/api/ai/engine";
 
         // Fetch task data
         fetch(taskEndpoint)

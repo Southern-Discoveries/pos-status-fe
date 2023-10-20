@@ -44,7 +44,7 @@ export default function Home() {
 
     console.log("request_body: ", request_body);
 
-    const response = await fetch("http://localhost:5000/api/post/chat", {
+    const response = await fetch("/api/ai/post/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
