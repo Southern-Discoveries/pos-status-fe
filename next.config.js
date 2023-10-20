@@ -10,6 +10,10 @@ const nextConfig = {
         source: '/api/ai/:path*',
         destination: `${AI_SERVICE_URL}/api/:path*`,
       },
+      {
+        source: '/api/oaidalleapiprodscus/:path*',
+        destination: 'https://oaidalleapiprodscus.blob.core.windows.net/:path*'
+      }
     ]
   },
 }
