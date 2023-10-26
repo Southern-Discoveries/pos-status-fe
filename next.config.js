@@ -1,20 +1,27 @@
-/** @type {import('next').NextConfig} */
+const { PHASE_DEVELOPMENT_SERVER } = require('next/constants');
 
-const AI_SERVICE_URL = process.env.AI_SERVICE_URL || "http://127.0.0.1:8000"
+module.exports = (phase) => {
+  const envConfig = {
+    /* common config variables */
+  };
 
-const nextConfig = {
-  reactStrictMode: true,
-  rewrites: async () => {
-    return [
-      {
-        source: '/public/:path*',
-        destination: `${AI_SERVICE_URL}/public/:path*`,
-      },
-      {
-        source: '/api/oaidalleapiprodscus/:path*',
-        destination: 'https://oaidalleapiprodscus.blob.core.windows.net/:path*'
-      }
-    ]
-  },
-}
-module.exports = nextConfig
+  if (phase === PHASE_DEVELOPMENT_SERVER) {
+    // Development mode
+    const devEnv = require('dotenv').config({
+      path: './.env.local',
+    }).parsed;
+
+    Object.assign(envConfig, devEnv);
+  } else {
+    // Production mode
+    const prodEnv = require('dotenv').config({
+      path: './.env.prod',
+    }).parsed;
+
+    Object.assign(envConfig, prodEnv);
+  }
+
+  return {
+    env: envConfig,
+  };
+};
