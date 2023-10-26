@@ -5,6 +5,7 @@ import { Message, PostOption, EngineConfig } from "@/types";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 import Sidebar from "@/components/SideBar/SideBar";
+const AI_SERVICE_URL = process.env.AI_SERVICE_URL || "http://127.0.0.1:8000";
 
 export default function Home() {
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
@@ -34,7 +35,7 @@ export default function Home() {
     let htmlMsg = "```html";
 
     try {
-      const response = await fetch("/api/ai/post/image", {
+      const response = await fetch(`${AI_SERVICE_URL}/public/image`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -81,7 +82,7 @@ export default function Home() {
 
     console.log("request_body: ", request_body);
 
-    const response = await fetch("/api/stream/chat", {
+    const response = await fetch(`${AI_SERVICE_URL}/public/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

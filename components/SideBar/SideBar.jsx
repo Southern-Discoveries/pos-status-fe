@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import ButtonList from "./ButtonList";
 import { PostOption } from "@/types";
+const AI_SERVICE_URL = process.env.AI_SERVICE_URL || "http://127.0.0.1:8000";
 
 const Sidebar = ({ setPostConfig, setEngineConfig }) => {
     const [selectedTask, setSelectedTask] = useState(null);
@@ -55,23 +56,19 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
 
     // Fetch data from the API and update the state when the component mounts
     useEffect(() => {
-        // Define the API endpoints
-        const taskEndpoint = "/api/ai/task";
-        const targetEndpoint = "/api/ai/target";
-        const audienceEndpoint = "/api/ai/audience";
-        const platformEndpoint = "/api/ai/platform";
-        const engineEndpoint = "/api/ai/engine";
-
         // Fetch task data
-        fetch(taskEndpoint)
-            .then((response) => response.json())
+        fetch(`${AI_SERVICE_URL}/public/tasks`)
+            .then((response) => {
+                console.log("task: ", response);
+                return response.json()
+            })
             .then((data) => {
                 setTaskOptions(data)
             })
             .catch((error) => console.error("Error fetching task data: " + error));
 
         // Fetch target data
-        fetch(targetEndpoint)
+        fetch(`${AI_SERVICE_URL}/public/targets`)
             .then((response) => response.json())
             .then((data) => {
                 setTargetOptions(data)
@@ -79,7 +76,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
             .catch((error) => console.error("Error fetching target data: " + error));
 
         // Fetch audience data
-        fetch(audienceEndpoint)
+        fetch(`${AI_SERVICE_URL}/public/audiences`)
             .then((response) => response.json())
             .then((data) => {
                 setAudienceOptions(data)
@@ -87,7 +84,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
             .catch((error) => console.error("Error fetching audience data: " + error));
 
         // Fetch platform data
-        fetch(platformEndpoint)
+        fetch(`${AI_SERVICE_URL}/public/platforms`)
             .then((response) => response.json())
             .then((data) => {
                 setPlatformOptions(data)
@@ -95,7 +92,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
             .catch((error) => console.error("Error fetching platform data: " + error));
 
         // Fetch engine data
-        fetch(engineEndpoint)
+        fetch(`${AI_SERVICE_URL}/public/engines`)
             .then((response) => response.json())
             .then((data) => {
                 setEngineOptions(data)

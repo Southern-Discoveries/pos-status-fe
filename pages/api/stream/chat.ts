@@ -5,7 +5,7 @@ const streamForward = async (body: any, write: (data: string) => void) => {
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
 
-  const res = await fetch(`${AI_SERVICE_URL}/api/post/chat`, {
+  const res = await fetch(`${AI_SERVICE_URL}/public/chat`, {
     headers: {
       "Content-Type": "application/json",
     },
