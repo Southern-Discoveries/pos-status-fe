@@ -11,7 +11,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}/pages/api/stream/chat.ts",
+      "program": "${workspaceFolder}/pages/public/chat.ts",
       "outFiles": [
         "${workspaceFolder}/**/*.js"
       ]
