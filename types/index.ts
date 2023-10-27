@@ -1,9 +1,8 @@
+export type Role = 'assistant' | 'user';
 export interface Message {
   role: Role;
   content: string;
 }
-
-export type Role = "assistant" | "user";
 
 export interface PostOption {
   task: string;

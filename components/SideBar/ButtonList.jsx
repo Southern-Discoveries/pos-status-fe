@@ -4,7 +4,7 @@ import React from "react";
 const ButtonList = ({ items, selectedItems, onItemClick }) => {
     // Ensure selectedItems is always an array
     selectedItems = selectedItems || [];
-
+    console.log('Current Selected ITem ', selectedItems);
     return (
         <div>
             {items.map((item) => (

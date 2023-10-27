@@ -1,10 +1,11 @@
-import { Chat } from "@/components/Chat/Chat";
-import { Footer } from "@/components/Layout/Footer";
-import { Navbar } from "@/components/Layout/Navbar";
-import { Message, PostOption, EngineConfig } from "@/types";
-import Head from "next/head";
-import { useEffect, useRef, useState } from "react";
-import Sidebar from "@/components/SideBar/SideBar";
+import Head from 'next/head';
+import { useEffect, useRef, useState } from 'react';
+
+import { Chat } from '@/components/Chat/Chat';
+import { Footer } from '@/components/Layout/Footer';
+import { Navbar } from '@/components/Layout/Navbar';
+import Sidebar from '@/components/SideBar/SideBar';
+import { Message, PostOption, EngineConfig } from '@/types';
 
 export default function Home() {
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
@@ -20,7 +21,7 @@ export default function Home() {
   const [engineConfig, setEngineConfig] = useState<EngineConfig>();
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleTrainingSend = async (message: Message) => {
@@ -31,13 +32,13 @@ export default function Home() {
 
   const handleCreateImage = async (msg: string) => {
     setChatLoading(true);
-    let htmlMsg = "```html";
+    let htmlMsg = '```html';
 
     try {
-      const response = await fetch("/api/ai/image", {
-        method: "POST",
+      const response = await fetch('/api/ai/image', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           content: msg.slice(0, 999),
@@ -47,8 +48,8 @@ export default function Home() {
       if (res && res.data) {
         for (const img of res.data) {
           htmlMsg += `<img src="${img.url.replace(
-            "https://oaidalleapiprodscus.blob.core.windows.net/",
-            "/api/oaidalleapiprodscus/"
+            'https://oaidalleapiprodscus.blob.core.windows.net/',
+            '/api/oaidalleapiprodscus/'
           )}"/>`;
 
           console.log(htmlMsg);
@@ -58,10 +59,10 @@ export default function Home() {
     } finally {
       setChatLoading(false);
     }
-    setChatMessages((chatMessages) => [
+    setChatMessages(chatMessages => [
       ...chatMessages,
       {
-        role: "assistant",
+        role: 'assistant',
         content: htmlMsg,
       },
     ]);
@@ -76,15 +77,15 @@ export default function Home() {
       content: message.content,
       post: postConfig,
       engine: engineConfig,
-      data: trainingMessages.map((element) => element.content),
+      data: trainingMessages.map(element => element.content),
     };
 
-    console.log("request_body: ", request_body);
+    console.log('request_body: ', request_body);
 
-    const response = await fetch("/api/stream/chat", {
-      method: "POST",
+    const response = await fetch('/api/stream/chat', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(request_body),
     });
@@ -114,15 +115,15 @@ export default function Home() {
 
       if (isFirst) {
         isFirst = false;
-        setChatMessages((chatMessages) => [
+        setChatMessages(chatMessages => [
           ...chatMessages,
           {
-            role: "assistant",
+            role: 'assistant',
             content: chunkValue,
           },
         ]);
       } else {
-        setChatMessages((chatMessages) => {
+        setChatMessages(chatMessages => {
           const lastMessage = chatMessages[chatMessages.length - 1];
           const updatedMessage = {
             ...lastMessage,
@@ -173,7 +174,7 @@ export default function Home() {
             <div className="min-w-[800px] max-w-[1000px] mx-auto mt-4 sm:mt-12">
               <Chat
                 onCreateImage={handleCreateImage}
-                name={"Training"}
+                name={'Training'}
                 messages={trainingMessages}
                 loading={trainingLoading}
                 onSend={handleTrainingSend}
@@ -187,7 +188,7 @@ export default function Home() {
             <div className="min-w-[800px] max-w-[1000px] mx-auto mt-4 sm:mt-12">
               <Chat
                 onCreateImage={handleCreateImage}
-                name={"Chat"}
+                name={'Chat'}
                 messages={chatMessages}
                 loading={chatLoading}
                 onSend={handleChatSend}
