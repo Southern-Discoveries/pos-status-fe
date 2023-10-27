@@ -1,4 +1,5 @@
-import { FC } from "react";
+import { Box } from '@chakra-ui/react';
+import { FC } from 'react';
 
 export const Navbar: FC = () => {
   return (

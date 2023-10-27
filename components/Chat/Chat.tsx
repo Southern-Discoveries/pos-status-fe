@@ -1,9 +1,11 @@
-import { Message } from "@/types";
-import { FC } from "react";
-import { ChatInput } from "./ChatInput";
-import { ChatLoader } from "./ChatLoader";
-import { ChatMessage } from "./ChatMessage";
-import { ResetChat } from "./ResetChat";
+import { FC } from 'react';
+
+import { ChatInput } from './ChatInput';
+import { ChatLoader } from './ChatLoader';
+import { ChatMessage } from './ChatMessage';
+import { ResetChat } from './ResetChat';
+
+import { Message } from '@/types';
 
 interface Props {
   name: String;
