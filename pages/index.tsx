@@ -1,13 +1,14 @@
+/* eslint-disable no-unused-vars */
+import { Box, Flex } from '@chakra-ui/react';
 import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
 
-import { Chat } from '@/components/Chat/Chat';
-import { Footer } from '@/components/Layout/Footer';
-import { Navbar } from '@/components/Layout/Navbar';
-import Sidebar from '@/components/SideBar/SideBar';
+import ChatScreen from '@/layouts/Chat';
+import Header from '@/layouts/Header';
+import Sidebar from '@/layouts/Sidebar';
 import { Message, PostOption, EngineConfig } from '@/types';
 
-export default function Home() {
+export default function Update() {
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
 
   const [chatLoading, setChatLoading] = useState<boolean>(false);
@@ -52,7 +53,7 @@ export default function Home() {
             '/api/oaidalleapiprodscus/'
           )}"/>`;
 
-          console.log(htmlMsg);
+          /*   console.log(htmlMsg); */
         }
       }
     } catch (error) {
@@ -80,7 +81,7 @@ export default function Home() {
       data: trainingMessages.map(element => element.content),
     };
 
-    console.log('request_body: ', request_body);
+    /*    console.log('request_body: ', request_body); */
 
     const response = await fetch('/api/stream/chat', {
       method: 'POST',
@@ -163,43 +164,30 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="flex h-screen">
-        <Sidebar
-          setPostConfig={setPostConfig}
-          setEngineConfig={setEngineConfig}
-        />
+      <Header />
 
-        <div className="flex flex-row h-full">
-          <div className="w-1/2 overflow-auto sm:px-10 pb-4 sm:pb-10">
-            <div className="min-w-[800px] max-w-[1000px] mx-auto mt-4 sm:mt-12">
-              <Chat
-                onCreateImage={handleCreateImage}
-                name={'Training'}
-                messages={trainingMessages}
-                loading={trainingLoading}
-                onSend={handleTrainingSend}
-                onReset={handleTrainingReset}
-              />
-              <div ref={messagesEndRef} />
-            </div>
-          </div>
-
-          <div className="w-1/2 overflow-auto sm:px-10 pb-4 sm:pb-10">
-            <div className="min-w-[800px] max-w-[1000px] mx-auto mt-4 sm:mt-12">
-              <Chat
-                onCreateImage={handleCreateImage}
-                name={'Chat'}
-                messages={chatMessages}
-                loading={chatLoading}
-                onSend={handleChatSend}
-                onReset={handleChatReset}
-              />
-              <div ref={messagesEndRef} />
-            </div>
-          </div>
-          <Footer />
-        </div>
-      </div>
+      <Flex width="full">
+        <Sidebar />
+        <Box
+          height="800px"
+          /*   bg="shader.a.50" */
+          backgroundImage={`url(assets/frame/BG.svg)`}
+          backgroundSize="cover"
+          width="full"
+          backgroundRepeat="no-repeat"
+          backgroundPosition="center"
+          padding={6}
+        >
+          <ChatScreen
+            onCreateImage={handleCreateImage}
+            name={'Training'}
+            messages={trainingMessages}
+            loading={trainingLoading}
+            onSend={handleTrainingSend}
+            onReset={handleTrainingReset}
+          />
+        </Box>
+      </Flex>
     </>
   );
 }

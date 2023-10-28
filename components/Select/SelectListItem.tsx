@@ -8,6 +8,7 @@ interface IProps {
 }
 /// List select check
 const SelectListItem = ({ items, selectedItems, onItemClick }: IProps) => {
+  // eslint-disable-next-line no-unused-vars
   selectedItems = selectedItems || [];
 
   return (

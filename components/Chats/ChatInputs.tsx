@@ -1,4 +1,5 @@
-import { Box, IconButton, Textarea } from '@chakra-ui/react';
+/* eslint-disable no-unused-vars */
+import { IconButton, Input, InputGroup } from '@chakra-ui/react';
 import { KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 import SendIcon from '@/public/assets/icons/line/send.svg';
@@ -46,16 +47,17 @@ const ChatInputs = ({ onSend }: Props) => {
 
   return (
     <>
-      <Box position="relative">
-        <Textarea placeholder="Type SomeThing" size="sm" />
+      <InputGroup position="relative">
+        <Input placeholder="Type SomeThing" />
         <IconButton
           aria-label={''}
           position="absolute"
           right={2}
           bottom={2}
-          icon={SendIcon}
+          variant="send_btn"
+          icon={<SendIcon />}
         />
-      </Box>
+      </InputGroup>
     </>
   );
 };

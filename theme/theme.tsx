@@ -47,6 +47,19 @@ const Button: ComponentStyleConfig = {
         width: 5,
       },
     },
+    send_btn: {
+      paddingX: 4,
+      paddingY: 2.5,
+      bg: 'primary.a.400',
+      color: 'white',
+      borderBottom: '0.188rem solid',
+      borderBottomColor: 'primary.a.500',
+    },
+  },
+};
+const Input: ComponentStyleConfig = {
+  variants: {
+    chat_input: {},
   },
 };
 const Checkbox: ComponentMultiStyleConfig = {
@@ -64,8 +77,9 @@ const Checkbox: ComponentMultiStyleConfig = {
         color: 'shader.a.600',
         fontWeight: 'medium',
         fontSize: 'sm',
+
         _hover: {
-          opacity: 0.7,
+          color: 'shader.a.500',
         },
         _checked: {
           color: 'shader.a.900',
@@ -90,6 +104,7 @@ const theme = extendTheme({
   components: {
     Button,
     Checkbox,
+    Input,
   },
 });
 
