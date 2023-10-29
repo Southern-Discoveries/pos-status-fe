@@ -13,6 +13,7 @@ import {
 } from '@/types/option';
 
 const Sidebar = () => {
+  // This is selectedOptions => Use send to api
   const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({
     task: null,
     engine: null,
@@ -20,7 +21,8 @@ const Sidebar = () => {
     targets: [],
     audiences: [],
   });
-  // Set State Open
+
+  // Set State Open Toggle
   const [sectionState, setSectionState] = useState<SectionState>({
     taskSectionOpen: true,
     targetSectionOpen: true,
@@ -29,6 +31,7 @@ const Sidebar = () => {
     engineSectionOpen: true,
   });
 
+  // This is Option get from api
   const [options, setOptions] = useState<Options>({
     taskOptions: [],
     targetOptions: [],
@@ -38,6 +41,7 @@ const Sidebar = () => {
     modelOptions: [],
   });
 
+  // OnToggle Function for many Section
   const toggleSection = (sectionName: string) => {
     setSectionState({
       ...sectionState,
@@ -45,7 +49,69 @@ const Sidebar = () => {
         !sectionState[`${sectionName}SectionOpen` as keyof SectionState],
     });
   };
+  // Fetch Data and log Error if exist
+  async function fetchData(
+    endpoint: string,
+    stateUpdater: (data: any) => void
+  ) {
+    try {
+      const response = await fetch(endpoint);
+      if (response.ok) {
+        const data = await response.json();
+        stateUpdater(data);
+      } else {
+        console.error(
+          `Error fetching data from ${endpoint}: ${response.status}`
+        );
+      }
+    } catch (error) {
+      console.error(`Error fetching data from ${endpoint}: ${error}`);
+    }
+  }
+  useEffect(() => {
+    const taskEndpoint = '/api/ai/tasks';
+    const targetEndpoint = '/api/ai/targets';
+    const audienceEndpoint = '/api/ai/audiences';
+    const platformEndpoint = '/api/ai/platforms';
+    const engineEndpoint = '/api/ai/engines';
 
+    // Fetch task data
+    fetchData(taskEndpoint, data => {
+      setOptions(prevOptions => ({
+        ...prevOptions,
+        taskOptions: data,
+      }));
+    });
+    // Fetch Target Endpoint
+    fetchData(targetEndpoint, data => {
+      setOptions(prevOptions => ({
+        ...prevOptions,
+        targetOptions: data,
+      }));
+    });
+    // Fetch AudienceEndpoint
+    fetchData(audienceEndpoint, data => {
+      setOptions(prevOptions => ({
+        ...prevOptions,
+        audienceOptions: data,
+      }));
+    });
+    // Fetch Platform Endpoint
+    fetchData(platformEndpoint, data => {
+      setOptions(prevOptions => ({
+        ...prevOptions,
+        platformOptions: data,
+      }));
+    });
+
+    // Fetch engineEndpoint
+    fetchData(engineEndpoint, data => {
+      setOptions(prevOptions => ({
+        ...prevOptions,
+        engineOptions: data,
+      }));
+    });
+  }, []);
   return (
     <>
       <Box
@@ -85,14 +151,14 @@ const Sidebar = () => {
               />
             </HStack>
             <Collapse in={sectionState.taskSectionOpen} animateOpacity>
-              {/*    <SelectListItem
+              {/* <SelectListItem
                 items={options.platformOptions}
                 selectedItems={selectedOptions.task}
-                onItemClick={()}
+                onItemClick={setSelectedOptions}
               /> */}
             </Collapse>
           </Flex>
-          {/*     <Flex flexDirection="column" padding={4}>
+          <Flex flexDirection="column" padding={4}>
             <HStack justifyContent="space-between">
               <Flex gap={2} alignItems="center">
                 <Icon as={GlobalIcon} height={5} w={5} />
@@ -101,20 +167,21 @@ const Sidebar = () => {
               <Icon
                 cursor="pointer"
                 as={ArrowIcon}
-                transform={isOpenPlatform ? 'rotate(-90deg)' : 'rotate(90deg)'}
+                transform={
+                  sectionState.platformSectionOpen
+                    ? 'rotate(-90deg)'
+                    : 'rotate(90deg)'
+                }
                 height={5}
                 width={5}
-                onClick={onTogglePlatform}
+                onClick={() => toggleSection('platform')}
               />
             </HStack>
-            <Collapse in={isOpenPlatform} animateOpacity>
-              <SelectListItem
-                items={platformOptions}
-                selectedItems={selectedPlatform}
-                onItemClick={handlePlatformClick}
-              />
-            </Collapse>
-          </Flex> */}
+            <Collapse
+              in={sectionState.platformSectionOpen}
+              animateOpacity
+            ></Collapse>
+          </Flex>
         </Box>
       </Box>
     </>

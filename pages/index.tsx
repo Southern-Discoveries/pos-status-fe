@@ -1,10 +1,12 @@
 /* eslint-disable no-unused-vars */
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Collapse, Flex, useDisclosure } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
 
 import ChatScreen from '@/layouts/Chat';
 import Header from '@/layouts/Header';
+import RightSetting from '@/layouts/RightSidebar/RightSetting';
 import Sidebar from '@/layouts/Sidebar';
 import { Message, PostOption, EngineConfig } from '@/types';
 
@@ -151,7 +153,12 @@ export default function Update() {
   useEffect(() => {
     setChatMessages([]);
   }, []);
-
+  const {
+    isOpen: isOpenSetting,
+    onToggle: onToggleSetting,
+    getDisclosureProps,
+  } = useDisclosure();
+  const [hidden, setHidden] = useState(!isOpenSetting);
   return (
     <>
       <Head>
@@ -164,29 +171,41 @@ export default function Update() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
+      <Header isOpenSetting={isOpenSetting} onToggleSetting={onToggleSetting} />
 
       <Flex width="full">
         <Sidebar />
         <Box
-          height="800px"
+          minH="90vh"
+          height="full"
           /*   bg="shader.a.50" */
           backgroundImage={`url(assets/frame/BG.svg)`}
           backgroundSize="cover"
           width="full"
           backgroundRepeat="no-repeat"
           backgroundPosition="center"
-          padding={6}
         >
-          <ChatScreen
-            onCreateImage={handleCreateImage}
-            name={'Training'}
-            messages={trainingMessages}
-            loading={trainingLoading}
-            onSend={handleTrainingSend}
-            onReset={handleTrainingReset}
-          />
+          <Box margin={6} height="90vh">
+            <ChatScreen
+              onCreateImage={handleCreateImage}
+              name={'Training'}
+              messages={trainingMessages}
+              loading={trainingLoading}
+              onSend={handleTrainingSend}
+              onReset={handleTrainingReset}
+            />
+          </Box>
         </Box>
+        <motion.div
+          {...getDisclosureProps()}
+          hidden={hidden}
+          initial={false}
+          onAnimationStart={() => setHidden(false)}
+          onAnimationComplete={() => setHidden(!isOpenSetting)}
+          animate={{ width: isOpenSetting ? 500 : 0 }}
+        >
+          <RightSetting />
+        </motion.div>
       </Flex>
     </>
   );

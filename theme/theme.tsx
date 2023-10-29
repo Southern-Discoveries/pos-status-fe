@@ -1,6 +1,7 @@
 import {
   ComponentMultiStyleConfig,
   ComponentStyleConfig,
+  StyleFunctionProps,
   extendTheme,
 } from '@chakra-ui/react';
 export const colors = {
@@ -35,18 +36,19 @@ export const colors = {
 };
 const Button: ComponentStyleConfig = {
   variants: {
-    icon_btn: {
+    icon_btn: (props: StyleFunctionProps) => ({
       borderRadius: 'full',
       border: '0.063rem solid',
-      borderColor: 'shader.a.300',
+      borderColor: props.isActive ? 'primary.a.500' : 'shader.a.300',
+      bg: props.isActive ? 'primary.a.500' : 'white',
       padding: 2.5,
       svg: {
         // icon svg file
-        color: 'shader.a.900',
+        color: props.isActive ? 'white' : 'shader.a.900',
         height: 5,
         width: 5,
       },
-    },
+    }),
     send_btn: {
       paddingX: 4,
       paddingY: 2.5,
@@ -57,9 +59,19 @@ const Button: ComponentStyleConfig = {
     },
   },
 };
-const Input: ComponentStyleConfig = {
+const Textarea: ComponentStyleConfig = {
   variants: {
-    chat_input: {},
+    chat_input: {
+      bg: 'white',
+      resize: 'none',
+      height: '3.5rem',
+      maxHeight: '12.5rem',
+      overflowY: 'hidden',
+      py: 4,
+      borderRadius: '2xl',
+      border: '0.063rem solid ',
+      borderColor: 'shader.a.300',
+    },
   },
 };
 const Checkbox: ComponentMultiStyleConfig = {
@@ -104,7 +116,7 @@ const theme = extendTheme({
   components: {
     Button,
     Checkbox,
-    Input,
+    Textarea,
   },
 });
 

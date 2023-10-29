@@ -4,7 +4,7 @@ import React from 'react';
 
 import ChatInputs from '@/components/Chats/ChatInputs';
 import { Message } from '@/types';
-interface Props {
+export interface ChatScreenProps {
   name: String;
   messages: Message[];
   loading: boolean;
@@ -19,11 +19,11 @@ const ChatScreen = ({
   onSend,
   onReset,
   onCreateImage,
-}: Props) => {
+}: ChatScreenProps) => {
   return (
     <>
-      <Box>
-        <Box position="absolute" bottom={10} width="inherit">
+      <Box position="relative" height="full">
+        <Box left={0} bottom={0} width="full" position="absolute">
           <ChatInputs onSend={onSend} />
         </Box>
       </Box>

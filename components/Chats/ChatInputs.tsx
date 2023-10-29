@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { IconButton, Input, InputGroup } from '@chakra-ui/react';
+import { HStack, IconButton, Textarea } from '@chakra-ui/react';
 import { KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 import SendIcon from '@/public/assets/icons/line/send.svg';
@@ -9,7 +9,7 @@ interface Props {
 }
 
 const ChatInputs = ({ onSend }: Props) => {
-  const [content, setContent] = useState<string>();
+  const [messageContent, setMessageContent] = useState<string>('');
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -19,16 +19,16 @@ const ChatInputs = ({ onSend }: Props) => {
       return;
     }
 
-    setContent(value);
+    setMessageContent(value);
   };
 
   const handleSend = () => {
-    if (!content) {
+    if (!messageContent) {
       alert('Please enter a message');
       return;
     }
-    onSend({ role: 'user', content });
-    setContent('');
+    onSend({ role: 'user', content: messageContent });
+    setMessageContent('');
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -40,16 +40,30 @@ const ChatInputs = ({ onSend }: Props) => {
 
   useEffect(() => {
     if (textareaRef && textareaRef.current) {
-      textareaRef.current.style.height = 'inherit';
+      textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = `${textareaRef.current?.scrollHeight}px`;
     }
-  }, [content]);
-
+  }, [messageContent]);
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = '3.5rem'; // Adjust this value as needed
+    }
+  }, []);
   return (
     <>
-      <InputGroup position="relative">
-        <Input placeholder="Type SomeThing" />
+      <HStack position="relative" flexGrow={1} overflow="hidden">
+        <Textarea
+          value={messageContent}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          ref={textareaRef}
+          variant="chat_input"
+          height="56px"
+          rows={1}
+          placeholder="Type SomeThing"
+        />
         <IconButton
+          zIndex={6}
           aria-label={''}
           position="absolute"
           right={2}
@@ -57,7 +71,7 @@ const ChatInputs = ({ onSend }: Props) => {
           variant="send_btn"
           icon={<SendIcon />}
         />
-      </InputGroup>
+      </HStack>
     </>
   );
 };

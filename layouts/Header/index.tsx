@@ -4,15 +4,23 @@ import React from 'react';
 import BookIcon from '@/public/assets/icons/line/book.svg';
 import SettingIcon from '@/public/assets/icons/line/setting.svg';
 import Logo from '@/public/assets/logo/logo_title.svg';
-const Header = () => {
+interface IProps {
+  isOpenSetting?: boolean;
+  onToggleSetting?: () => void;
+}
+const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
   return (
     <HStack
       as="header"
+      position="sticky"
+      bg="white"
+      top={0}
       justifyContent="space-between"
       borderBottom="0.063rem solid"
       borderBottomColor="shader.a.200"
       width="full"
       px={6}
+      zIndex="99"
     >
       <HStack py="18px" gap="8px">
         <Logo />
@@ -25,6 +33,9 @@ const Header = () => {
         <IconButton
           variant="icon_btn"
           aria-label="Book Button"
+          color={isOpenSetting ? 'primary.a.400' : 'red'}
+          isActive={isOpenSetting}
+          onClick={onToggleSetting}
           icon={<BookIcon />}
         />
         <IconButton
