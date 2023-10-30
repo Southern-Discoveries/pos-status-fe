@@ -2,10 +2,15 @@
 import { Box, Collapse, Flex, HStack, Icon, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
+import CategorySection from './components/CategorySection';
+
 import SelectListItem from '@/components/Select/SelectListItem';
 import SelectRadioItem from '@/components/Select/SelectRadioItem';
 import ArrowIcon from '@/public/assets/icons/line/arrow.svg';
+import FileIcon from '@/public/assets/icons/line/file.svg';
 import GlobalIcon from '@/public/assets/icons/line/global.svg';
+import TargetIcon from '@/public/assets/icons/line/target.svg';
+import UserIcon from '@/public/assets/icons/line/user.svg';
 import { Options, SectionState, Selected } from '@/types/option';
 
 interface IProps {
@@ -88,7 +93,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
       fetchData(endpoints[category], category);
     }
   }, []);
-  console.log('Current Options', options.engineOptions);
+
   useEffect(() => {
     let new_config = {
       task: selectedTask ? selectedTask[0].name : null,
@@ -96,6 +101,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
       targets: selectedTargets.map(ele => ele.name),
       audiences: selectedAudiences.map(ele => ele.name),
     };
+
     setPostConfig(new_config);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTask, selectedPlatform, selectedAudiences, selectedTargets]);
@@ -168,121 +174,56 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
         borderRadius="xl"
         height="auto"
       >
-        <Flex flexDirection="column" padding={4}>
-          <HStack justifyContent="space-between">
-            <Flex gap={2} alignItems="center">
-              <Icon as={GlobalIcon} height={5} w={5} />
-              <Text fontWeight="600">Task </Text>
-            </Flex>
-            <Icon
-              cursor="pointer"
-              as={ArrowIcon}
-              transform={
-                sectionState.taskSectionOpen
-                  ? 'rotate(-90deg)'
-                  : 'rotate(90deg)'
-              }
-              height={5}
-              width={5}
-              onClick={() => toggleSection('task')}
-            />
-          </HStack>
-          <Collapse in={sectionState.taskSectionOpen} animateOpacity>
-            <SelectRadioItem
-              items={options.taskOptions}
-              selectedItems={selectedTask}
-              onItemClick={handleTaskClick}
-            />
-          </Collapse>
-        </Flex>
-        <Flex flexDirection="column" padding={4}>
-          <HStack justifyContent="space-between">
-            <Flex gap={2} alignItems="center">
-              <Icon as={GlobalIcon} height={5} w={5} />
-              <Text fontWeight="600">Media Platform</Text>
-            </Flex>
-            <Icon
-              cursor="pointer"
-              as={ArrowIcon}
-              transform={
-                sectionState.platformSectionOpen
-                  ? 'rotate(-90deg)'
-                  : 'rotate(90deg)'
-              }
-              height={5}
-              width={5}
-              onClick={() => toggleSection('platform')}
-            />
-          </HStack>
-          <Collapse in={sectionState.platformSectionOpen} animateOpacity>
-            <SelectRadioItem
-              items={options.platformOptions}
-              selectedItems={selectedPlatform}
-              onItemClick={handlePlatformClick}
-            />
-          </Collapse>
-        </Flex>
+        <CategorySection
+          type="radio"
+          icon={FileIcon}
+          label={'Task'}
+          isOpen={sectionState.taskSectionOpen}
+          onToggle={() => toggleSection('task')}
+          items={options.taskOptions}
+          selectedItems={selectedTask}
+          onItemClick={handleTaskClick}
+        />
+        <CategorySection
+          type="select"
+          icon={TargetIcon}
+          label={'Target'}
+          isOpen={sectionState.targetSectionOpen}
+          onToggle={() => toggleSection('target')}
+          items={options.targetOptions}
+          selectedItems={selectedTargets}
+          onItemClick={handleTargetClick}
+        />
+        <CategorySection
+          type="radio"
+          icon={GlobalIcon}
+          label={'Media Platform'}
+          isOpen={sectionState.platformSectionOpen}
+          onToggle={() => toggleSection('platform')}
+          items={options.platformOptions}
+          selectedItems={selectedPlatform}
+          onItemClick={handlePlatformClick}
+        />
 
-        <Flex flexDirection="column" padding={4}>
-          <HStack justifyContent="space-between">
-            <Flex gap={2} alignItems="center">
-              <Icon as={GlobalIcon} height={5} w={5} />
-              <Text fontWeight="600">Target</Text>
-            </Flex>
-            <Icon
-              cursor="pointer"
-              as={ArrowIcon}
-              transform={
-                sectionState.targetSectionOpen
-                  ? 'rotate(-90deg)'
-                  : 'rotate(90deg)'
-              }
-              height={5}
-              width={5}
-              onClick={() => toggleSection('target')}
-            />
-          </HStack>
-          <Collapse in={sectionState.targetSectionOpen} animateOpacity>
-            <SelectListItem
-              items={options.targetOptions}
-              selectedItems={selectedTargets}
-              onItemClick={handleTargetClick}
-            />
-          </Collapse>
-        </Flex>
+        <CategorySection
+          type="select"
+          icon={UserIcon}
+          label={'Audience'}
+          isOpen={sectionState.audienceSectionOpen}
+          onToggle={() => toggleSection('audience')}
+          items={options.audienceOptions}
+          selectedItems={selectedAudiences}
+          onItemClick={handleAudienceClick}
+        />
 
-        <Flex flexDirection="column" padding={4}>
-          <HStack justifyContent="space-between">
+        <Flex
+          flexDirection="column"
+          borderBottom="0.063rem solid"
+          borderBottomColor="shader.a.200"
+        >
+          <HStack justifyContent="space-between" padding={4}>
             <Flex gap={2} alignItems="center">
-              <Icon as={GlobalIcon} height={5} w={5} />
-              <Text fontWeight="600">Audience</Text>
-            </Flex>
-            <Icon
-              cursor="pointer"
-              as={ArrowIcon}
-              transform={
-                sectionState.audienceSectionOpen
-                  ? 'rotate(-90deg)'
-                  : 'rotate(90deg)'
-              }
-              height={5}
-              width={5}
-              onClick={() => toggleSection('audience')}
-            />
-          </HStack>
-          <Collapse in={sectionState.audienceSectionOpen} animateOpacity>
-            <SelectListItem
-              items={options.audienceOptions}
-              selectedItems={selectedAudiences}
-              onItemClick={handleAudienceClick}
-            />
-          </Collapse>
-        </Flex>
-
-        <Flex flexDirection="column" padding={4}>
-          <HStack justifyContent="space-between">
-            <Flex gap={2} alignItems="center">
-              <Icon as={GlobalIcon} height={5} w={5} />
+              <Icon as={GlobalIcon} height={5} w={5} color="primary.a.500" />
               <Text fontWeight="600">Engine</Text>
             </Flex>
             <Icon
@@ -298,7 +239,14 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
               onClick={() => toggleSection('engine')}
             />
           </HStack>
-          <Collapse in={sectionState.engineSectionOpen} animateOpacity>
+          <Collapse
+            in={sectionState.engineSectionOpen}
+            animateOpacity
+            style={{
+              padding: 4,
+              paddingTop: 2,
+            }}
+          >
             <SelectRadioItem
               items={options.engineOptions}
               selectedItems={selectedEngine}

@@ -1,5 +1,13 @@
 /* eslint-disable no-unused-vars */
-import { Box, Flex, useDisclosure } from '@chakra-ui/react';
+import {
+  Box,
+  Drawer,
+  DrawerContent,
+  DrawerOverlay,
+  Flex,
+  useBreakpointValue,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
@@ -154,12 +162,15 @@ export default function Update() {
   useEffect(() => {
     setChatMessages([]);
   }, []);
+  const isMobileScreen = useBreakpointValue({ base: true, md: false });
   const {
     isOpen: isOpenSetting,
     onToggle: onToggleSetting,
+    onClose: onCloseSetting,
     getDisclosureProps,
-  } = useDisclosure({ defaultIsOpen: true });
+  } = useDisclosure({ defaultIsOpen: isMobileScreen ? false : true });
   const [hidden, setHidden] = useState(!isOpenSetting);
+
   return (
     <>
       <Head>
@@ -174,10 +185,11 @@ export default function Update() {
 
       <Header isOpenSetting={isOpenSetting} onToggleSetting={onToggleSetting} />
 
-      <Flex width="full" overflowX="hidden" maxH="calc(100vh - 65px)">
+      <Flex width="full" overflowX="hidden" maxH="calc(100vh - 4.063rem)">
         <Box
+          display={{ md: 'block', base: 'none' }}
           bg="white"
-          minWidth="350px"
+          minWidth="21.875rem"
           borderRight="0.063rem solid"
           borderRightColor="shader.a.200"
           padding={4}
@@ -190,11 +202,12 @@ export default function Update() {
           </Scrollbar>
         </Box>
         <Box
-          maxH="calc(100vh - 65px)"
-          h="calc(100vh - 65px)"
+          maxH="calc(100vh - 4.063rem)"
+          h="calc(100vh - 4.063rem)"
           backgroundImage={`url(assets/frame/BG.svg)`}
           backgroundSize="cover"
           width="full"
+          flexGrow={1}
           backgroundRepeat="no-repeat"
           backgroundPosition="center"
         >
@@ -206,31 +219,64 @@ export default function Update() {
             onReset={handleChatReset}
           />
         </Box>
-        <motion.div
-          {...getDisclosureProps()}
-          hidden={hidden}
-          initial={false}
-          onAnimationStart={() => setHidden(false)}
-          onAnimationComplete={() => setHidden(!isOpenSetting)}
-          animate={{ width: isOpenSetting ? 500 : 0 }}
-        >
-          <Box
-            overflow="hidden"
-            height="full"
-            borderLeft="0.063rem solid"
-            borderLeftColor="shader.a.200"
-            position="relative"
-            bg="white"
-          >
-            <TrainingChat
-              onCreateImage={handleCreateImage}
-              messages={trainingMessages}
-              loading={trainingLoading}
-              onSend={handleTrainingSend}
-              onReset={handleTrainingReset}
-            />
-          </Box>
-        </motion.div>
+        {isMobileScreen ? (
+          <>
+            <Drawer
+              isOpen={isOpenSetting}
+              onClose={onCloseSetting}
+              placement="right"
+            >
+              <DrawerOverlay />
+              <DrawerContent>
+                <Box
+                  overflow="hidden"
+                  height="full"
+                  borderLeft="0.063rem solid"
+                  borderLeftColor="shader.a.200"
+                  position="relative"
+                  bg="white"
+                >
+                  <TrainingChat
+                    onCreateImage={handleCreateImage}
+                    messages={trainingMessages}
+                    loading={trainingLoading}
+                    onSend={handleTrainingSend}
+                    onReset={handleTrainingReset}
+                  />
+                </Box>
+              </DrawerContent>
+            </Drawer>
+          </>
+        ) : (
+          <>
+            <motion.div
+              {...getDisclosureProps()}
+              hidden={hidden}
+              initial={false}
+              transition={{ duration: 0.3 }}
+              onAnimationStart={() => setHidden(false)}
+              onAnimationComplete={() => setHidden(!isOpenSetting)}
+              animate={{ width: isOpenSetting ? 500 : 0 }}
+            >
+              <Box
+                overflow="hidden"
+                height="full"
+                borderLeft="0.063rem solid"
+                borderLeftColor="shader.a.200"
+                position="relative"
+                bg="white"
+              >
+                <TrainingChat
+                  onCreateImage={handleCreateImage}
+                  messages={trainingMessages}
+                  loading={trainingLoading}
+                  onSend={handleTrainingSend}
+                  onReset={handleTrainingReset}
+                />
+              </Box>
+            </motion.div>
+          </>
+        )}
       </Flex>
     </>
   );
