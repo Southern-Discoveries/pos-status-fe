@@ -1,5 +1,5 @@
 import { Box, Flex } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { ChatScreenProps } from '../Chat';
 
@@ -16,6 +16,13 @@ const TrainingChat = ({
   onReset,
   onCreateImage,
 }: ChatScreenProps) => {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
   return (
     <Flex flexDirection="column" height="full">
       <Box
@@ -24,7 +31,7 @@ const TrainingChat = ({
         flexBasis={0}
         padding={4}
         overflow="hidden"
-        pb="6rem"
+        pb="7rem"
       >
         <Box position="relative" height="full">
           <Scrollbar>
@@ -41,6 +48,7 @@ const TrainingChat = ({
 
             {loading && <ChatLoader />}
             <ChatReset onReset={onReset} />
+            <Box ref={messagesEndRef} />
           </Scrollbar>
         </Box>
       </Box>

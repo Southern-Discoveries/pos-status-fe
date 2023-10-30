@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Box, Flex } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import ChatInputs from '@/components/Chats/ChatInputs';
 import ChatLoader from '@/components/Chats/ChatLoader';
@@ -22,11 +22,18 @@ const ChatScreen = ({
   onReset,
   onCreateImage,
 }: ChatScreenProps) => {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
   return (
     <>
       <Box position="relative" height="full" width="full">
         <Scrollbar>
-          <Box padding={6} py={8}>
+          <Box padding={6} py={8} pb={12}>
             {loading && <ChatLoader />}
             <ChatReset onReset={onReset} />
             <Flex flexDirection="column" gap={4}>
@@ -39,6 +46,7 @@ const ChatScreen = ({
                 </Box>
               ))}
             </Flex>
+            <Box ref={messagesEndRef} />
           </Box>
         </Scrollbar>
 
