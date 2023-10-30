@@ -111,11 +111,35 @@ const Checkbox: ComponentMultiStyleConfig = {
   },
   parts: [],
 };
+const Radio: ComponentMultiStyleConfig = {
+  variants: {
+    primary: {
+      control: {
+        _checked: {
+          background: 'white',
+          color: 'primary.a.400',
+          borderColor: 'primary.a.400',
+        },
+      },
+      label: {},
+      container: {
+        padding: 3,
+        _checked: {
+          border: '0.125rem solid',
+          borderColor: 'primary.a.400',
+          borderRadius: 'xl',
+        },
+      },
+    },
+  },
+  parts: [],
+};
 const theme = extendTheme({
   colors,
   components: {
     Button,
     Checkbox,
+    Radio,
     Textarea,
   },
 });

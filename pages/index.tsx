@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Box, Collapse, Flex, useDisclosure } from '@chakra-ui/react';
+import { Box, Flex, useDisclosure } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import Scrollbar from '@/components/Scrollbar';
 import ChatScreen from '@/layouts/Chat';
 import Header from '@/layouts/Header';
-import RightSetting from '@/layouts/RightSidebar/RightSetting';
+import TrainingChat from '@/layouts/RightSidebar/TrainingChat';
 import Sidebar from '@/layouts/Sidebar';
 import { Message, PostOption, EngineConfig } from '@/types';
 
@@ -175,35 +175,36 @@ export default function Update() {
       <Header isOpenSetting={isOpenSetting} onToggleSetting={onToggleSetting} />
 
       <Flex width="full" overflowX="hidden" maxH="calc(100vh - 65px)">
-        <Box bg="white" minWidth="350px">
-          <Scrollbar>
-            <Box
-              borderRight="0.063rem solid"
-              borderRightColor="shader.a.200"
-              padding={4}
-            >
-              <Sidebar />
-            </Box>
+        <Box
+          bg="white"
+          minWidth="350px"
+          borderRight="0.063rem solid"
+          borderRightColor="shader.a.200"
+          padding={4}
+        >
+          <Scrollbar overflowY="auto" overflow="hidden">
+            <Sidebar
+              setEngineConfig={setEngineConfig}
+              setPostConfig={setPostConfig}
+            />
           </Scrollbar>
         </Box>
         <Box
-          height="100vh"
+          maxH="calc(100vh - 65px)"
+          h="calc(100vh - 65px)"
           backgroundImage={`url(assets/frame/BG.svg)`}
           backgroundSize="cover"
           width="full"
           backgroundRepeat="no-repeat"
           backgroundPosition="center"
         >
-          <Box margin={6}>
-            <ChatScreen
-              onCreateImage={handleCreateImage}
-              name={'Training'}
-              messages={trainingMessages}
-              loading={trainingLoading}
-              onSend={handleTrainingSend}
-              onReset={handleTrainingReset}
-            />
-          </Box>
+          <ChatScreen
+            onCreateImage={handleCreateImage}
+            messages={chatMessages}
+            loading={chatLoading}
+            onSend={handleChatSend}
+            onReset={handleChatReset}
+          />
         </Box>
         <motion.div
           {...getDisclosureProps()}
@@ -213,7 +214,22 @@ export default function Update() {
           onAnimationComplete={() => setHidden(!isOpenSetting)}
           animate={{ width: isOpenSetting ? 500 : 0 }}
         >
-          <RightSetting />
+          <Box
+            overflow="hidden"
+            height="full"
+            borderLeft="0.063rem solid"
+            borderLeftColor="shader.a.200"
+            position="relative"
+            bg="white"
+          >
+            <TrainingChat
+              onCreateImage={handleCreateImage}
+              messages={trainingMessages}
+              loading={trainingLoading}
+              onSend={handleTrainingSend}
+              onReset={handleTrainingReset}
+            />
+          </Box>
         </motion.div>
       </Flex>
     </>

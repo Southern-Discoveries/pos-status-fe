@@ -63,6 +63,7 @@ const ChatInputs = ({ onSend }: Props) => {
           placeholder="Type SomeThing"
         />
         <IconButton
+          onClick={() => handleSend()}
           zIndex={6}
           aria-label={''}
           position="absolute"

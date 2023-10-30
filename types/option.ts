@@ -3,7 +3,7 @@ import { PostOption } from '.';
 // Task Option
 export type SelectedOptions = {
   task: string | null;
-  engine: PostOption | null;
+  engine: string | null;
   platform: string | null;
   targets: PostOption[];
   audiences: PostOption[];
