@@ -12,9 +12,8 @@ const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
   return (
     <HStack
       as="header"
-      position="sticky"
       bg="white"
-      top={0}
+      /*   top={0} */ /*    position="sticky" */
       justifyContent="space-between"
       borderBottom="0.063rem solid"
       borderBottomColor="shader.a.200"

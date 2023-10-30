@@ -8,13 +8,12 @@ interface IProps {
 }
 /// List select check
 const SelectRadioItem = ({ items, selectedItems, onItemClick }: IProps) => {
-  selectedItems = selectedItems || [];
   return (
     <>
       <RadioGroup value={selectedItems} onChange={onItemClick}>
         <Flex flexDirection="column" gap={2} py={2}>
           {items.map((item: any) => (
-            <Radio key={item.name} variant="primary" value={item}>
+            <Radio key={item.name} variant="primary" value={item.name}>
               {item.name}
             </Radio>
           ))}

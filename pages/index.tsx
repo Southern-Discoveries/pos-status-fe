@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
 
+import Scrollbar from '@/components/Scrollbar';
 import ChatScreen from '@/layouts/Chat';
 import Header from '@/layouts/Header';
 import RightSetting from '@/layouts/RightSidebar/RightSetting';
@@ -173,19 +174,27 @@ export default function Update() {
 
       <Header isOpenSetting={isOpenSetting} onToggleSetting={onToggleSetting} />
 
-      <Flex width="full">
-        <Sidebar />
+      <Flex width="full" overflowX="hidden" maxH="calc(100vh - 65px)">
+        <Box bg="white" minWidth="350px">
+          <Scrollbar>
+            <Box
+              borderRight="0.063rem solid"
+              borderRightColor="shader.a.200"
+              padding={4}
+            >
+              <Sidebar />
+            </Box>
+          </Scrollbar>
+        </Box>
         <Box
-          minH="90vh"
-          height="full"
-          /*   bg="shader.a.50" */
+          height="100vh"
           backgroundImage={`url(assets/frame/BG.svg)`}
           backgroundSize="cover"
           width="full"
           backgroundRepeat="no-repeat"
           backgroundPosition="center"
         >
-          <Box margin={6} height="90vh">
+          <Box margin={6}>
             <ChatScreen
               onCreateImage={handleCreateImage}
               name={'Training'}

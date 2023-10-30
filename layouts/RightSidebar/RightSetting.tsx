@@ -2,6 +2,7 @@ import { Box, Flex, Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
 import ChatInputs from '@/components/Chats/ChatInputs';
+import Scrollbar from '@/components/Scrollbar';
 import { Message } from '@/types';
 
 const RightSetting = () => {
@@ -35,10 +36,10 @@ const RightSetting = () => {
             pb="6rem"
           >
             <Box position="relative" height="full">
-              <Box overflowY="auto" height="full">
+              <Scrollbar>
                 <Box height="2000px">das</Box>
                 <Text> dasdwqewq</Text>
-              </Box>
+              </Scrollbar>
             </Box>
           </Box>
           <Box
