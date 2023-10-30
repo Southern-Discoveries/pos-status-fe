@@ -17,11 +17,18 @@ export type SectionState = {
   engineSectionOpen: boolean;
 };
 
+// Basic Info Of Model
+export interface Selected {
+  name: string;
+  des: string;
+  models?: any;
+}
+
 export type Options = {
-  taskOptions: PostOption[];
-  targetOptions: PostOption[];
-  audienceOptions: PostOption[];
-  platformOptions: PostOption[];
+  taskOptions: Selected[];
+  targetOptions: Selected[];
+  audienceOptions: Selected[];
+  platformOptions: Selected[];
   engineOptions: PostOption[];
   modelOptions: string[];
 };

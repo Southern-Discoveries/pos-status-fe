@@ -15,6 +15,7 @@ const streamForward = async (body: any, write: (data: string) => void) => {
   });
 
   if (res.status !== 200) {
+    // eslint-disable-next-line no-console
     console.error(res);
     throw new Error('OpenAI API returned an error');
   }

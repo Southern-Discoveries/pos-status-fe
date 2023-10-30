@@ -18,7 +18,6 @@ const SelectRadioItem = ({ items, selectedItems, onItemClick }: IProps) => {
           const selectedItem = items.find((item: any) => item.name === e);
           if (selectedItem) {
             onItemClick(selectedItem); // Return the entire object
-            console.log(selectedItem); // Log the selected item
           }
         }}
       >

@@ -1,37 +1,27 @@
 /* eslint-disable no-unused-vars */
 import { Box, Collapse, Flex, HStack, Icon, Text } from '@chakra-ui/react';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import SelectListItem from '@/components/Select/SelectListItem';
 import SelectRadioItem from '@/components/Select/SelectRadioItem';
 import ArrowIcon from '@/public/assets/icons/line/arrow.svg';
 import GlobalIcon from '@/public/assets/icons/line/global.svg';
-import { EngineConfig, PostOption } from '@/types';
-import {
-  ModelSettings,
-  Options,
-  SectionState,
-  SelectedOptions,
-} from '@/types/option';
+import { Options, SectionState, Selected } from '@/types/option';
 
 interface IProps {
-  setPostConfig: Dispatch<SetStateAction<PostOption | undefined>>;
-  setEngineConfig: Dispatch<SetStateAction<EngineConfig | undefined>>;
+  setPostConfig: any;
+  setEngineConfig: any;
 }
-const Sidebar = ({ setPostConfig, setEngineConfig }) => {
+const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
   // This is selectedOptions => Use send to api
-  const [selectedTask, setSelectedTask] = useState(null);
-  const [selectedEngine, setSelectedEngine] = useState(null);
-  const [selectedPlatform, setSelectedPlatform] = useState(null);
+  const [selectedTask, setSelectedTask] = useState<Selected[] | null>(null);
+  const [selectedEngine, setSelectedEngine] = useState<Selected[] | null>(null);
+  const [selectedPlatform, setSelectedPlatform] = useState<Selected[] | null>(
+    null
+  );
 
-  const [selectedTargets, setSelectedTargets] = useState([]);
-  const [selectedAudiences, setSelectedAudiences] = useState([]);
-
-  const [taskOptions, setTaskOptions] = useState([]);
-  const [targetOptions, setTargetOptions] = useState([]);
-  const [audienceOptions, setAudienceOptions] = useState([]);
-  const [platformOptions, setPlatformOptions] = useState([]);
-  const [engineOptions, setEngineOptions] = useState([]);
+  const [selectedTargets, setSelectedTargets] = useState<Selected[]>([]);
+  const [selectedAudiences, setSelectedAudiences] = useState<Selected[]>([]);
 
   const [modelOptions, setModelOptions] = useState([]);
   const [model, setModel] = useState(); // Initial model
@@ -47,14 +37,14 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
   });
 
   // This is Option get from api
-  /*   const [options, setOptions] = useState<Options>({
+  const [options, setOptions] = useState<Options>({
     taskOptions: [],
     targetOptions: [],
     audienceOptions: [],
     platformOptions: [],
     engineOptions: [],
     modelOptions: [],
-  }); */
+  });
 
   // OnToggle Function for many Section
   const toggleSection = (sectionName: string) => {
@@ -65,12 +55,12 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
     });
   };
   // Fetch Data and log Error if exist
-  /*  async function fetchData(endpoint: string, category: string) {
+  async function fetchData(endpoint: string, category: string) {
     try {
       const response = await fetch(endpoint);
       if (response.ok) {
         const data = await response.json();
-        setOptions(prevOptions => ({
+        setOptions((prevOptions: any) => ({
           ...prevOptions,
           [`${category}Options`]: data,
         }));
@@ -97,57 +87,8 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
     for (const category in endpoints) {
       fetchData(endpoints[category], category);
     }
-  }, []); */
-
-  useEffect(() => {
-    // Define the API endpoints
-    const taskEndpoint = '/api/ai/tasks';
-    const targetEndpoint = '/api/ai/targets';
-    const audienceEndpoint = '/api/ai/audiences';
-    const platformEndpoint = '/api/ai/platforms';
-    const engineEndpoint = '/api/ai/engines';
-
-    // Fetch task data
-    fetch(taskEndpoint)
-      .then(response => response.json())
-      .then(data => {
-        setTaskOptions(data);
-      })
-      .catch(error => console.error('Error fetching task data: ' + error));
-
-    // Fetch target data
-    fetch(targetEndpoint)
-      .then(response => response.json())
-      .then(data => {
-        setTargetOptions(data);
-      })
-      .catch(error => console.error('Error fetching target data: ' + error));
-
-    // Fetch audience data
-    fetch(audienceEndpoint)
-      .then(response => response.json())
-      .then(data => {
-        setAudienceOptions(data);
-      })
-      .catch(error => console.error('Error fetching audience data: ' + error));
-
-    // Fetch platform data
-    fetch(platformEndpoint)
-      .then(response => response.json())
-      .then(data => {
-        setPlatformOptions(data);
-      })
-      .catch(error => console.error('Error fetching platform data: ' + error));
-
-    // Fetch engine data
-    fetch(engineEndpoint)
-      .then(response => response.json())
-      .then(data => {
-        setEngineOptions(data);
-      })
-      .catch(error => console.error('Error fetching engine data: ' + error));
   }, []);
-
+  console.log('Current Options', options.engineOptions);
   useEffect(() => {
     let new_config = {
       task: selectedTask ? selectedTask[0].name : null,
@@ -156,7 +97,8 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
       audiences: selectedAudiences.map(ele => ele.name),
     };
     setPostConfig(new_config);
-  }, [selectedTask, selectedPlatform, selectedAudiences, selectedAudiences]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTask, selectedPlatform, selectedAudiences, selectedTargets]);
   useEffect(() => {
     if (selectedEngine) {
       setModelOptions(selectedEngine[0].models);
@@ -170,23 +112,24 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
     };
 
     setEngineConfig(new_config);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedEngine, model, temperature]);
   // Handle the click of a Task button
-  const handleTaskClick = task => {
+  const handleTaskClick = (task: any) => {
     setSelectedTask([task]);
   };
 
   // Handle the click of a Platform button
-  const handlePlatformClick = platform => {
+  const handlePlatformClick = (platform: any) => {
     setSelectedPlatform([platform]);
   };
 
-  const handleEngineClick = engine => {
+  const handleEngineClick = (engine: any) => {
     setSelectedEngine([engine]);
   };
 
   // Handle the click of a Target button
-  const handleTargetClick = target => {
+  const handleTargetClick = (target: any) => {
     if (selectedTargets.includes(target)) {
       setSelectedTargets(selectedTargets.filter(item => item !== target));
     } else {
@@ -195,7 +138,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
   };
 
   // Handle the click of an Audience button
-  const handleAudienceClick = audience => {
+  const handleAudienceClick = (audience: any) => {
     if (selectedAudiences.includes(audience)) {
       setSelectedAudiences(selectedAudiences.filter(item => item !== audience));
     } else {
@@ -203,13 +146,13 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
     }
   };
 
-  const handleModelChange = selectedModel => {
+  const handleModelChange = (selectedModel: any) => {
     // Update the selected model in the component's state
     setModel(selectedModel);
     // You can also perform other actions, like making API requests, based on the selected model.
   };
 
-  const handleTemperatureChange = newTemperature => {
+  const handleTemperatureChange = (newTemperature: any) => {
     // Ensure the temperature is within the range 0.1 to 1.0
     const parsedTemperature = parseFloat(newTemperature);
     if (parsedTemperature >= 0.1 && parsedTemperature <= 1.0) {
@@ -246,7 +189,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
           </HStack>
           <Collapse in={sectionState.taskSectionOpen} animateOpacity>
             <SelectRadioItem
-              items={taskOptions}
+              items={options.taskOptions}
               selectedItems={selectedTask}
               onItemClick={handleTaskClick}
             />
@@ -273,7 +216,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
           </HStack>
           <Collapse in={sectionState.platformSectionOpen} animateOpacity>
             <SelectRadioItem
-              items={platformOptions}
+              items={options.platformOptions}
               selectedItems={selectedPlatform}
               onItemClick={handlePlatformClick}
             />
@@ -301,7 +244,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
           </HStack>
           <Collapse in={sectionState.targetSectionOpen} animateOpacity>
             <SelectListItem
-              items={targetOptions}
+              items={options.targetOptions}
               selectedItems={selectedTargets}
               onItemClick={handleTargetClick}
             />
@@ -329,7 +272,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
           </HStack>
           <Collapse in={sectionState.audienceSectionOpen} animateOpacity>
             <SelectListItem
-              items={audienceOptions}
+              items={options.audienceOptions}
               selectedItems={selectedAudiences}
               onItemClick={handleAudienceClick}
             />
@@ -357,7 +300,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }) => {
           </HStack>
           <Collapse in={sectionState.engineSectionOpen} animateOpacity>
             <SelectRadioItem
-              items={engineOptions}
+              items={options.engineOptions}
               selectedItems={selectedEngine}
               onItemClick={handleEngineClick}
             />

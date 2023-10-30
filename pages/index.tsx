@@ -158,7 +158,7 @@ export default function Update() {
     isOpen: isOpenSetting,
     onToggle: onToggleSetting,
     getDisclosureProps,
-  } = useDisclosure();
+  } = useDisclosure({ defaultIsOpen: true });
   const [hidden, setHidden] = useState(!isOpenSetting);
   return (
     <>
