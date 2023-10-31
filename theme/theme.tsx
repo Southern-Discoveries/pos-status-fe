@@ -2,6 +2,7 @@ import {
   ComponentMultiStyleConfig,
   ComponentStyleConfig,
   StyleFunctionProps,
+  calc,
   extendTheme,
 } from '@chakra-ui/react';
 export const colors = {
@@ -49,13 +50,16 @@ const Button: ComponentStyleConfig = {
         width: 5,
       },
     }),
-    send_btn: {
+    primary: {
       paddingX: 4,
       paddingY: 2.5,
       bg: 'primary.a.400',
       color: 'white',
       borderBottom: '0.188rem solid',
       borderBottomColor: 'primary.a.500',
+      _hover: {
+        borderBottomColor: 'primary.a.600',
+      },
     },
   },
 };
@@ -134,6 +138,42 @@ const Radio: ComponentMultiStyleConfig = {
   },
   parts: [],
 };
+const Tabs: ComponentStyleConfig = {
+  variants: {
+    right_sidebar: {
+      root: {
+        h: calc('100vh').subtract('115px').toString(),
+      },
+      tab: {
+        color: 'shader.a.400',
+        fontWeight: 'bold',
+        borderBottom: '1px solid',
+        borderBottomColor: 'shader.a.300',
+        flex: 1,
+        py: 4,
+        _selected: {
+          color: 'shader.a.900',
+          borderBottom: '3px solid',
+          zIndex: 2,
+          borderBottomColor: 'primary.a.400',
+        },
+      },
+      tablist: {
+        display: 'flex',
+      },
+      tabpanels: {
+        padding: 0,
+        height: 'full',
+        width: 'full',
+      },
+      tabpanel: {
+        padding: 0,
+        height: 'full',
+        width: 'full',
+      },
+    },
+  },
+};
 const theme = extendTheme({
   colors,
   components: {
@@ -141,6 +181,7 @@ const theme = extendTheme({
     Checkbox,
     Radio,
     Textarea,
+    Tabs,
   },
 });
 

@@ -69,7 +69,7 @@ const ChatInputs = ({ onSend }: Props) => {
           position="absolute"
           right={2}
           bottom={2}
-          variant="send_btn"
+          variant="primary"
           icon={<SendIcon />}
         />
       </HStack>

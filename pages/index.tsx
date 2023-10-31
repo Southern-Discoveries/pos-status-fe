@@ -5,6 +5,12 @@ import {
   DrawerContent,
   DrawerOverlay,
   Flex,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  calc,
   useBreakpointValue,
   useDisclosure,
 } from '@chakra-ui/react';
@@ -13,10 +19,12 @@ import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
 
 import Scrollbar from '@/components/Scrollbar';
-import ChatScreen from '@/layouts/Chat';
+import ChatScreen from '@/layouts/ChatScreen';
 import Header from '@/layouts/Header';
-import TrainingChat from '@/layouts/RightSidebar/TrainingChat';
+import ActivityTopic from '@/layouts/RightSidebar/ActivityTopic';
+import TrainingChatScreen from '@/layouts/RightSidebar/TrainingChat';
 import Sidebar from '@/layouts/Sidebar';
+import { colors } from '@/theme/theme';
 import { Message, PostOption, EngineConfig } from '@/types';
 
 export default function Update() {
@@ -185,7 +193,11 @@ export default function Update() {
 
       <Header isOpenSetting={isOpenSetting} onToggleSetting={onToggleSetting} />
 
-      <Flex width="full" overflowX="hidden" maxH="calc(100vh - 4.063rem)">
+      <Flex
+        width="full"
+        overflowX="hidden"
+        maxH={{ md: 'calc(100vh - 4.063rem)', base: '100vh' }}
+      >
         <Box
           display={{ md: 'block', base: 'none' }}
           bg="white"
@@ -228,22 +240,34 @@ export default function Update() {
             >
               <DrawerOverlay />
               <DrawerContent>
-                <Box
-                  overflow="hidden"
-                  height="full"
-                  borderLeft="0.063rem solid"
-                  borderLeftColor="shader.a.200"
-                  position="relative"
-                  bg="white"
-                >
-                  <TrainingChat
-                    onCreateImage={handleCreateImage}
-                    messages={trainingMessages}
-                    loading={trainingLoading}
-                    onSend={handleTrainingSend}
-                    onReset={handleTrainingReset}
-                  />
-                </Box>
+                <Tabs variant="right_sidebar">
+                  <TabList height="54px">
+                    <Tab>Trainning</Tab>
+                    <Tab>Activity</Tab>
+                  </TabList>
+                  <TabPanels>
+                    <TabPanel>
+                      <Box
+                        overflow="hidden"
+                        height="full"
+                        position="relative"
+                        bg="white"
+                        h="calc(100vh - 65px)"
+                      >
+                        <TrainingChatScreen
+                          onCreateImage={handleCreateImage}
+                          messages={trainingMessages}
+                          loading={trainingLoading}
+                          onSend={handleTrainingSend}
+                          onReset={handleTrainingReset}
+                        />
+                      </Box>
+                    </TabPanel>
+                    <TabPanel padding={4}>
+                      <ActivityTopic />
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
               </DrawerContent>
             </Drawer>
           </>
@@ -256,24 +280,32 @@ export default function Update() {
               transition={{ duration: 0.3 }}
               onAnimationStart={() => setHidden(false)}
               onAnimationComplete={() => setHidden(!isOpenSetting)}
+              style={{
+                borderLeft: '0.063rem solid',
+                borderLeftColor: colors.shader.a[200],
+              }}
               animate={{ width: isOpenSetting ? 500 : 0 }}
             >
-              <Box
-                overflow="hidden"
-                height="full"
-                borderLeft="0.063rem solid"
-                borderLeftColor="shader.a.200"
-                position="relative"
-                bg="white"
-              >
-                <TrainingChat
-                  onCreateImage={handleCreateImage}
-                  messages={trainingMessages}
-                  loading={trainingLoading}
-                  onSend={handleTrainingSend}
-                  onReset={handleTrainingReset}
-                />
-              </Box>
+              <Tabs variant="right_sidebar">
+                <TabList height="54px">
+                  <Tab>Trainning</Tab>
+                  <Tab>Activity</Tab>
+                </TabList>
+                <TabPanels>
+                  <TabPanel>
+                    <TrainingChatScreen
+                      onCreateImage={handleCreateImage}
+                      messages={trainingMessages}
+                      loading={trainingLoading}
+                      onSend={handleTrainingSend}
+                      onReset={handleTrainingReset}
+                    />
+                  </TabPanel>
+                  <TabPanel>
+                    <ActivityTopic />
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
             </motion.div>
           </>
         )}
