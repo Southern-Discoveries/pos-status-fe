@@ -1,12 +1,25 @@
-import { Chat } from "@/components/Chat/Chat";
-import { Footer } from "@/components/Layout/Footer";
-import { Navbar } from "@/components/Layout/Navbar";
-import { Message, PostOption, EngineConfig } from "@/types";
-import Head from "next/head";
-import { useEffect, useRef, useState } from "react";
-import Sidebar from "@/components/SideBar/SideBar";
+/* eslint-disable no-unused-vars */
+import {
+  Box,
+  Drawer,
+  DrawerContent,
+  DrawerOverlay,
+  Flex,
+  useBreakpointValue,
+  useDisclosure,
+} from '@chakra-ui/react';
+import { motion } from 'framer-motion';
+import Head from 'next/head';
+import { useEffect, useRef, useState } from 'react';
 
-export default function Home() {
+import Scrollbar from '@/components/Scrollbar';
+import ChatScreen from '@/layouts/Chat';
+import Header from '@/layouts/Header';
+import TrainingChat from '@/layouts/RightSidebar/TrainingChat';
+import Sidebar from '@/layouts/Sidebar';
+import { Message, PostOption, EngineConfig } from '@/types';
+
+export default function Update() {
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
 
   const [chatLoading, setChatLoading] = useState<boolean>(false);
@@ -20,7 +33,7 @@ export default function Home() {
   const [engineConfig, setEngineConfig] = useState<EngineConfig>();
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleTrainingSend = async (message: Message) => {
@@ -31,13 +44,13 @@ export default function Home() {
 
   const handleCreateImage = async (msg: string) => {
     setChatLoading(true);
-    let htmlMsg = "```html";
+    let htmlMsg = '```html';
 
     try {
-      const response = await fetch("/api/ai/image", {
-        method: "POST",
+      const response = await fetch('/api/ai/image', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           content: msg.slice(0, 999),
@@ -47,21 +60,21 @@ export default function Home() {
       if (res && res.data) {
         for (const img of res.data) {
           htmlMsg += `<img src="${img.url.replace(
-            "https://oaidalleapiprodscus.blob.core.windows.net/",
-            "/api/oaidalleapiprodscus/"
+            'https://oaidalleapiprodscus.blob.core.windows.net/',
+            '/api/oaidalleapiprodscus/'
           )}"/>`;
 
-          console.log(htmlMsg);
+          /*   console.log(htmlMsg); */
         }
       }
     } catch (error) {
     } finally {
       setChatLoading(false);
     }
-    setChatMessages((chatMessages) => [
+    setChatMessages(chatMessages => [
       ...chatMessages,
       {
-        role: "assistant",
+        role: 'assistant',
         content: htmlMsg,
       },
     ]);
@@ -76,15 +89,15 @@ export default function Home() {
       content: message.content,
       post: postConfig,
       engine: engineConfig,
-      data: trainingMessages.map((element) => element.content),
+      data: trainingMessages.map(element => element.content),
     };
 
-    console.log("request_body: ", request_body);
+    /*    console.log('request_body: ', request_body); */
 
-    const response = await fetch("/api/stream/chat", {
-      method: "POST",
+    const response = await fetch('/api/stream/chat', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(request_body),
     });
@@ -114,15 +127,15 @@ export default function Home() {
 
       if (isFirst) {
         isFirst = false;
-        setChatMessages((chatMessages) => [
+        setChatMessages(chatMessages => [
           ...chatMessages,
           {
-            role: "assistant",
+            role: 'assistant',
             content: chunkValue,
           },
         ]);
       } else {
-        setChatMessages((chatMessages) => {
+        setChatMessages(chatMessages => {
           const lastMessage = chatMessages[chatMessages.length - 1];
           const updatedMessage = {
             ...lastMessage,
@@ -149,6 +162,14 @@ export default function Home() {
   useEffect(() => {
     setChatMessages([]);
   }, []);
+  const isMobileScreen = useBreakpointValue({ base: true, md: false });
+  const {
+    isOpen: isOpenSetting,
+    onToggle: onToggleSetting,
+    onClose: onCloseSetting,
+    getDisclosureProps,
+  } = useDisclosure({ defaultIsOpen: isMobileScreen ? false : true });
+  const [hidden, setHidden] = useState(!isOpenSetting);
 
   return (
     <>
@@ -162,43 +183,101 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="flex h-screen">
-        <Sidebar
-          setPostConfig={setPostConfig}
-          setEngineConfig={setEngineConfig}
-        />
+      <Header isOpenSetting={isOpenSetting} onToggleSetting={onToggleSetting} />
 
-        <div className="flex flex-row h-full">
-          <div className="w-1/2 overflow-auto sm:px-10 pb-4 sm:pb-10">
-            <div className="min-w-[800px] max-w-[1000px] mx-auto mt-4 sm:mt-12">
-              <Chat
-                onCreateImage={handleCreateImage}
-                name={"Training"}
-                messages={trainingMessages}
-                loading={trainingLoading}
-                onSend={handleTrainingSend}
-                onReset={handleTrainingReset}
-              />
-              <div ref={messagesEndRef} />
-            </div>
-          </div>
-
-          <div className="w-1/2 overflow-auto sm:px-10 pb-4 sm:pb-10">
-            <div className="min-w-[800px] max-w-[1000px] mx-auto mt-4 sm:mt-12">
-              <Chat
-                onCreateImage={handleCreateImage}
-                name={"Chat"}
-                messages={chatMessages}
-                loading={chatLoading}
-                onSend={handleChatSend}
-                onReset={handleChatReset}
-              />
-              <div ref={messagesEndRef} />
-            </div>
-          </div>
-          <Footer />
-        </div>
-      </div>
+      <Flex width="full" overflowX="hidden" maxH="calc(100vh - 4.063rem)">
+        <Box
+          display={{ md: 'block', base: 'none' }}
+          bg="white"
+          minWidth="21.875rem"
+          borderRight="0.063rem solid"
+          borderRightColor="shader.a.200"
+          padding={4}
+        >
+          <Scrollbar overflowY="auto" overflow="hidden">
+            <Sidebar
+              setEngineConfig={setEngineConfig}
+              setPostConfig={setPostConfig}
+            />
+          </Scrollbar>
+        </Box>
+        <Box
+          maxH="calc(100vh - 4.063rem)"
+          h="calc(100vh - 4.063rem)"
+          backgroundImage={`url(assets/frame/BG.svg)`}
+          backgroundSize="cover"
+          width="full"
+          flexGrow={1}
+          backgroundRepeat="no-repeat"
+          backgroundPosition="center"
+        >
+          <ChatScreen
+            onCreateImage={handleCreateImage}
+            messages={chatMessages}
+            loading={chatLoading}
+            onSend={handleChatSend}
+            onReset={handleChatReset}
+          />
+        </Box>
+        {isMobileScreen ? (
+          <>
+            <Drawer
+              isOpen={isOpenSetting}
+              onClose={onCloseSetting}
+              placement="right"
+            >
+              <DrawerOverlay />
+              <DrawerContent>
+                <Box
+                  overflow="hidden"
+                  height="full"
+                  borderLeft="0.063rem solid"
+                  borderLeftColor="shader.a.200"
+                  position="relative"
+                  bg="white"
+                >
+                  <TrainingChat
+                    onCreateImage={handleCreateImage}
+                    messages={trainingMessages}
+                    loading={trainingLoading}
+                    onSend={handleTrainingSend}
+                    onReset={handleTrainingReset}
+                  />
+                </Box>
+              </DrawerContent>
+            </Drawer>
+          </>
+        ) : (
+          <>
+            <motion.div
+              {...getDisclosureProps()}
+              hidden={hidden}
+              initial={false}
+              transition={{ duration: 0.3 }}
+              onAnimationStart={() => setHidden(false)}
+              onAnimationComplete={() => setHidden(!isOpenSetting)}
+              animate={{ width: isOpenSetting ? 500 : 0 }}
+            >
+              <Box
+                overflow="hidden"
+                height="full"
+                borderLeft="0.063rem solid"
+                borderLeftColor="shader.a.200"
+                position="relative"
+                bg="white"
+              >
+                <TrainingChat
+                  onCreateImage={handleCreateImage}
+                  messages={trainingMessages}
+                  loading={trainingLoading}
+                  onSend={handleTrainingSend}
+                  onReset={handleTrainingReset}
+                />
+              </Box>
+            </motion.div>
+          </>
+        )}
+      </Flex>
     </>
   );
 }

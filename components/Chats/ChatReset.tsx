@@ -1,10 +1,10 @@
-import { FC } from "react";
+import { FC } from 'react';
 
 interface Props {
   onReset: () => void;
 }
 
-export const ResetChat: FC<Props> = ({ onReset }) => {
+export const ChatReset: FC<Props> = ({ onReset }) => {
   return (
     <div className="flex flex-row items-center">
       <button
@@ -16,4 +16,3 @@ export const ResetChat: FC<Props> = ({ onReset }) => {
     </div>
   );
 };
-;
