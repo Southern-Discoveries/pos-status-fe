@@ -2,9 +2,15 @@ import {
   ComponentMultiStyleConfig,
   ComponentStyleConfig,
   StyleFunctionProps,
-  calc,
   extendTheme,
 } from '@chakra-ui/react';
+
+/// Animation Style Setting
+const activeLabelStyles = {
+  transform: 'scale(0.85) translateY(-24px)',
+};
+////---------------------
+
 export const colors = {
   primary: {
     a: {
@@ -55,8 +61,9 @@ const Button: ComponentStyleConfig = {
       paddingY: 2.5,
       bg: 'primary.a.400',
       color: 'white',
-      borderBottom: '0.188rem solid',
+      borderBottom: '0.25rem solid',
       borderBottomColor: 'primary.a.500',
+      borderRadius: 'xl',
       _hover: {
         borderBottomColor: 'primary.a.600',
       },
@@ -142,8 +149,9 @@ const Tabs: ComponentStyleConfig = {
   variants: {
     right_sidebar: {
       root: {
-        h: calc('100vh').subtract('115px').toString(),
+        h: { md: 'calc(100vh - 145px)', base: 'calc(100vh - 165px)' },
       },
+
       tab: {
         color: 'shader.a.400',
         fontWeight: 'bold',
@@ -160,6 +168,8 @@ const Tabs: ComponentStyleConfig = {
       },
       tablist: {
         display: 'flex',
+        bg: 'white',
+        zIndex: 2,
       },
       tabpanels: {
         padding: 0,
@@ -174,6 +184,57 @@ const Tabs: ComponentStyleConfig = {
     },
   },
 };
+
+const Form: ComponentStyleConfig = {
+  variants: {
+    floating_input: {
+      container: {
+        _focusWithin: {
+          label: {
+            color: 'shader.a.500',
+            ...activeLabelStyles,
+          },
+        },
+        'input:not(:placeholder-shown) + label, .chakra-select__wrapper + label, textarea:not(:placeholder-shown) ~ label':
+          {
+            ...activeLabelStyles,
+          },
+        label: {
+          top: 0,
+          left: 0,
+          zIndex: 2,
+          position: 'absolute',
+          backgroundColor: 'white',
+          pointerEvents: 'none',
+          mx: 3,
+          px: 1,
+          my: 2,
+          color: 'shader.a.500',
+          transformOrigin: 'left top',
+        },
+      },
+    },
+  },
+  parts: [],
+};
+const Input: ComponentStyleConfig = {
+  variants: {
+    auth: {
+      /*       borderRadius: 'lg',
+      borderWidth: '0.094rem solid',
+      borderColor: 'shader.a.300', */
+      field: {
+        bg: 'shader.a.50',
+        borderRadius: 'lg',
+        border: '0.094rem solid',
+        borderColor: 'shader.a.300',
+        px: 4,
+        py: 3,
+        color: 'shader.a.900',
+      },
+    },
+  },
+};
 const theme = extendTheme({
   colors,
   components: {
@@ -182,6 +243,8 @@ const theme = extendTheme({
     Radio,
     Textarea,
     Tabs,
+    Input,
+    Form,
   },
 });
 

@@ -49,7 +49,13 @@ const ChatScreen = ({
             <Box ref={messagesEndRef} />
           </Box>
         </Scrollbar>
-        <Box left={0} bottom={0} width="full" position="absolute" height="4rem">
+        <Box
+          left={0}
+          bottom={10}
+          width="full"
+          position="absolute"
+          height="4rem"
+        >
           <Box padding={4}>
             <ChatInputs onSend={onSend} />
           </Box>

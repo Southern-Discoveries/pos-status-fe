@@ -30,7 +30,7 @@ const TrainingChatScreen = ({
         flexShrink={1}
         flexBasis={0}
         overflow="hidden"
-        pb="4rem"
+        pb="5rem"
       >
         <Box position="relative" height="full">
           <Scrollbar>
@@ -54,12 +54,10 @@ const TrainingChatScreen = ({
         borderTop="0.063rem solid"
         borderTopColor="shader.a.200"
         padding={4}
-        pb={6}
         position="absolute"
         width="full"
-        height="4rem"
         left={0}
-        bottom={5}
+        bottom={0}
         bg="white"
       >
         <ChatInputs onSend={onSend} />
