@@ -68,6 +68,16 @@ const Button: ComponentStyleConfig = {
         borderBottomColor: 'primary.a.600',
       },
     },
+    sign_in: {
+      border: '0.063rem solid',
+      borderColor: 'shader.a.300',
+      px: 3,
+      py: 2.5,
+      svg: {
+        width: 6,
+        height: 6,
+      },
+    },
   },
 };
 const Textarea: ComponentStyleConfig = {

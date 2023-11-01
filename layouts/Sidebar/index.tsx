@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 import CategorySection from './components/CategorySection';
 
+import api from '@/axios/config';
 import SelectListItem from '@/components/Select/SelectListItem';
 import SelectRadioItem from '@/components/Select/SelectRadioItem';
 import ArrowIcon from '@/public/assets/icons/line/arrow.svg';
@@ -60,11 +61,12 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
     });
   };
   // Fetch Data and log Error if exist
+
   async function fetchData(endpoint: string, category: string) {
     try {
-      const response = await fetch(endpoint);
-      if (response.ok) {
-        const data = await response.json();
+      const response = await api.get(endpoint); // Use Axios to make a GET request
+      if (response.status === 200) {
+        const data = response.data; // Use response.data to access the JSON data
         setOptions((prevOptions: any) => ({
           ...prevOptions,
           [`${category}Options`]: data,
@@ -81,11 +83,11 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
 
   useEffect(() => {
     const endpoints: { [key: string]: string } = {
-      task: '/api/ai/tasks',
-      platform: '/api/ai/platforms',
-      target: '/api/ai/targets',
-      audience: '/api/ai/audiences',
-      engine: '/api/ai/engines',
+      task: '/public/tasks',
+      platform: '/public/platforms',
+      target: '/public/targets',
+      audience: '/public/audiences',
+      engine: '/public/engines',
     };
 
     // Fetch data for each category

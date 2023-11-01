@@ -11,10 +11,17 @@ import {
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
+import api from '@/axios/config';
 import DefaultBG from '@/components/Logo/DefaultBG';
 import LogoLong from '@/components/Logo/LogoLong';
 import LoginBySocial from '@/components/Select/LoginBySocial';
+import {
+  loginFailure,
+  loginStart,
+  loginSuccess,
+} from '@/redux/reducer/userSlice';
 
 const SignIn = () => {
   const router = useRouter();
@@ -22,27 +29,27 @@ const SignIn = () => {
     email: '',
     password: '',
   });
+
+  const dispatch = useDispatch();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    dispatch(loginStart());
     try {
-      const response = await fetch('http://127.0.0.1:8000/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email: user.email, password: user.password }),
+      const response = await api.post('/auth/login', {
+        email: user.email,
+        password: user.password,
       });
 
-      if (response.ok) {
-        const data = await response.json();
-
-        console.log('Current Data', data);
-        router.push('/');
+      if (response.status === 200) {
+        console.log(response.data);
+        dispatch(loginSuccess(response.data));
+        router.push('/'); // Replace with your desired route
       } else {
-        // Handle authentication error
+        dispatch(loginFailure('Authentication failed'));
       }
     } catch (error) {
       // Handle network or server errors
+      console.error('Network or server error:', error);
     }
   };
   return (
@@ -121,7 +128,7 @@ const SignIn = () => {
                 <Text fontSize="sm">Don&rsquo;t have account ?</Text>
                 <Link href="/auth/register">
                   <Text color="primary.a.500" fontSize="sm" fontWeight="600">
-                    Forget your password?
+                    Register Now
                   </Text>
                 </Link>
               </HStack>
