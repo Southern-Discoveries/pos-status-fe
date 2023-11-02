@@ -12,20 +12,20 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
-import Cookies from 'js-cookie';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import * as Yup from 'yup';
 
-import api from '@/axios/config';
 import InputPassword from '@/components/Form/InputPassword';
 import LoginBySocial from '@/components/Form/LoginBySocial';
 import DefaultBG from '@/components/Logo/DefaultBG';
 import LogoLong from '@/components/Logo/LogoLong';
+import { useActions } from '@/hooks/useActions';
 import ErrorIcon from '@/public/assets/icons/fill/error.svg';
 const SignIn = () => {
   const router = useRouter();
+  const { login } = useActions();
   const formik = useFormik({
     initialValues: {
       email: 'hello@grindy.io',
@@ -34,12 +34,11 @@ const SignIn = () => {
     },
     onSubmit: async (values, { setFieldError }) => {
       try {
-        const response = await api.post('/auth/login', {
+        /*  const response = await api.post('/auth/login', {
           email: values.email,
           password: values.password,
-        });
-
-        Cookies.set('token', response.data.token);
+        }); */
+        login({ email: values.email, password: values.password });
         router.push('/');
       } catch (error) {
         setFieldError('error_message', 'Invalid Email or Password');

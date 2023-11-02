@@ -2,6 +2,7 @@ import { Box, HStack, IconButton } from '@chakra-ui/react';
 import React from 'react';
 
 import LogoLong from '@/components/Logo/LogoLong';
+import { useAuth } from '@/hooks/useAuth';
 import BookIcon from '@/public/assets/icons/line/book.svg';
 import SettingIcon from '@/public/assets/icons/line/setting.svg';
 
@@ -10,6 +11,9 @@ interface IProps {
   onToggleSetting?: () => void;
 }
 const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
+  const { user } = useAuth();
+
+  console.log('User ??', user);
   return (
     <>
       <Box
@@ -45,6 +49,11 @@ const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
               aria-label="Setting Button"
               icon={<SettingIcon />}
             />
+            {user && (
+              <>
+                <Box>{user.email}</Box>
+              </>
+            )}
           </HStack>
         </HStack>
       </Box>

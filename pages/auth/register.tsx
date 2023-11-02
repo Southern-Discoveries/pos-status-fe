@@ -53,7 +53,7 @@ const RegisterPage = () => {
           return this.createError({
             message: validation.errors.hasNumber,
             path: 'password',
-            errors: validation.errors,
+            /*  errors: validation.errors, */
           });
         }
 

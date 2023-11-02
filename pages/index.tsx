@@ -60,19 +60,16 @@ export default function Home() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          post_config: postConfig,
+          post: postConfig,
           content: msg.slice(0, 999),
-          train_data: trainingMessages,
+          data: trainingMessages.map(element => element.content),
         }),
       });
       const res = await response.json();
-      if (res && res.data) {
-        for (const img of res.data) {
-          htmlMsg += `<img src="${img.url.replace(
-            'https://oaidalleapiprodscus.blob.core.windows.net/',
-            '/api/oaidalleapiprodscus/'
-          )}"/>`;
 
+      if (res) {
+        for (const img of res) {
+          htmlMsg += `<img src="${img}"/>`;
           /*   console.log(htmlMsg); */
         }
       }
@@ -191,7 +188,14 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Flex flexDirection="column" gap={0}>
+      <Flex
+        flexDirection="column"
+        gap={0}
+        /*  onContextMenu={e => {
+          e.preventDefault(); // prevent the default behaviour when right clicked
+          console.log('Right Click');
+        }} */
+      >
         <Header
           isOpenSetting={isOpenSetting}
           onToggleSetting={onToggleSetting}

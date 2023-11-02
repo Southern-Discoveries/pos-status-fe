@@ -33,9 +33,8 @@ const ChatScreen = ({
     <>
       <Box position="relative" height="full" width="full">
         <Scrollbar>
-          <Box padding={6} py={8} pb="4rem">
-            {loading && <ChatLoader />}
-            <ChatReset onReset={onReset} />
+          <Box padding={6} py={8} pb="6rem">
+            {/* <ChatReset onReset={onReset} /> */}
             <Flex flexDirection="column" gap={4}>
               {messages.map((message, index) => (
                 <Box key={index}>
@@ -46,6 +45,7 @@ const ChatScreen = ({
                 </Box>
               ))}
             </Flex>
+            {loading && <ChatLoader />}
             <Box ref={messagesEndRef} />
           </Box>
         </Scrollbar>
