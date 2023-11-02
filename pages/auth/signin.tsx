@@ -14,6 +14,7 @@ import {
 import { useFormik } from 'formik';
 import Cookies from 'js-cookie';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import * as Yup from 'yup';
 
@@ -24,20 +25,26 @@ import DefaultBG from '@/components/Logo/DefaultBG';
 import LogoLong from '@/components/Logo/LogoLong';
 import ErrorIcon from '@/public/assets/icons/fill/error.svg';
 const SignIn = () => {
+  const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      email: '',
-      password: '',
+      email: 'hello@grindy.io',
+      password: '123456',
+      error_message: '',
     },
-    onSubmit: async (values, { resetForm }) => {
+    onSubmit: async (values, { setFieldError }) => {
+      try {
+        const response = await api.post('/auth/login', {
+          email: values.email,
+          password: values.password,
+        });
+
+        Cookies.set('token', response.data.token);
+        router.push('/');
+      } catch (error) {
+        setFieldError('error_message', 'Invalid Email or Password');
+      }
       // do your stuff
-      const response = await api.post('/auth/login', {
-        email: values.email,
-        password: values.password,
-      });
-      console.log(response);
-      Cookies.set('token', response.data.token);
-      resetForm();
     },
     validationSchema: Yup.object({
       email: Yup.string()
@@ -116,6 +123,17 @@ const SignIn = () => {
                         : undefined
                     }
                   />
+                  {formik.errors.error_message && (
+                    <FormErrorMessage
+                      fontSize="sm"
+                      display="flex"
+                      alignItems="center"
+                      gap={1.5}
+                    >
+                      <Icon as={ErrorIcon} h={3.5} width={3.5} />
+                      <Text> {formik.errors.error_message}</Text>
+                    </FormErrorMessage>
+                  )}
                   <Link href="/auth/reset-email">
                     <Text color="primary.a.500" fontSize="sm" fontWeight="600">
                       Forget your password?

@@ -1,12 +1,12 @@
+import Cookies from 'js-cookie';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   const isPublicPath = path === '/auth/*';
 
-  const token = request.cookies.get('token')?.value || '';
+  const token = Cookies.get('token');
   /*  const res = NextResponse.next(); */
 
   if (!isPublicPath && !token) {
@@ -18,5 +18,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/'],
+  matcher: ['/auth'],
 };
