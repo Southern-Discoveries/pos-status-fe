@@ -53,7 +53,6 @@ export default function Home() {
   const handleCreateImage = async (msg: string) => {
     setChatLoading(true);
     let htmlMsg = '```html';
-
     try {
       const response = await fetch('/api/ai/image', {
         method: 'POST',
@@ -61,7 +60,9 @@ export default function Home() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          post_config: postConfig,
           content: msg.slice(0, 999),
+          train_data: trainingMessages,
         }),
       });
       const res = await response.json();

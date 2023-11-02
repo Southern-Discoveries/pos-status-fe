@@ -40,11 +40,12 @@ const ChatMessage = ({ message, onCreateImage }: Props) => {
               )}
             </HStack>
             {!isHtml && (
-              <div
+              <Box
+                height="50px"
+                width="50px"
                 onClick={() => {
                   onCreateImage && onCreateImage(message.content);
                 }}
-                className="flex items-center justify-center w-10 h-10 bg-gray-400 rounded-full text-white transition-opacity duration-300 opacity-0 group-hover:opacity-100 cursor-pointer"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -60,7 +61,7 @@ const ChatMessage = ({ message, onCreateImage }: Props) => {
                     d="M9 19v2a2 2 0 002 2h2a2 2 0 002-2v-2m-6 0h0a2 2 0 002-2V9a2 2 0 00-2-2h0a2 2 0 00-2 2v8a2 2 0 002 2zm6 0h0a2 2 0 002-2V9a2 2 0 00-2-2h0a2 2 0 00-2 2v8a2 2 0 002 2zm0 0h0a2 2 0 002-2V9a2 2 0 00-2-2h0a2 2 0 00-2 2v8a2 2 0 002 2zm6 0h0a2 2 0 002-2V9a2 2 0 00-2-2h0a2 2 0 00-2 2v8a2 2 0 002 2zM5 8H4a2 2 0 00-2 2v2a2 2 0 002 2h1m8 0h3m-3 0H7m10 0a2 2 0 012-2V4a2 2 0 00-2-2H4a2 2 0 00-2 2v2a2 2 0 002 2h16z"
                   />
                 </svg>
-              </div>
+              </Box>
             )}
           </>
         ) : (

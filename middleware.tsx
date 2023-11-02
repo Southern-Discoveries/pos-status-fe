@@ -7,7 +7,6 @@ export function middleware(request: NextRequest) {
   const isPublicPath = path === '/auth/*';
 
   const token = Cookies.get('token');
-  /*  const res = NextResponse.next(); */
 
   if (!isPublicPath && !token) {
     return NextResponse.redirect(new URL('/auth/signin', request.nextUrl));
