@@ -1,5 +1,6 @@
 // userSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 interface User {
   name: string;
   // Add more user properties here

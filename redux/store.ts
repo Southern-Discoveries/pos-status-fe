@@ -8,8 +8,10 @@ const store = configureStore({
     user: userReducer,
     // Add other reducers as needed
   },
+  devTools: true,
 });
 
 export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
 export default store;

@@ -1,8 +1,8 @@
 import { Box, Collapse, Flex, HStack, Icon, Text } from '@chakra-ui/react';
 import React from 'react';
 
-import SelectListItem from '@/components/Select/SelectListItem';
-import SelectRadioItem from '@/components/Select/SelectRadioItem';
+import SelectListItem from '@/components/Form/SelectListItem';
+import SelectRadioItem from '@/components/Form/SelectRadioItem';
 import ArrowIcon from '@/public/assets/icons/line/arrow.svg';
 
 interface IProps {

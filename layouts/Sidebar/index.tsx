@@ -5,8 +5,8 @@ import React, { useEffect, useState } from 'react';
 import CategorySection from './components/CategorySection';
 
 import api from '@/axios/config';
-import SelectListItem from '@/components/Select/SelectListItem';
-import SelectRadioItem from '@/components/Select/SelectRadioItem';
+import SelectListItem from '@/components/Form/SelectListItem';
+import SelectRadioItem from '@/components/Form/SelectRadioItem';
 import ArrowIcon from '@/public/assets/icons/line/arrow.svg';
 import FileIcon from '@/public/assets/icons/line/file.svg';
 import GlobalIcon from '@/public/assets/icons/line/global.svg';

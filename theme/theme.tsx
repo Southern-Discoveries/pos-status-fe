@@ -40,6 +40,9 @@ export const colors = {
       900: '#18181B',
     },
   },
+  secondary: {
+    red: '#FF4444',
+  },
 };
 const Button: ComponentStyleConfig = {
   variants: {
@@ -230,9 +233,6 @@ const Form: ComponentStyleConfig = {
 const Input: ComponentStyleConfig = {
   variants: {
     auth: {
-      /*       borderRadius: 'lg',
-      borderWidth: '0.094rem solid',
-      borderColor: 'shader.a.300', */
       field: {
         bg: 'shader.a.50',
         borderRadius: 'lg',
@@ -241,6 +241,9 @@ const Input: ComponentStyleConfig = {
         px: 4,
         py: 3,
         color: 'shader.a.900',
+        _invalid: {
+          borderColor: 'secondary.red',
+        },
       },
     },
   },
