@@ -5,10 +5,10 @@ export interface IInitialState {
 }
 
 export interface ITokens {
-  accessToken: string;
-  refreshToken: string;
+  token: string;
+  refresh_token: string;
 }
 
 export interface IAuthResponse extends ITokens {
-  user: IUser;
+  user: IUser | null;
 }

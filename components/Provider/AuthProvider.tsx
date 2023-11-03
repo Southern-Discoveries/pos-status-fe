@@ -4,7 +4,7 @@ import { FC, PropsWithChildren, useEffect } from 'react';
 
 import { useActions } from '@/hooks/useActions';
 import { useAuth } from '@/hooks/useAuth';
-import { EnumTokens, getAccessToken } from '@/utils/helper/auth/auth.helper';
+import { EnumTokens, getAccessToken } from '@/utils/helper/auth/auth-helper';
 
 const AuthProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   const { user } = useAuth();
@@ -23,7 +23,9 @@ const AuthProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
 
   useEffect(() => {
     const refreshToken = Cookies.get(EnumTokens.REFRESHTOKEN);
+    console.log("Don't run refresh");
     if (!refreshToken && user) {
+      console.log("Don't run logout");
       logout();
     }
   }, [pathname]);

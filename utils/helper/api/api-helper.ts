@@ -3,7 +3,14 @@ export const getContentType = () => {
     'Content-Type': 'application/json',
   };
 };
-
+export const getAuthorizationHeader = (token: string) => {
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  };
+};
 export const errorCatch = (error: any): string => {
   const message = error?.response?.data?.message;
 

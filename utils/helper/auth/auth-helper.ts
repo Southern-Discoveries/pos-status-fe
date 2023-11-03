@@ -14,8 +14,8 @@ export const getUserFromStorage = () => {
 };
 
 export const saveTokensStorage = (data: ITokens) => {
-  Cookies.set(EnumTokens.ACCESSTOKEN, data.accessToken);
-  Cookies.set(EnumTokens.REFRESHTOKEN, data.refreshToken);
+  Cookies.set(EnumTokens.ACCESSTOKEN, data.token);
+  Cookies.set(EnumTokens.REFRESHTOKEN, data.refresh_token);
 };
 
 export const removeFromStorage = () => {
@@ -26,10 +26,11 @@ export const removeFromStorage = () => {
 
 export const saveToStorage = (data: IAuthResponse) => {
   saveTokensStorage(data);
-  localStorage.setItem('user', JSON.stringify(data.user));
+  console.log('Current Data User save', JSON.stringify(data));
+  localStorage.setItem('user', JSON.stringify(data));
 };
 
 export enum EnumTokens {
-  ACCESSTOKEN = 'accessToken',
-  REFRESHTOKEN = 'refreshToken',
+  ACCESSTOKEN = 'token',
+  REFRESHTOKEN = 'refresh_token',
 }

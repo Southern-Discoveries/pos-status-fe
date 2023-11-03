@@ -13,7 +13,6 @@ interface IProps {
 const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
   const { user } = useAuth();
 
-  console.log('User ??', user);
   return (
     <>
       <Box
@@ -51,7 +50,7 @@ const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
             />
             {user && (
               <>
-                <Box>{user.email}</Box>
+                <Box color="red">{user.id}</Box>
               </>
             )}
           </HStack>

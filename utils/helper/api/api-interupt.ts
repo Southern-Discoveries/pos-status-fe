@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-import { getAccessToken, removeFromStorage } from '../auth/auth.helper';
-import authService from '../auth/auth.service';
+import { getAccessToken, removeFromStorage } from '../auth/auth-helper';
+import authService from '../auth/auth-service';
 
-import { errorCatch, getContentType } from './apiHelper';
+import { errorCatch, getContentType } from './api-helper';
 
 export const instance = axios.create({
   baseURL: process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000',

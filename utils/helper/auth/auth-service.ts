@@ -1,10 +1,10 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-import { getContentType } from '../api/apiHelper';
-import { instance } from '../api/apiInterupt';
+import { getContentType } from '../api/api-helper';
+import { instance } from '../api/api-interupt';
 
-import { EnumTokens, saveToStorage } from './auth.helper';
+import { EnumTokens, saveToStorage } from './auth-helper';
 
 import { IAuthResponse } from '@/redux/user/user.interface';
 import { ICreateUserInfo, ILoginInfo } from '@/types';
@@ -19,7 +19,7 @@ export class AuthService {
       data,
     });
 
-    if (response.data.accessToken) {
+    if (response.data.token) {
       saveToStorage(response.data);
     }
 
@@ -32,24 +32,44 @@ export class AuthService {
       url: `${this.AUTH_URL}/login`,
       data,
     });
-    console.log(response.data);
-    if (response.data.accessToken) {
+
+    if (response.data.token) {
       saveToStorage(response.data);
     }
 
     return response.data;
   }
 
+  async getAuthUser() {
+    const access_token = Cookies.get(EnumTokens.ACCESSTOKEN);
+
+    const response = await instance<string, { data: any }>({
+      method: 'GET',
+      url: `user`,
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
+
+    if (response) {
+      console.log('Curent Affter Checkout', response);
+      saveToStorage(response.data);
+    }
+
+    return response.data;
+  }
   async getNewTokens() {
     const refreshToken = Cookies.get(EnumTokens.REFRESHTOKEN);
 
     const response = await axios.post<string, { data: IAuthResponse }>(
-      `${this.AUTH_URL}/refresh-token`,
-      { refreshToken },
-      { headers: getContentType() }
+      `http://127.0.0.1:8000${this.AUTH_URL}/refresh`,
+      { token: refreshToken },
+      {
+        headers: getContentType(),
+      }
     );
 
-    if (response.data.accessToken) {
+    if (response.data.token) {
       saveToStorage(response.data);
     }
 

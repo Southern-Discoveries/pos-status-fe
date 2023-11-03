@@ -34,10 +34,6 @@ const SignIn = () => {
     },
     onSubmit: async (values, { setFieldError }) => {
       try {
-        /*  const response = await api.post('/auth/login', {
-          email: values.email,
-          password: values.password,
-        }); */
         login({ email: values.email, password: values.password });
         router.push('/');
       } catch (error) {

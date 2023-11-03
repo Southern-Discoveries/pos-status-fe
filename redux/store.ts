@@ -9,14 +9,16 @@ import {
   REGISTER,
   REHYDRATE,
 } from 'redux-persist';
-/* import storage from 'redux-persist/lib/storage'; */
+import storage from 'redux-persist/lib/storage';
 
-import storage from './storage';
+/* import storage from './storage'; */
 import { userSlice } from './user/userSlice';
 
 const persistConfig = {
   key: 'root',
   storage,
+  version: 1,
+  whitelist: ['user'],
 };
 
 const rootReducer = combineReducers({
