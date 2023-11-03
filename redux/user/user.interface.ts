@@ -12,3 +12,5 @@ export interface ITokens {
 export interface IAuthResponse extends ITokens {
   user: IUser | null;
 }
+
+export interface ILoginResponse extends ITokens {}

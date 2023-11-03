@@ -19,14 +19,14 @@ export const saveTokensStorage = (data: ITokens) => {
 };
 
 export const removeFromStorage = () => {
+  console.log('Remove from local storage');
   Cookies.remove(EnumTokens.ACCESSTOKEN);
   Cookies.remove(EnumTokens.REFRESHTOKEN);
   localStorage.removeItem('user');
 };
 
-export const saveToStorage = (data: IAuthResponse) => {
-  saveTokensStorage(data);
-  console.log('Current Data User save', JSON.stringify(data));
+// Save Data User
+export const saveUserToStorage = (data: IAuthResponse) => {
   localStorage.setItem('user', JSON.stringify(data));
 };
 

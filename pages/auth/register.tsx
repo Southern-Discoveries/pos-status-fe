@@ -18,12 +18,16 @@ import * as Yup from 'yup';
 import LoginBySocial from '@/components/Form/LoginBySocial';
 import DefaultBG from '@/components/Logo/DefaultBG';
 import LogoLong from '@/components/Logo/LogoLong';
+import { useActions } from '@/hooks/useActions';
+
 interface IProps {
   hasUpperCase?: string;
   hasNumber?: string;
   hasSpecialChar?: string;
 }
 const RegisterPage = () => {
+  const { register } = useActions();
+  // eslint-disable-next-line no-unused-vars
   const isPasswordValid = (password: string) => {
     const errors: IProps = {};
 
@@ -44,21 +48,20 @@ const RegisterPage = () => {
     };
   };
   const SignupSchema = Yup.object().shape({
-    password: Yup.string()
-      .required('Password is required')
-      .test('password-validation', 'Invalid password', function (values) {
+    password: Yup.string().required('Password is required'),
+    /*  .test('password-validation', 'Invalid password', function (values) {
         const validation = isPasswordValid(values || '');
 
         if (!validation.valid) {
           return this.createError({
             message: validation.errors.hasNumber,
             path: 'password',
-            /*  errors: validation.errors, */
+          
           });
         }
 
         return true;
-      }),
+      }), */
   });
   const formik = useFormik({
     initialValues: {
@@ -66,11 +69,15 @@ const RegisterPage = () => {
       email: '',
       password: '',
       confirm_password: '',
+      error_message: '',
     },
     validationSchema: SignupSchema,
-    onSubmit: values => {
-      // Your form submission logic
-      console.log(values);
+    onSubmit: async (values, { setFieldError }) => {
+      try {
+        register({ email: values.email, password: values.password });
+      } catch (error) {
+        setFieldError('error_message', 'Invalid Email or Password');
+      }
     },
     validateOnChange: true,
   });

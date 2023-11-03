@@ -1,18 +1,18 @@
-import { Box, HStack, IconButton } from '@chakra-ui/react';
+import { Box, Button, HStack, IconButton } from '@chakra-ui/react';
 import React from 'react';
 
 import LogoLong from '@/components/Logo/LogoLong';
-import { useAuth } from '@/hooks/useAuth';
+import { useActions } from '@/hooks/useActions';
 import BookIcon from '@/public/assets/icons/line/book.svg';
-import SettingIcon from '@/public/assets/icons/line/setting.svg';
+import { getUserFromStorage } from '@/utils/helper/auth/auth-helper';
 
 interface IProps {
   isOpenSetting?: boolean;
   onToggleSetting?: () => void;
 }
 const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
-  const { user } = useAuth();
-
+  const user = getUserFromStorage();
+  const { logout } = useActions();
   return (
     <>
       <Box
@@ -43,14 +43,10 @@ const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
               onClick={onToggleSetting}
               icon={<BookIcon />}
             />
-            <IconButton
-              variant="icon_btn"
-              aria-label="Setting Button"
-              icon={<SettingIcon />}
-            />
+            <Button onClick={() => logout()}>Logout</Button>
             {user && (
               <>
-                <Box color="red">{user.id}</Box>
+                <Box color="red">{user.email}</Box>
               </>
             )}
           </HStack>

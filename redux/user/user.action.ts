@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { IAuthResponse } from './user.interface';
+import { IAuthResponse, ILoginResponse } from './user.interface';
 
 import { ICreateUserInfo, ILoginInfo } from '@/types';
 import { errorCatch } from '@/utils/helper/api/api-helper';
@@ -20,12 +20,11 @@ export const register = createAsyncThunk<IAuthResponse, ICreateUserInfo>(
   }
 );
 
-export const login = createAsyncThunk<IAuthResponse, ILoginInfo>(
+export const login = createAsyncThunk<ILoginResponse, ILoginInfo>(
   'auth/login',
   async (data, thunkApi) => {
     try {
       const response = await authService.login(data);
-
       return response;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
@@ -33,8 +32,12 @@ export const login = createAsyncThunk<IAuthResponse, ILoginInfo>(
   }
 );
 
-export const logout = createAsyncThunk('auth/logout', () => {
-  removeFromStorage();
+export const logout = createAsyncThunk('auth/logout', async () => {
+  try {
+    const response = await authService.logout();
+    removeFromStorage();
+    return response;
+  } catch (error) {}
 });
 
 export const checkAuth = createAsyncThunk<IAuthResponse>(
@@ -42,13 +45,11 @@ export const checkAuth = createAsyncThunk<IAuthResponse>(
   async (_, thunkApi) => {
     try {
       const response = await authService.getAuthUser();
-
       return response;
     } catch (error) {
-      console.log('Error from reponse', error);
-      /*  if (errorCatch(error) === 'jwt expired') {
+      if (errorCatch(error) === 'jwt expired') {
         thunkApi.dispatch(logout());
-      } */
+      }
 
       return thunkApi.rejectWithValue(error);
     }

@@ -248,6 +248,14 @@ const Input: ComponentStyleConfig = {
     },
   },
 };
+const Popover: ComponentStyleConfig = {
+  variants: {
+    chat_edit: {
+      content: { right: 0, inset: 0 },
+      body: {},
+    },
+  },
+};
 const theme = extendTheme({
   colors,
   components: {
@@ -258,6 +266,7 @@ const theme = extendTheme({
     Tabs,
     Input,
     Form,
+    Popover,
   },
 });
 

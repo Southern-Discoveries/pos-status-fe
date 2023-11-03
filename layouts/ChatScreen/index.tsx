@@ -2,6 +2,8 @@
 import { Box, Flex } from '@chakra-ui/react';
 import React, { useEffect, useRef } from 'react';
 
+import WellCome from './WellCome';
+
 import ChatInputs from '@/components/Chat/ChatInput';
 import ChatLoader from '@/components/Chat/ChatLoader';
 import ChatMessage from '@/components/Chat/ChatMessage';
@@ -33,21 +35,29 @@ const ChatScreen = ({
     <>
       <Box position="relative" height="full" width="full">
         <Scrollbar>
-          <Box padding={6} py={8} pb="6rem">
-            {/* <ChatReset onReset={onReset} /> */}
-            <Flex flexDirection="column" gap={4}>
-              {messages.map((message, index) => (
-                <Box key={index}>
-                  <ChatMessage
-                    onCreateImage={onCreateImage}
-                    message={message}
-                  />
-                </Box>
-              ))}
-            </Flex>
-            {loading && <ChatLoader />}
-            <Box ref={messagesEndRef} />
-          </Box>
+          {messages.length ? (
+            <>
+              <Box padding={6} py={8} pb="6rem">
+                {/* <ChatReset onReset={onReset} /> */}
+                <Flex flexDirection="column" gap={4}>
+                  {messages.map((message, index) => (
+                    <Box key={index}>
+                      <ChatMessage
+                        onCreateImage={onCreateImage}
+                        message={message}
+                      />
+                    </Box>
+                  ))}
+                </Flex>
+                {loading && <ChatLoader />}
+                <Box ref={messagesEndRef} />
+              </Box>
+            </>
+          ) : (
+            <>
+              <WellCome />
+            </>
+          )}
         </Scrollbar>
         <Box
           left={0}

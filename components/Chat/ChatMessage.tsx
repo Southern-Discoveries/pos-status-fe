@@ -1,6 +1,18 @@
 /* eslint-disable no-unused-vars */
-import { Box, Button, Flex, HStack, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import React from 'react';
+
+import ChatEdit from './ChatEdit';
 
 import ImageIcon from '@/public/assets/icons/line/image.svg';
 import RefreshIcon from '@/public/assets/icons/line/refresh.svg';
@@ -13,6 +25,7 @@ const ChatMessage = ({ message, onCreateImage }: Props) => {
   let content = message.content;
   const isHtml = content.includes('```html');
   content = isHtml ? content.replace('```html', '') : content;
+  const { onOpen, onClose, isOpen, onToggle } = useDisclosure();
   return (
     <>
       <Flex
@@ -22,53 +35,70 @@ const ChatMessage = ({ message, onCreateImage }: Props) => {
       >
         {message.role === 'assistant' ? (
           <>
-            <HStack
-              overflowWrap="anywhere"
-              borderRadius="xl"
-              paddingX={2}
-              py={3}
-              whiteSpace="pre-wrap"
-              alignItems="center"
-              maxW="67%"
-              bg="white"
-              gap={0}
-              color="shader.a.800"
-              border="0.063rem solid"
-              borderColor="shader.a.200"
-              backdropBlur="blur(2.5px)"
-              mb={2}
-              onContextMenu={e => {
-                e.preventDefault();
-                console.log('Right Click Message', e.pageX, e.pageY);
-              }}
-            >
-              <Text> {!isHtml && content}</Text>
-              {isHtml && (
-                <Box dangerouslySetInnerHTML={{ __html: content }}></Box>
-              )}
-            </HStack>
-            {!isHtml && (
-              <Flex gap={2}>
-                <Button variant="primary" leftIcon={<RefreshIcon />}>
-                  Retry
-                </Button>
-                <Button
-                  px={3}
-                  py={2}
-                  bg="white"
-                  borderRadius="24px"
-                  border="0.063rem solid"
-                  borderColor="shader.a.300"
-                  leftIcon={<ImageIcon />}
-                  onClick={() => {
-                    onCreateImage && onCreateImage(message.content);
-                  }}
-                  color="shader.a.900"
+            <Box position="relative">
+              <HStack
+                overflowWrap="anywhere"
+                borderRadius="xl"
+                paddingX={2}
+                py={3}
+                whiteSpace="pre-wrap"
+                alignItems="center"
+                maxW="67%"
+                bg="white"
+                gap={0}
+                color="shader.a.800"
+                border="0.063rem solid"
+                borderColor="shader.a.200"
+                backdropBlur="blur(2.5px)"
+                mb={2}
+                position="relative"
+                onContextMenu={e => {
+                  e.preventDefault();
+                  /*   onToggle(); */
+                  /* console.log('Right Click Message', e.pageX, e.pageY); */
+                }}
+              >
+                <Text> {!isHtml && content}</Text>
+                {isHtml && (
+                  <Box dangerouslySetInnerHTML={{ __html: content }}></Box>
+                )}
+                {/*   <Popover
+                  variant="chat_edit"
+                  isOpen={isOpen}
+                  onOpen={onOpen}
+                  onClose={onClose}
+                  placement="right"
+                  closeOnBlur={false}
                 >
-                  Generate Image
-                </Button>
-              </Flex>
-            )}
+                  <PopoverContent p={5}>
+                    <ChatEdit />
+                  </PopoverContent>
+                </Popover> */}
+              </HStack>
+
+              {!isHtml && (
+                <Flex gap={2}>
+                  <Button variant="primary" leftIcon={<RefreshIcon />}>
+                    Retry
+                  </Button>
+                  <Button
+                    px={3}
+                    py={2}
+                    bg="white"
+                    borderRadius="24px"
+                    border="0.063rem solid"
+                    borderColor="shader.a.300"
+                    leftIcon={<ImageIcon />}
+                    onClick={() => {
+                      onCreateImage && onCreateImage(message.content);
+                    }}
+                    color="shader.a.900"
+                  >
+                    Generate Image
+                  </Button>
+                </Flex>
+              )}
+            </Box>
           </>
         ) : (
           <>

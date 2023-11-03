@@ -12,25 +12,25 @@ const AuthProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   const { checkAuth, logout } = useActions();
 
   const { pathname } = useRouter();
-
+  const router = useRouter();
   useEffect(() => {
     const accessToken = getAccessToken();
 
     if (accessToken) {
       checkAuth();
+    } else {
+      router.push('/auth/signin');
     }
   }, []);
 
   useEffect(() => {
     const refreshToken = Cookies.get(EnumTokens.REFRESHTOKEN);
-    console.log("Don't run refresh");
     if (!refreshToken && user) {
-      console.log("Don't run logout");
+      router.push('/auth/signin');
       logout();
     }
   }, [pathname]);
 
   return <>{children}</>;
 };
-
 export default AuthProvider;

@@ -39,3 +39,8 @@ export interface ICreateUserInfo extends Pick<IUser, 'email'> {
 export interface ILoginInfo extends Pick<IUser, 'email'> {
   password: string;
 }
+
+// Refresh API from server response
+export interface IRefreshResponse {
+  access_token: string;
+}

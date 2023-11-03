@@ -4,7 +4,11 @@ import Cookies from 'js-cookie';
 import { getContentType } from '../api/api-helper';
 import { instance } from '../api/api-interupt';
 
-import { EnumTokens, saveToStorage } from './auth-helper';
+import {
+  EnumTokens,
+  saveTokensStorage,
+  saveUserToStorage,
+} from './auth-helper';
 
 import { IAuthResponse } from '@/redux/user/user.interface';
 import { ICreateUserInfo, ILoginInfo } from '@/types';
@@ -19,13 +23,18 @@ export class AuthService {
       data,
     });
 
-    if (response.data.token) {
+    /* if (response.data.token) {
       saveToStorage(response.data);
-    }
+    } */
 
     return response.data;
   }
-
+  async logout() {
+    const response = await instance<string, {}>({
+      url: `${this.AUTH_URL}/logout`,
+    });
+    return response;
+  }
   async login(data: ILoginInfo) {
     const response = await instance<string, { data: IAuthResponse }>({
       method: 'POST',
@@ -34,7 +43,7 @@ export class AuthService {
     });
 
     if (response.data.token) {
-      saveToStorage(response.data);
+      saveTokensStorage(response.data);
     }
 
     return response.data;
@@ -50,27 +59,27 @@ export class AuthService {
         Authorization: `Bearer ${access_token}`,
       },
     });
-
-    if (response) {
-      console.log('Curent Affter Checkout', response);
-      saveToStorage(response.data);
-    }
+    saveUserToStorage(response.data);
 
     return response.data;
   }
   async getNewTokens() {
     const refreshToken = Cookies.get(EnumTokens.REFRESHTOKEN);
 
-    const response = await axios.post<string, { data: IAuthResponse }>(
+    const response = await axios.post<
+      string,
+      { data: { access_token: string } }
+    >(
       `http://127.0.0.1:8000${this.AUTH_URL}/refresh`,
       { token: refreshToken },
       {
         headers: getContentType(),
       }
     );
-
-    if (response.data.token) {
-      saveToStorage(response.data);
+    if (response.data.access_token) {
+      // Update Refresh Token
+      /*    saveTokensStorage(response.data); */
+      Cookies.set(EnumTokens.ACCESSTOKEN, response.data.access_token);
     }
 
     return response.data;

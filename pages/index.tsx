@@ -12,6 +12,7 @@ import {
   Tabs,
   useBreakpointValue,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import Head from 'next/head';
@@ -28,6 +29,7 @@ import { colors } from '@/theme/theme';
 import { Message, PostOption, EngineConfig } from '@/types';
 
 export default function Home() {
+  const toast = useToast();
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
 
   const [chatLoading, setChatLoading] = useState<boolean>(false);
@@ -66,7 +68,7 @@ export default function Home() {
         }),
       });
       const res = await response.json();
-
+      console.log('Current res', res);
       if (res) {
         for (const img of res) {
           htmlMsg += `<img src="${img}"/>`;
@@ -90,66 +92,72 @@ export default function Home() {
     const updatedMessages = [...chatMessages, message];
     setChatMessages(updatedMessages);
     setChatLoading(true);
+    try {
+      let request_body = {
+        content: message.content,
+        post: postConfig,
+        engine: engineConfig,
+        data: trainingMessages.map(element => element.content),
+      };
+      const response = await fetch('/api/stream/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(request_body),
+      });
 
-    let request_body = {
-      content: message.content,
-      post: postConfig,
-      engine: engineConfig,
-      data: trainingMessages.map(element => element.content),
-    };
-
-    /*    console.log('request_body: ', request_body); */
-
-    const response = await fetch('/api/stream/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(request_body),
-    });
-
-    if (!response.ok) {
-      setChatLoading(false);
-      throw new Error(response.statusText);
-    }
-
-    const data = response.body;
-
-    if (!data) {
-      return;
-    }
-
-    setChatLoading(false);
-
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    let done = false;
-    let isFirst = true;
-
-    while (!done) {
-      const { value, done: doneReading } = await reader.read();
-      done = doneReading;
-      const chunkValue = decoder.decode(value);
-
-      if (isFirst) {
-        isFirst = false;
-        setChatMessages(chatMessages => [
-          ...chatMessages,
-          {
-            role: 'assistant',
-            content: chunkValue,
-          },
-        ]);
-      } else {
-        setChatMessages(chatMessages => {
-          const lastMessage = chatMessages[chatMessages.length - 1];
-          const updatedMessage = {
-            ...lastMessage,
-            content: lastMessage.content + chunkValue,
-          };
-          return [...chatMessages.slice(0, -1), updatedMessage];
-        });
+      if (!response.ok) {
+        setChatLoading(false);
+        throw new Error(response.statusText);
       }
+
+      const data = response.body;
+
+      if (!data) {
+        return;
+      }
+
+      setChatLoading(false);
+
+      const reader = data.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+      let isFirst = true;
+
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+        const chunkValue = decoder.decode(value);
+
+        if (isFirst) {
+          isFirst = false;
+          setChatMessages(chatMessages => [
+            ...chatMessages,
+            {
+              role: 'assistant',
+              content: chunkValue,
+            },
+          ]);
+        } else {
+          setChatMessages(chatMessages => {
+            const lastMessage = chatMessages[chatMessages.length - 1];
+            const updatedMessage = {
+              ...lastMessage,
+              content: lastMessage.content + chunkValue,
+            };
+            return [...chatMessages.slice(0, -1), updatedMessage];
+          });
+        }
+      }
+    } catch (error) {
+      toast({
+        title: 'Choose Option',
+        description: "We've you choose all option in sidebar",
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
     }
   };
 
