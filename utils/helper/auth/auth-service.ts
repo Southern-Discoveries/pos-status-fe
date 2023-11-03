@@ -1,7 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-import { getContentType } from '../api/api-helper';
 import { instance } from '../api/api-interupt';
 
 import {
@@ -10,8 +9,11 @@ import {
   saveUserToStorage,
 } from './auth-helper';
 
-import { IAuthResponse } from '@/redux/user/user.interface';
-import { ICreateUserInfo, ILoginInfo } from '@/types';
+import {
+  IAuthResponse,
+  ICreateUserInfo,
+  ILoginInfo,
+} from '@/redux/user/user.interface';
 
 export class AuthService {
   private AUTH_URL = '/auth';
@@ -23,9 +25,9 @@ export class AuthService {
       data,
     });
 
-    /* if (response.data.token) {
-      saveToStorage(response.data);
-    } */
+    if (response.status == 200) {
+      this.login(data);
+    }
 
     return response.data;
   }
@@ -44,6 +46,7 @@ export class AuthService {
 
     if (response.data.token) {
       saveTokensStorage(response.data);
+      this.getAuthUser();
     }
 
     return response.data;
@@ -51,7 +54,6 @@ export class AuthService {
 
   async getAuthUser() {
     const access_token = Cookies.get(EnumTokens.ACCESSTOKEN);
-
     const response = await instance<string, { data: any }>({
       method: 'GET',
       url: `user`,
@@ -66,6 +68,13 @@ export class AuthService {
   async getNewTokens() {
     const refreshToken = Cookies.get(EnumTokens.REFRESHTOKEN);
 
+    /*   const response = await instance<string, { data: any }>({
+      method: 'POST',
+      url: `${this.AUTH_URL}/refresh`,
+      headers: {
+        Authorization: `Bearer ${refreshToken}`,
+      },
+    }); */
     const response = await axios.post<
       string,
       { data: { access_token: string } }
@@ -73,7 +82,9 @@ export class AuthService {
       `http://127.0.0.1:8000${this.AUTH_URL}/refresh`,
       { token: refreshToken },
       {
-        headers: getContentType(),
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+        },
       }
     );
     if (response.data.access_token) {

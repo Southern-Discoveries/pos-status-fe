@@ -31,7 +31,7 @@ const ChatMessage = ({ message, onCreateImage }: Props) => {
       <Flex
         position="relative"
         flexDirection="column"
-        alignItems={message.role === 'assistant' ? 'flex-start' : 'flex-end'}
+        /*  alignItems={message.role === 'assistant' ? 'flex-start' : 'flex-end'} */
       >
         {message.role === 'assistant' ? (
           <>

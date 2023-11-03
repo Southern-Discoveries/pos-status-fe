@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import * as Yup from 'yup';
 
@@ -47,9 +48,10 @@ const RegisterPage = () => {
       errors,
     };
   };
-  const SignupSchema = Yup.object().shape({
+  /*  const SignupSchema = Yup.object().shape({
     password: Yup.string().required('Password is required'),
-    /*  .test('password-validation', 'Invalid password', function (values) {
+    
+     .test('password-validation', 'Invalid password', function (values) {
         const validation = isPasswordValid(values || '');
 
         if (!validation.valid) {
@@ -61,8 +63,9 @@ const RegisterPage = () => {
         }
 
         return true;
-      }), */
-  });
+      }),
+  }); */
+  const router = useRouter();
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -71,10 +74,18 @@ const RegisterPage = () => {
       confirm_password: '',
       error_message: '',
     },
-    validationSchema: SignupSchema,
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .required('Email Address cannot be empty')
+        .email('Invalid email address'),
+      password: Yup.string()
+        .required('Password cannot be empty')
+        .min(6, 'Password must be at least 6 characters long'),
+    }),
     onSubmit: async (values, { setFieldError }) => {
       try {
         register({ email: values.email, password: values.password });
+        router.push('/');
       } catch (error) {
         setFieldError('error_message', 'Invalid Email or Password');
       }

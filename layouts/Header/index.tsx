@@ -1,4 +1,5 @@
 import { Box, Button, HStack, IconButton } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import LogoLong from '@/components/Logo/LogoLong';
@@ -11,8 +12,14 @@ interface IProps {
   onToggleSetting?: () => void;
 }
 const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
+  /*   const [user,setUser]=getUserFromStorage();
+  useEffect(() => {
+    user = getUserFromStorage();
+  }, [user]); */
+  /*   const { user, isLoading } = useAuth(); */
   const user = getUserFromStorage();
   const { logout } = useActions();
+  const router = useRouter();
   return (
     <>
       <Box
@@ -43,7 +50,14 @@ const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
               onClick={onToggleSetting}
               icon={<BookIcon />}
             />
-            <Button onClick={() => logout()}>Logout</Button>
+            <Button
+              onClick={() => {
+                logout();
+                router.push('/auth/signin');
+              }}
+            >
+              Logout
+            </Button>
             {user && (
               <>
                 <Box color="red">{user.email}</Box>

@@ -1,10 +1,10 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 import { checkAuth, login, logout, register } from './user.action';
 import { IInitialState } from './user.interface';
 
 import { getItemFromLocal } from '@/utils/getLocalStorage';
-export const initializeUserFromLocalStorage = createAsyncThunk(
+/* export const initializeUserFromLocalStorage = createAsyncThunk(
   'user/initializeFromLocalStorage',
   async (_, { dispatch }) => {
     const storedUser = localStorage.getItem('user');
@@ -14,7 +14,7 @@ export const initializeUserFromLocalStorage = createAsyncThunk(
       dispatch(userSlice.actions.setUser(parsedUser));
     }
   }
-);
+); */
 
 const initialState: IInitialState = {
   user: getItemFromLocal('user'),
@@ -44,7 +44,7 @@ export const userSlice = createSlice({
       .addCase(login.pending, state => {
         state.isLoading = true;
       })
-      .addCase(login.fulfilled, (state, { payload }) => {
+      .addCase(login.fulfilled, state => {
         state.isLoading = false;
       })
       .addCase(login.rejected, state => {

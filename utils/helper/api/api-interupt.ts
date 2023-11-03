@@ -26,6 +26,8 @@ instance.interceptors.response.use(
     const originalRequest = error.config;
 
     if (
+      error?.response?.status === 401 ||
+      error?.response?.status === 422 ||
       error?.response?.status === 402 ||
       (error.config && !error.config._isRetry)
     ) {

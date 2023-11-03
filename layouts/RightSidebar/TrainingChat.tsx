@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Box, Flex } from '@chakra-ui/react';
 import React, { useEffect, useRef } from 'react';
 
@@ -44,7 +45,7 @@ const TrainingChatScreen = ({
                 </Box>
               ))}
               {loading && <ChatLoader />}
-              <ChatReset onReset={onReset} />
+              {/* <ChatReset onReset={onReset} /> */}
               <Box ref={messagesEndRef} />
             </Flex>
           </Scrollbar>

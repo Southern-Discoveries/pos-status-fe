@@ -27,6 +27,8 @@ import TrainingChatScreen from '@/layouts/RightSidebar/TrainingChat';
 import Sidebar from '@/layouts/Sidebar';
 import { colors } from '@/theme/theme';
 import { Message, PostOption, EngineConfig } from '@/types';
+import { instance } from '@/utils/helper/api/api-interupt';
+import { getAccessToken } from '@/utils/helper/auth/auth-helper';
 
 export default function Home() {
   const toast = useToast();
@@ -41,7 +43,7 @@ export default function Home() {
 
   const [postConfig, setPostConfig] = useState<PostOption>();
   const [engineConfig, setEngineConfig] = useState<EngineConfig>();
-
+  const [chatID, setChatID] = useState(null);
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -56,10 +58,12 @@ export default function Home() {
     setChatLoading(true);
     let htmlMsg = '```html';
     try {
-      const response = await fetch('/api/ai/image', {
-        method: 'POST',
+      const accessToken = getAccessToken();
+      const response = await fetch(`/api/ai/image/${chatID}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           post: postConfig,
@@ -92,6 +96,18 @@ export default function Home() {
     const updatedMessages = [...chatMessages, message];
     setChatMessages(updatedMessages);
     setChatLoading(true);
+    if (!chatID) {
+      const response = await instance<any>({
+        method: 'PUT',
+        url: `chat/new-chat`,
+        data: {
+          title: message.content,
+        },
+      });
+      if (response.status === 200) {
+        setChatID(response.data.id);
+      }
+    }
     try {
       let request_body = {
         content: message.content,
@@ -99,10 +115,12 @@ export default function Home() {
         engine: engineConfig,
         data: trainingMessages.map(element => element.content),
       };
-      const response = await fetch('/api/stream/chat', {
-        method: 'POST',
+      const accessToken = getAccessToken();
+      const response = await fetch(`/api/stream/chat/${chatID}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(request_body),
       });
