@@ -2,10 +2,10 @@
 import { Box, Flex } from '@chakra-ui/react';
 import React, { useEffect, useRef } from 'react';
 
-import ChatInputs from '@/components/Chats/ChatInputs';
-import ChatLoader from '@/components/Chats/ChatLoader';
-import ChatMessage from '@/components/Chats/ChatMessage';
-import { ChatReset } from '@/components/Chats/ChatReset';
+import ChatInputs from '@/components/Chat/ChatInput';
+import ChatLoader from '@/components/Chat/ChatLoader';
+import ChatMessage from '@/components/Chat/ChatMessage';
+import { ChatReset } from '@/components/Chat/ChatReset';
 import Scrollbar from '@/components/Scrollbar';
 import { Message } from '@/types';
 export interface ChatScreenProps {
@@ -33,9 +33,8 @@ const ChatScreen = ({
     <>
       <Box position="relative" height="full" width="full">
         <Scrollbar>
-          <Box padding={6} py={8} pb={12}>
-            {loading && <ChatLoader />}
-            <ChatReset onReset={onReset} />
+          <Box padding={6} py={8} pb="6rem">
+            {/* <ChatReset onReset={onReset} /> */}
             <Flex flexDirection="column" gap={4}>
               {messages.map((message, index) => (
                 <Box key={index}>
@@ -46,11 +45,17 @@ const ChatScreen = ({
                 </Box>
               ))}
             </Flex>
+            {loading && <ChatLoader />}
             <Box ref={messagesEndRef} />
           </Box>
         </Scrollbar>
-
-        <Box left={0} bottom={2} width="full" position="absolute">
+        <Box
+          left={0}
+          bottom={10}
+          width="full"
+          position="absolute"
+          height="4rem"
+        >
           <Box padding={4}>
             <ChatInputs onSend={onSend} />
           </Box>

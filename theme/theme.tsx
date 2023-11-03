@@ -4,6 +4,13 @@ import {
   StyleFunctionProps,
   extendTheme,
 } from '@chakra-ui/react';
+
+/// Animation Style Setting
+const activeLabelStyles = {
+  transform: 'scale(0.85) translateY(-24px)',
+};
+////---------------------
+
 export const colors = {
   primary: {
     a: {
@@ -33,6 +40,9 @@ export const colors = {
       900: '#18181B',
     },
   },
+  secondary: {
+    red: '#FF4444',
+  },
 };
 const Button: ComponentStyleConfig = {
   variants: {
@@ -49,13 +59,27 @@ const Button: ComponentStyleConfig = {
         width: 5,
       },
     }),
-    send_btn: {
+    primary: {
       paddingX: 4,
       paddingY: 2.5,
       bg: 'primary.a.400',
       color: 'white',
-      borderBottom: '0.188rem solid',
+      borderBottom: '0.25rem solid',
       borderBottomColor: 'primary.a.500',
+      borderRadius: 'xl',
+      _hover: {
+        borderBottomColor: 'primary.a.600',
+      },
+    },
+    sign_in: {
+      border: '0.063rem solid',
+      borderColor: 'shader.a.300',
+      px: 3,
+      py: 2.5,
+      svg: {
+        width: 6,
+        height: 6,
+      },
     },
   },
 };
@@ -134,6 +158,96 @@ const Radio: ComponentMultiStyleConfig = {
   },
   parts: [],
 };
+const Tabs: ComponentStyleConfig = {
+  variants: {
+    right_sidebar: {
+      root: {
+        h: { md: 'calc(100vh - 145px)', base: 'calc(100vh - 165px)' },
+      },
+
+      tab: {
+        color: 'shader.a.400',
+        fontWeight: 'bold',
+        borderBottom: '1px solid',
+        borderBottomColor: 'shader.a.300',
+        flex: 1,
+        py: 4,
+        _selected: {
+          color: 'shader.a.900',
+          borderBottom: '3px solid',
+          zIndex: 2,
+          borderBottomColor: 'primary.a.400',
+        },
+      },
+      tablist: {
+        display: 'flex',
+        bg: 'white',
+        zIndex: 2,
+      },
+      tabpanels: {
+        padding: 0,
+        height: 'full',
+        width: 'full',
+      },
+      tabpanel: {
+        padding: 0,
+        height: 'full',
+        width: 'full',
+      },
+    },
+  },
+};
+
+const Form: ComponentStyleConfig = {
+  variants: {
+    floating_input: {
+      container: {
+        _focusWithin: {
+          label: {
+            color: 'shader.a.500',
+            ...activeLabelStyles,
+          },
+        },
+        'input:not(:placeholder-shown) + label, .chakra-select__wrapper + label, textarea:not(:placeholder-shown) ~ label':
+          {
+            ...activeLabelStyles,
+          },
+        label: {
+          top: 0,
+          left: 0,
+          zIndex: 2,
+          position: 'absolute',
+          backgroundColor: 'white',
+          pointerEvents: 'none',
+          mx: 3,
+          px: 1,
+          my: 2,
+          color: 'shader.a.500',
+          transformOrigin: 'left top',
+        },
+      },
+    },
+  },
+  parts: [],
+};
+const Input: ComponentStyleConfig = {
+  variants: {
+    auth: {
+      field: {
+        bg: 'shader.a.50',
+        borderRadius: 'lg',
+        border: '0.094rem solid',
+        borderColor: 'shader.a.300',
+        px: 4,
+        py: 3,
+        color: 'shader.a.900',
+        _invalid: {
+          borderColor: 'secondary.red',
+        },
+      },
+    },
+  },
+};
 const theme = extendTheme({
   colors,
   components: {
@@ -141,6 +255,9 @@ const theme = extendTheme({
     Checkbox,
     Radio,
     Textarea,
+    Tabs,
+    Input,
+    Form,
   },
 });
 

@@ -23,3 +23,19 @@ export interface Post {
   content: string;
   data: [string];
 }
+
+// User Interface
+export interface IUser {
+  id: string;
+  email: string;
+  username?: string;
+}
+
+// Register Info
+export interface ICreateUserInfo extends Pick<IUser, 'email'> {
+  password: string;
+}
+// Login with email , password
+export interface ILoginInfo extends Pick<IUser, 'email'> {
+  password: string;
+}
