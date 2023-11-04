@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getAccessToken, removeFromStorage } from '../auth/auth-helper';
 import authService from '../auth/auth-service';
 
-import { errorCatch, getContentType } from './api-helper';
+import { getContentType } from './api-helper';
 
 export const instance = axios.create({
   baseURL: process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000',
@@ -25,21 +25,13 @@ instance.interceptors.response.use(
   async error => {
     const originalRequest = error.config;
 
-    if (
-      error?.response?.status === 401 ||
-      error?.response?.status === 422 ||
-      error?.response?.status === 402 ||
-      (error.config && !error.config._isRetry)
-    ) {
+    if (error?.response?.status === 401) {
       originalRequest._isRetry = true;
-
       try {
         await authService.getNewTokens();
         return instance.request(originalRequest);
       } catch (error) {
-        if (errorCatch(error) === 'jwt expired') {
-          removeFromStorage();
-        }
+        removeFromStorage();
       }
     }
   }

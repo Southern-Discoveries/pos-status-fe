@@ -4,20 +4,15 @@ import React from 'react';
 
 import LogoLong from '@/components/Logo/LogoLong';
 import { useActions } from '@/hooks/useActions';
+import { useAuth } from '@/hooks/useAuth';
 import BookIcon from '@/public/assets/icons/line/book.svg';
-import { getUserFromStorage } from '@/utils/helper/auth/auth-helper';
 
 interface IProps {
   isOpenSetting?: boolean;
   onToggleSetting?: () => void;
 }
 const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
-  /*   const [user,setUser]=getUserFromStorage();
-  useEffect(() => {
-    user = getUserFromStorage();
-  }, [user]); */
-  /*   const { user, isLoading } = useAuth(); */
-  const user = getUserFromStorage();
+  const { user } = useAuth();
   const { logout } = useActions();
   const router = useRouter();
   return (
@@ -51,9 +46,9 @@ const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
               icon={<BookIcon />}
             />
             <Button
-              onClick={() => {
-                logout();
+              onClick={async () => {
                 router.push('/auth/signin');
+                logout();
               }}
             >
               Logout

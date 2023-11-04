@@ -14,10 +14,6 @@ export interface ITokens {
   refresh_token: string;
 }
 
-export interface IAuthResponse extends ITokens {
-  user: IUser | null;
-}
-
 export interface ILoginResponse extends ITokens {}
 
 // Register Info

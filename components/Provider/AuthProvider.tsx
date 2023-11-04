@@ -8,14 +8,13 @@ import { EnumTokens, getAccessToken } from '@/utils/helper/auth/auth-helper';
 
 const AuthProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   const { user } = useAuth();
-
   const { checkAuth, logout } = useActions();
 
   const { pathname } = useRouter();
   const router = useRouter();
   useEffect(() => {
     const accessToken = getAccessToken();
-
+    /* console.log('Auth Check Access Token', accessToken); */
     if (accessToken) {
       checkAuth();
     } else {

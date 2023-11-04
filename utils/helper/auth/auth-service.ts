@@ -3,23 +3,22 @@ import Cookies from 'js-cookie';
 
 import { instance } from '../api/api-interupt';
 
-import {
-  EnumTokens,
-  saveTokensStorage,
-  saveUserToStorage,
-} from './auth-helper';
+import { EnumTokens, saveTokensStorage } from './auth-helper';
 
 import {
-  IAuthResponse,
   ICreateUserInfo,
   ILoginInfo,
+  ITokens,
+  IUser,
 } from '@/redux/user/user.interface';
 
 export class AuthService {
   private AUTH_URL = '/auth';
 
   async register(data: ICreateUserInfo) {
-    const response = await instance<IAuthResponse>({
+    // Current API no  return any thing
+    // It jut a messsage
+    const response = await instance<string>({
       method: 'POST',
       url: `${this.AUTH_URL}/register`,
       data,
@@ -38,7 +37,7 @@ export class AuthService {
     return response;
   }
   async login(data: ILoginInfo) {
-    const response = await instance<string, { data: IAuthResponse }>({
+    const response = await instance<string, { data: ITokens }>({
       method: 'POST',
       url: `${this.AUTH_URL}/login`,
       data,
@@ -46,7 +45,7 @@ export class AuthService {
 
     if (response.data.token) {
       saveTokensStorage(response.data);
-      this.getAuthUser();
+      await this.getAuthUser();
     }
 
     return response.data;
@@ -54,27 +53,17 @@ export class AuthService {
 
   async getAuthUser() {
     const access_token = Cookies.get(EnumTokens.ACCESSTOKEN);
-    const response = await instance<string, { data: any }>({
+    const response = await instance<string, { data: IUser }>({
       method: 'GET',
       url: `user`,
       headers: {
         Authorization: `Bearer ${access_token}`,
       },
     });
-    saveUserToStorage(response.data);
-
     return response.data;
   }
   async getNewTokens() {
     const refreshToken = Cookies.get(EnumTokens.REFRESHTOKEN);
-
-    /*   const response = await instance<string, { data: any }>({
-      method: 'POST',
-      url: `${this.AUTH_URL}/refresh`,
-      headers: {
-        Authorization: `Bearer ${refreshToken}`,
-      },
-    }); */
     const response = await axios.post<
       string,
       { data: { access_token: string } }
@@ -88,11 +77,9 @@ export class AuthService {
       }
     );
     if (response.data.access_token) {
-      // Update Refresh Token
-      /*    saveTokensStorage(response.data); */
+     
       Cookies.set(EnumTokens.ACCESSTOKEN, response.data.access_token);
     }
-
     return response.data;
   }
 }

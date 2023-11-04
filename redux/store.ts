@@ -11,7 +11,6 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
-/* import storage from './storage'; */
 import { userSlice } from './user/userSlice';
 
 const persistConfig = {

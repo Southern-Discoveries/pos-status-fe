@@ -1,15 +1,11 @@
-import { Box, Button, Text } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-
-import { IChatData } from '@/redux/chat/chat.interface';
-import { instance } from '@/utils/helper/api/api-interupt';
-import { getUserFromStorage } from '@/utils/helper/auth/auth-helper';
+import { Box, Button } from '@chakra-ui/react';
+import React from 'react';
 
 const ActivityTopic = () => {
-  const user = getUserFromStorage();
+  /*  const user = getUserFromStorage();
   const [listChats, setListChat] = useState<Array<IChatData> | null>(null);
-
-  useEffect(() => {
+ */
+  /*  useEffect(() => {
     const fetchList = async () => {
       const response = await instance<any>({
         method: 'GET',
@@ -20,22 +16,22 @@ const ActivityTopic = () => {
       }
     };
     fetchList();
-  }, []);
+  }, []); */
   return (
     <>
       <Box padding={4}>
         <Button variant="primary" width="full">
           New Topic
         </Button>
-        {listChats &&
+        {/* {listChats &&
           listChats.map(list => (
             <>
               <Box key={list.id}>
                 <Text>{list.title}</Text>
-                {/*  <Text>{getTimeAgo(list.updated_at)}</Text> */}
+             
               </Box>
             </>
-          ))}
+          ))} */}
       </Box>
     </>
   );

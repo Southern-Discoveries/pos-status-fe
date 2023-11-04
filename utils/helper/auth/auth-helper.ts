@@ -2,7 +2,7 @@
 /* eslint-disable no-use-before-define */
 import Cookies from 'js-cookie';
 
-import { IAuthResponse, ITokens } from '@/redux/user/user.interface';
+import { ITokens } from '@/redux/user/user.interface';
 
 export const getAccessToken = () => {
   const accessToken = Cookies.get(EnumTokens.ACCESSTOKEN);
@@ -19,14 +19,13 @@ export const saveTokensStorage = (data: ITokens) => {
 };
 
 export const removeFromStorage = () => {
-  console.log('Remove from local storage');
   Cookies.remove(EnumTokens.ACCESSTOKEN);
   Cookies.remove(EnumTokens.REFRESHTOKEN);
   localStorage.removeItem('user');
 };
 
 // Save Data User
-export const saveUserToStorage = (data: IAuthResponse) => {
+export const saveUserToStorage = (data: ITokens) => {
   localStorage.setItem('user', JSON.stringify(data));
 };
 

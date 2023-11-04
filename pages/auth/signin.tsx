@@ -25,7 +25,7 @@ import { useActions } from '@/hooks/useActions';
 import ErrorIcon from '@/public/assets/icons/fill/error.svg';
 const SignIn = () => {
   const router = useRouter();
-  const { login } = useActions();
+  const { login, checkAuth } = useActions();
   const formik = useFormik({
     initialValues: {
       email: 'hello@grindy.io',
@@ -34,7 +34,8 @@ const SignIn = () => {
     },
     onSubmit: async (values, { setFieldError }) => {
       try {
-        login({ email: values.email, password: values.password });
+        await login({ email: values.email, password: values.password });
+        await checkAuth();
         router.push('/');
       } catch (error) {
         setFieldError('error_message', 'Invalid Email or Password');
