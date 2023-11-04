@@ -77,14 +77,10 @@ export default function Home() {
         if (response) {
           for (const img of response.data.images) {
             const res = await imageService.getImage(img.raw);
-            const arrayBuffer = new Uint8Array(res.data).buffer;
-            const blob = new Blob([arrayBuffer], { type: 'image/jpeg' });
-            const imageUrl = URL.createObjectURL(blob);
 
-            const imgElement = document.createElement('img');
-            imgElement.src = imageUrl;
-            htmlMsg += `${imgElement}`;
-            /*   console.log(htmlMsg); */
+            htmlMsg += `<img src="${
+              process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000'
+            }/image/${img.raw}"/>`;
           }
         }
       }

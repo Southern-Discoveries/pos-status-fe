@@ -16,6 +16,7 @@ export class ImageService {
       const imageUrl = URL.createObjectURL(blob);
       console.log('IMG URL', imageUrl);
     } */
+
     return response;
   }
   async generateImage(chat_id: string, data: any) {

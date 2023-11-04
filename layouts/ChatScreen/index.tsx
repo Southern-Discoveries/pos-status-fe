@@ -7,7 +7,6 @@ import WellCome from './WellCome';
 import ChatInputs from '@/components/Chat/ChatInput';
 import ChatLoader from '@/components/Chat/ChatLoader';
 import ChatMessage from '@/components/Chat/ChatMessage';
-import { ChatReset } from '@/components/Chat/ChatReset';
 import Scrollbar from '@/components/Scrollbar';
 import { Message } from '@/types';
 export interface ChatScreenProps {
@@ -31,6 +30,7 @@ const ChatScreen = ({
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+  console.log('Current Message', messages);
   return (
     <>
       <Box position="relative" height="full" width="full">
