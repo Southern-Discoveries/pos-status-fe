@@ -8,7 +8,6 @@ import { EnumTokens, saveTokensStorage } from './auth-helper';
 import {
   ICreateUserInfo,
   ILoginInfo,
-  ITokens,
   IUser,
 } from '@/redux/user/user.interface';
 
@@ -37,7 +36,7 @@ export class AuthService {
     return response;
   }
   async login(data: ILoginInfo) {
-    const response = await instance<string, { data: ITokens }>({
+    const response = await instance<any, any>({
       method: 'POST',
       url: `${this.AUTH_URL}/login`,
       data,
@@ -48,7 +47,7 @@ export class AuthService {
       await this.getAuthUser();
     }
 
-    return response.data;
+    return response;
   }
 
   async getAuthUser() {
@@ -77,7 +76,6 @@ export class AuthService {
       }
     );
     if (response.data.access_token) {
-     
       Cookies.set(EnumTokens.ACCESSTOKEN, response.data.access_token);
     }
     return response.data;

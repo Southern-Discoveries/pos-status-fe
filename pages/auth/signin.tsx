@@ -34,9 +34,18 @@ const SignIn = () => {
     },
     onSubmit: async (values, { setFieldError }) => {
       try {
-        await login({ email: values.email, password: values.password });
-        await checkAuth();
-        router.push('/');
+        const response: any = await login({
+          email: values.email,
+          password: values.password,
+        });
+
+        if (response.payload.status == 200) {
+          await checkAuth();
+          router.push('/');
+        } else {
+          setFieldError('error_message', 'Invalid Email or Password');
+          return;
+        }
       } catch (error) {
         setFieldError('error_message', 'Invalid Email or Password');
       }
@@ -119,17 +128,29 @@ const SignIn = () => {
                         : undefined
                     }
                   />
-                  {formik.errors.error_message && (
-                    <FormErrorMessage
-                      fontSize="sm"
-                      display="flex"
-                      alignItems="center"
-                      gap={1.5}
-                    >
-                      <Icon as={ErrorIcon} h={3.5} width={3.5} />
-                      <Text> {formik.errors.error_message}</Text>
-                    </FormErrorMessage>
-                  )}
+                  <FormControl
+                    variant="floating_input"
+                    isInvalid={
+                      !!(
+                        formik.touched.error_message &&
+                        formik.errors.error_message
+                      )
+                    }
+                  >
+                    {' '}
+                    {formik.errors.error_message && (
+                      <FormErrorMessage
+                        fontSize="sm"
+                        display="flex"
+                        alignItems="center"
+                        gap={1.5}
+                      >
+                        <Icon as={ErrorIcon} h={3.5} width={3.5} />
+                        <Text> {formik.errors.error_message}</Text>
+                      </FormErrorMessage>
+                    )}
+                  </FormControl>
+
                   <Link href="/auth/reset-email">
                     <Text color="primary.a.500" fontSize="sm" fontWeight="600">
                       Forget your password?

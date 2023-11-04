@@ -34,5 +34,6 @@ instance.interceptors.response.use(
         removeFromStorage();
       }
     }
+    return error.response;
   }
 );

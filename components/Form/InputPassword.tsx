@@ -20,7 +20,7 @@ interface Props {
   error?: string;
 }
 const InputPassword = ({ isInvalid, value, onChange, error }: Props) => {
-  const [hide, setHide] = useState(true);
+  const [hide, setHide] = useState(false);
   return (
     <>
       <FormControl variant="floating_input" isInvalid={isInvalid}>

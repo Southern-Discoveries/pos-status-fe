@@ -28,6 +28,9 @@ export const login = createAsyncThunk<ILoginResponse, ILoginInfo>(
   async (data, thunkApi) => {
     try {
       const response = await authService.login(data);
+      if (response.status != 200) {
+        return thunkApi.rejectWithValue(response);
+      }
       return response;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
