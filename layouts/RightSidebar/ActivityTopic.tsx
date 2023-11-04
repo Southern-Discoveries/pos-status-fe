@@ -1,37 +1,44 @@
-import { Box, Button } from '@chakra-ui/react';
-import React from 'react';
+import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+
+import chatService from '@/redux/chat/chat-service';
+import { IChatData } from '@/redux/chat/chat.interface';
 
 const ActivityTopic = () => {
-  /*  const user = getUserFromStorage();
   const [listChats, setListChat] = useState<Array<IChatData> | null>(null);
- */
-  /*  useEffect(() => {
+
+  useEffect(() => {
     const fetchList = async () => {
-      const response = await instance<any>({
-        method: 'GET',
-        url: `chat/my-chat?page=1&size=10&order_by=-updated_at`,
-      });
+      const response = await chatService.getOwnChats();
       if (response.status === 200) {
         setListChat(response.data.data);
       }
     };
     fetchList();
-  }, []); */
+  }, []);
   return (
     <>
       <Box padding={4}>
-        <Button variant="primary" width="full">
-          New Topic
-        </Button>
-        {/* {listChats &&
-          listChats.map(list => (
-            <>
-              <Box key={list.id}>
-                <Text>{list.title}</Text>
-             
-              </Box>
-            </>
-          ))} */}
+        <Flex flexDirection="column" gap={3}>
+          <Button variant="primary" width="full">
+            New Topic
+          </Button>
+          {listChats &&
+            listChats.map(list => (
+              <>
+                <Box
+                  key={list.id}
+                  width="full"
+                  padding={3}
+                  borderRadius="xl"
+                  border="0.063rem solid"
+                  borderColor="shader.a.200"
+                >
+                  <Text>{list.title}</Text>
+                </Box>
+              </>
+            ))}
+        </Flex>
       </Box>
     </>
   );

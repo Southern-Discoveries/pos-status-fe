@@ -25,6 +25,7 @@ import Header from '@/layouts/Header';
 import ActivityTopic from '@/layouts/RightSidebar/ActivityTopic';
 import TrainingChatScreen from '@/layouts/RightSidebar/TrainingChat';
 import Sidebar from '@/layouts/Sidebar';
+import chatService from '@/redux/chat/chat-service';
 import imageService from '@/redux/images/image-service';
 import { getAccessToken } from '@/redux/user/auth-helper';
 import { colors } from '@/theme/theme';
@@ -96,25 +97,21 @@ export default function Home() {
       },
     ]);
   };
-
+  async function createChatIfNot(title: string) {
+    if (!chatID) {
+      const response = await chatService.createNewChat(title);
+      if (response.status === 200) {
+        setChatID(response.data.id);
+        return response;
+      }
+    }
+  }
   const handleChatSend = async (message: Message) => {
     const updatedMessages = [...chatMessages, message];
     setChatMessages(updatedMessages);
+    const res_new = await createChatIfNot(message.content);
     setChatLoading(true);
-    if (!chatID) {
-      const response = await instance<any>({
-        method: 'PUT',
-        url: `chat/new-chat`,
-        data: {
-          title: message.content,
-        },
-      }).then(response => {
-        setChatID(response.data.id);
-      });
-      /*   if (response.status === 200) {
-        setChatID(response.data.id);
-      } */
-    }
+
     try {
       let request_body = {
         content: message.content,
@@ -123,14 +120,17 @@ export default function Home() {
         data: trainingMessages.map(element => element.content),
       };
       const accessToken = getAccessToken();
-      const response = await fetch(`/api/stream/chat/${chatID}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(request_body),
-      });
+      const response = await fetch(
+        `/api/stream/chat/${res_new?.data.id || chatID}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(request_body),
+        }
+      );
 
       if (!response.ok) {
         setChatLoading(false);
