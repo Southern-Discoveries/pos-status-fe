@@ -1,9 +1,11 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-import { instance } from '../api/api-interupt';
-
-import { EnumTokens, saveTokensStorage } from './auth-helper';
+import { instance } from '../../utils/helper/api/api-interupt';
+import {
+  EnumTokens,
+  saveTokensStorage,
+} from '../../utils/helper/auth/auth-helper';
 
 import {
   ICreateUserInfo,
@@ -47,7 +49,7 @@ export class AuthService {
       await this.getAuthUser();
     }
 
-    return response;
+    return response.data;
   }
 
   async getAuthUser() {

@@ -25,6 +25,7 @@ import Header from '@/layouts/Header';
 import ActivityTopic from '@/layouts/RightSidebar/ActivityTopic';
 import TrainingChatScreen from '@/layouts/RightSidebar/TrainingChat';
 import Sidebar from '@/layouts/Sidebar';
+import imageService from '@/redux/images/image-service';
 import { colors } from '@/theme/theme';
 import { Message, PostOption, EngineConfig } from '@/types';
 import { instance } from '@/utils/helper/api/api-interupt';
@@ -58,25 +59,33 @@ export default function Home() {
     setChatLoading(true);
     let htmlMsg = '```html';
     try {
-      const accessToken = getAccessToken();
-      const response = await fetch(`/api/ai/image/${chatID}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          post: postConfig,
-          content: msg.slice(0, 999),
-          data: trainingMessages.map(element => element.content),
-        }),
-      });
-      const res = await response.json();
-      console.log('Current res', res);
-      if (res) {
-        for (const img of res) {
-          htmlMsg += `<img src="${img}"/>`;
-          /*   console.log(htmlMsg); */
+      if (chatID) {
+        const response = await imageService.generateImage(
+          chatID,
+          JSON.stringify({
+            post: postConfig,
+            content: msg.slice(0, 999),
+            data: trainingMessages.map(element => element.content),
+          })
+        );
+        /*      JSON.stringify({
+               post: postConfig,
+               content: msg.slice(0, 999),
+               data: trainingMessages.map(element => element.content),
+             }); */
+
+        if (response) {
+          for (const img of response.data.images) {
+            const res = await imageService.getImage(img.raw);
+            const arrayBuffer = new Uint8Array(res.data).buffer;
+            const blob = new Blob([arrayBuffer], { type: 'image/jpeg' });
+            const imageUrl = URL.createObjectURL(blob);
+
+            const imgElement = document.createElement('img');
+            imgElement.src = imageUrl;
+            htmlMsg += `${imgElement}`;
+            /*   console.log(htmlMsg); */
+          }
         }
       }
     } catch (error) {
@@ -103,10 +112,12 @@ export default function Home() {
         data: {
           title: message.content,
         },
-      });
-      if (response.status === 200) {
+      }).then(response => {
         setChatID(response.data.id);
-      }
+      });
+      /*   if (response.status === 200) {
+        setChatID(response.data.id);
+      } */
     }
     try {
       let request_body = {

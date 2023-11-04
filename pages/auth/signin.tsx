@@ -39,7 +39,7 @@ const SignIn = () => {
           password: values.password,
         });
 
-        if (response.payload.status == 200) {
+        if (response.payload.token) {
           await checkAuth();
           router.push('/');
         } else {
