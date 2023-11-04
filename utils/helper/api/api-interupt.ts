@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+import {
+  getAccessToken,
+  removeFromStorage,
+} from '../../../redux/user/auth-helper';
 import authService from '../../../redux/user/user-service';
-import { getAccessToken, removeFromStorage } from '../auth/auth-helper';
 
 import { getContentType } from './api-helper';
 

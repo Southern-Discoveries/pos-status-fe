@@ -1,4 +1,4 @@
-import { instance } from '../api/api-interupt';
+import { instance } from '../../utils/helper/api/api-interupt';
 
 export class ChatService {
   private CHAT_URL = '/chat';
@@ -10,6 +10,7 @@ export class ChatService {
     if (response.status === 200) {
       console.log(response.data);
     }
+    return response.data;
   }
 }
 export default new ChatService();

@@ -7,9 +7,9 @@ import {
   IUser,
 } from './user.interface';
 
+import { removeFromStorage } from '@/redux/user/auth-helper';
 import authService from '@/redux/user/user-service';
 import { errorCatch } from '@/utils/helper/api/api-helper';
-import { removeFromStorage } from '@/utils/helper/auth/auth-helper';
 
 export const register = createAsyncThunk<string, ICreateUserInfo>(
   'auth/register',

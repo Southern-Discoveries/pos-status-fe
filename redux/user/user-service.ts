@@ -2,10 +2,8 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 import { instance } from '../../utils/helper/api/api-interupt';
-import {
-  EnumTokens,
-  saveTokensStorage,
-} from '../../utils/helper/auth/auth-helper';
+
+import { EnumTokens, saveTokensStorage } from './auth-helper';
 
 import {
   ICreateUserInfo,

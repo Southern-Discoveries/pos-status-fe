@@ -26,10 +26,10 @@ import ActivityTopic from '@/layouts/RightSidebar/ActivityTopic';
 import TrainingChatScreen from '@/layouts/RightSidebar/TrainingChat';
 import Sidebar from '@/layouts/Sidebar';
 import imageService from '@/redux/images/image-service';
+import { getAccessToken } from '@/redux/user/auth-helper';
 import { colors } from '@/theme/theme';
 import { Message, PostOption, EngineConfig } from '@/types';
 import { instance } from '@/utils/helper/api/api-interupt';
-import { getAccessToken } from '@/utils/helper/auth/auth-helper';
 
 export default function Home() {
   const toast = useToast();
