@@ -1,6 +1,5 @@
 **Vercel**
 Host your own live version of Mediator UI with Vercel.
-**Replit**
 
 ## Running Locally
 
@@ -29,7 +28,3 @@ npm install
 ```bash
 npm run dev
 ```
-
-### Reference:
-
-git clone https://github.com/mckaywrigley/chatbot-ui-lite.git

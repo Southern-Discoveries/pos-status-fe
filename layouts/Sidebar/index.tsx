@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react';
 import CategorySection from './components/CategorySection';
 
 import api from '@/axios/config';
-import SelectListItem from '@/components/Form/SelectListItem';
 import SelectRadioItem from '@/components/Form/SelectRadioItem';
 import ArrowIcon from '@/public/assets/icons/line/arrow.svg';
 import FileIcon from '@/public/assets/icons/line/file.svg';
@@ -66,7 +65,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
     try {
       const response = await api.get(endpoint); // Use Axios to make a GET request
       if (response.status === 200) {
-        const data = response.data; // Use response.data to access the JSON data
+        const data = response.data;
         setOptions((prevOptions: any) => ({
           ...prevOptions,
           [`${category}Options`]: data,
