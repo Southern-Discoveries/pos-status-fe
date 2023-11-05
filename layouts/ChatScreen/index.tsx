@@ -41,11 +41,23 @@ const ChatScreen = ({
                 {/* <ChatReset onReset={onReset} /> */}
                 <Flex flexDirection="column" gap={4}>
                   {messages.map((message, index) => (
-                    <Box key={index}>
+                    <Box key={index} role="group" position="relative">
                       <ChatMessage
                         onCreateImage={onCreateImage}
                         message={message}
                       />
+                      <Box
+                        display="none"
+                        _groupHover={{
+                          display: 'block',
+                        }}
+                        bg="red"
+                        top={0}
+                        right="28%"
+                        position="absolute"
+                      >
+                        DOT
+                      </Box>
                     </Box>
                   ))}
                 </Flex>

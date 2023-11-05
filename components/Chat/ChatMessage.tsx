@@ -62,18 +62,6 @@ const ChatMessage = ({ message, onCreateImage }: Props) => {
                 {isHtml && (
                   <Box dangerouslySetInnerHTML={{ __html: content }}></Box>
                 )}
-                {/*   <Popover
-                  variant="chat_edit"
-                  isOpen={isOpen}
-                  onOpen={onOpen}
-                  onClose={onClose}
-                  placement="right"
-                  closeOnBlur={false}
-                >
-                  <PopoverContent p={5}>
-                    <ChatEdit />
-                  </PopoverContent>
-                </Popover> */}
               </HStack>
 
               {!isHtml && (

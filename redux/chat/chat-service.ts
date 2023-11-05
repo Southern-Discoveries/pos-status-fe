@@ -10,7 +10,7 @@ export class ChatService {
         title: title,
       },
     });
-    console.log('Check Current ChatId', response.data);
+
     return response;
   }
   // Get List Chat of This owner
@@ -22,6 +22,20 @@ export class ChatService {
     if (response.status === 200) {
       console.log(response.data);
     }
+    return response;
+  }
+  async getChatMessage(chat_id: string) {
+    const response = await instance<any>({
+      method: 'GET',
+      url: `${this.CHAT_URL}/messages/${chat_id}`,
+    });
+    return response;
+  }
+  async deleteChat(chat_id: string) {
+    const response = await instance<any>({
+      method: 'DELETE',
+      url: `${this.CHAT_URL}/delete-chat/${chat_id}`,
+    });
     return response;
   }
 }

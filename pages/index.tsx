@@ -136,7 +136,9 @@ export default function Home() {
         setChatLoading(false);
         throw new Error(response.statusText);
       }
-
+      /// fetch chat message
+      /*  const test = await chatService.getChatMessage(res_new?.data.id || chatID);
+      console.log('Test Get', test); */
       const data = response.body;
 
       if (!data) {
