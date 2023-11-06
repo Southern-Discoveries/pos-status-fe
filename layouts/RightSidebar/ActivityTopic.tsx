@@ -9,13 +9,18 @@ const ActivityTopic = () => {
 
   useEffect(() => {
     const fetchList = async () => {
-      const response = await chatService.getOwnChats();
+      const response = await chatService.getOwnChats({
+        page: 1,
+        limit: 10,
+        order_by: '-updated_at',
+      });
       if (response.status === 200) {
         setListChat(response.data.data);
       }
     };
     fetchList();
   }, []);
+
   return (
     <>
       <Box padding={4}>

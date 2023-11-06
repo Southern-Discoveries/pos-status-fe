@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { IChatData } from './chat.interface';
 
@@ -17,5 +17,10 @@ const initialState: ConversationsState = {
 export const chatSlice = createSlice({
   name: 'chat',
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentChatID: (state, action: PayloadAction<string | null>) => {
+      state.currentChatID = action.payload;
+    },
+  },
 });
+export const { setCurrentChatID } = chatSlice.actions;

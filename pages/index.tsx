@@ -246,7 +246,8 @@ export default function Home() {
             borderRight="0.063rem solid"
             borderRightColor="shader.a.200"
             overscrollBehavior="contain"
-            minW="400px"
+            minW="350px"
+            maxWidth="400px"
           >
             <Scrollbar overflowY="auto" overflow="hidden">
               <Box padding={4}>
@@ -320,7 +321,7 @@ export default function Home() {
                   borderLeft: '0.063rem solid',
                   borderLeftColor: colors.shader.a[200],
                 }}
-                animate={{ width: isOpenSetting ? 500 : 0 }}
+                animate={{ width: isOpenSetting ? 600 : 0 }}
               >
                 <Tabs variant="right_sidebar">
                   <TabList height="54px">
