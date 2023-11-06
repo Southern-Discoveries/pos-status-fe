@@ -30,7 +30,6 @@ import imageService from '@/redux/images/image-service';
 import { getAccessToken } from '@/redux/user/auth-helper';
 import { colors } from '@/theme/theme';
 import { Message, PostOption, EngineConfig } from '@/types';
-import { instance } from '@/utils/helper/api/api-interupt';
 
 export default function Home() {
   const toast = useToast();
@@ -78,10 +77,14 @@ export default function Home() {
         if (response) {
           for (const img of response.data.images) {
             const res = await imageService.getImage(img.raw);
-
+            await imageService.getImage(img.text);
             htmlMsg += `<img src="${
               process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000'
-            }/image/${img.raw}"/>`;
+            }/image/${img.raw}"/>
+            <img src="${
+              process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000'
+            }/image/${img.text_banner}"/>
+            `;
           }
         }
       }
@@ -209,7 +212,7 @@ export default function Home() {
     onToggle: onToggleSetting,
     onClose: onCloseSetting,
     getDisclosureProps,
-  } = useDisclosure({ defaultIsOpen: isMobileScreen ? false : true });
+  } = useDisclosure({ defaultIsOpen: true });
   const [hidden, setHidden] = useState(!isOpenSetting);
 
   return (

@@ -53,7 +53,7 @@ const ChatMessage = ({ message, onCreateImage }: Props) => {
                 mb={2}
                 position="relative"
                 onContextMenu={e => {
-                  e.preventDefault();
+                  /*   e.preventDefault(); */
                   /*   onToggle(); */
                   /* console.log('Right Click Message', e.pageX, e.pageY); */
                 }}

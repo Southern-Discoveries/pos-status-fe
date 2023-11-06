@@ -1,10 +1,9 @@
-import { Box, Button, HStack, IconButton } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
+import { Box, HStack, IconButton } from '@chakra-ui/react';
 import React from 'react';
 
+import { AccountMenu } from './AccountMenu';
+
 import LogoLong from '@/components/Logo/LogoLong';
-import { useActions } from '@/hooks/useActions';
-import { useAuth } from '@/hooks/useAuth';
 import BookIcon from '@/public/assets/icons/line/book.svg';
 
 interface IProps {
@@ -12,9 +11,6 @@ interface IProps {
   onToggleSetting?: () => void;
 }
 const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
-  const { user } = useAuth();
-  const { logout } = useActions();
-  const router = useRouter();
   return (
     <>
       <Box
@@ -45,19 +41,7 @@ const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
               onClick={onToggleSetting}
               icon={<BookIcon />}
             />
-            <Button
-              onClick={async () => {
-                router.push('/auth/signin');
-                logout();
-              }}
-            >
-              Logout
-            </Button>
-            {user && (
-              <>
-                <Box color="red">{user.email}</Box>
-              </>
-            )}
+            <AccountMenu />
           </HStack>
         </HStack>
       </Box>

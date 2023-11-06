@@ -256,6 +256,48 @@ const Popover: ComponentStyleConfig = {
     },
   },
 };
+const Menu: ComponentStyleConfig = {
+  variants: {
+    account: {
+      button: {},
+      list: {
+        padding: 3,
+        border: '0.063rem solid',
+        borderColor: 'shader.a.200',
+        borderRadius: 'xl',
+      },
+      item: {
+        padding: 3,
+        display: 'flex',
+        fontWeight: 'medium',
+        gap: 3,
+        svg: {
+          height: 5,
+          width: 5,
+        },
+      },
+      groupTitle: {},
+      command: {},
+      divider: {},
+    },
+  },
+};
+const Switch: ComponentStyleConfig = {
+  variants: {
+    toggle: {
+      /* container:{
+
+      }, */
+      thumb: {},
+      track: {
+        bg: 'shader.a.300',
+        _checked: {
+          bg: 'primary.a.500',
+        },
+      },
+    },
+  },
+};
 const theme = extendTheme({
   colors,
   components: {
@@ -267,6 +309,8 @@ const theme = extendTheme({
     Input,
     Form,
     Popover,
+    Menu,
+    Switch,
   },
 });
 

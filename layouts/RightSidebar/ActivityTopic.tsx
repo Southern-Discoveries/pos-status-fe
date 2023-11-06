@@ -27,6 +27,10 @@ const ActivityTopic = () => {
             listChats.map(list => (
               <>
                 <Box
+                  cursor="pointer"
+                  _hover={{
+                    borderColor: 'primary.a.400',
+                  }}
                   key={list.id}
                   width="full"
                   padding={3}
