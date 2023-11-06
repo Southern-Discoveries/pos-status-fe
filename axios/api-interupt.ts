@@ -10,6 +10,7 @@ export const instance = axios.create({
   headers: getContentType(),
 });
 
+// Add an interceptor to include the token in headers for authorized requests
 instance.interceptors.request.use(config => {
   const accessToken = getAccessToken();
 
@@ -20,6 +21,7 @@ instance.interceptors.request.use(config => {
   return config;
 });
 
+// Renew Access Token , if failed logout
 instance.interceptors.response.use(
   config => config,
   async error => {

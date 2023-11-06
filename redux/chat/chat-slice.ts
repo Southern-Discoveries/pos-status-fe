@@ -1,16 +1,13 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { createNewChat } from './chat-action';
-import { IChatData } from './chat-interface';
+import { createNewChat, deleteChat, getChatMessage } from './chat-action';
 
 interface ConversationsState {
-  listChat: IChatData[];
   currentChatID: string | null;
   isChatLoading: boolean;
 }
 
 const initialState: ConversationsState = {
-  listChat: [],
   currentChatID: null,
   isChatLoading: false,
 };
@@ -31,8 +28,26 @@ export const chatSlice = createSlice({
       .addCase(createNewChat.fulfilled, (state, action: any) => {
         state.isChatLoading = false;
         state.currentChatID = action.payload.id;
+        console.log('Current P', action.payload.id);
       })
       .addCase(createNewChat.rejected, state => {
+        state.isChatLoading = false;
+        state.currentChatID = null;
+      })
+      .addCase(getChatMessage.pending, state => {
+        state.isChatLoading = true;
+      })
+      .addCase(getChatMessage.rejected, state => {
+        state.isChatLoading = false;
+        state.currentChatID = null;
+      })
+      .addCase(deleteChat.pending, state => {
+        state.isChatLoading = true;
+      })
+      .addCase(deleteChat.rejected, state => {
+        state.isChatLoading = false;
+      })
+      .addCase(deleteChat.fulfilled, state => {
         state.isChatLoading = false;
         state.currentChatID = null;
       });

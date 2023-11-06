@@ -16,7 +16,7 @@ const WellCome = () => {
             rowGap={0}
           >
             <Text>Welcome to</Text>
-            <Text color="primary.a.500">PostSatus</Text>
+            <Text color="primary.a.500">PostStatus</Text>
           </HStack>
           <Text color="shader.a.500" mb="40px">
             Neque porro quisquam est qui dolorem ipsum quia dolor sit amet

@@ -1,13 +1,16 @@
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { useChat } from '@/hooks/useChat';
 import { IChatData } from '@/redux/chat/chat-interface';
 import chatService from '@/redux/chat/chat-service';
+import { setCurrentChatID } from '@/redux/chat/chat-slice';
 
 const ActivityTopic = () => {
   const [listChats, setListChat] = useState<Array<IChatData> | null>(null);
-
+  const { currentChatID } = useChat();
   useEffect(() => {
     const fetchList = async () => {
       const response = await chatService.getOwnChats({
@@ -20,8 +23,10 @@ const ActivityTopic = () => {
       }
     };
     fetchList();
-  }, []);
-  const { currentChatID } = useChat();
+  }, [currentChatID]);
+  const router = useRouter();
+  const dispatch = useDispatch();
+
   return (
     <>
       <Box padding={4}>
@@ -36,6 +41,10 @@ const ActivityTopic = () => {
                   cursor="pointer"
                   _hover={{
                     borderColor: 'primary.a.400',
+                  }}
+                  onClick={() => {
+                    dispatch(setCurrentChatID(list.id));
+                    router.push(`/chat/${list.id}`);
                   }}
                   key={list.id}
                   width="full"

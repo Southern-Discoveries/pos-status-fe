@@ -21,9 +21,6 @@ export class ChatService {
       method: 'GET',
       url: `${this.CHAT_URL}/my-chat?page=${data.page}&size=${data.limit}&order_by=${data.order_by}`,
     });
-    if (response.status === 200) {
-      console.log(response.data);
-    }
     return response;
   }
   async getChatMessage(chat_id: string) {

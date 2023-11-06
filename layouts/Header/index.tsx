@@ -1,16 +1,20 @@
 import { Box, HStack, IconButton } from '@chakra-ui/react';
+import Link from 'next/link';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
 import { AccountMenu } from './AccountMenu';
 
 import LogoLong from '@/components/Logo/LogoLong';
 import BookIcon from '@/public/assets/icons/line/book.svg';
+import { setCurrentChatID } from '@/redux/chat/chat-slice';
 
 interface IProps {
   isOpenSetting?: boolean;
   onToggleSetting?: () => void;
 }
 const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
+  const dispatch = useDispatch();
   return (
     <>
       <Box
@@ -31,7 +35,15 @@ const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
           px={6}
           py={3}
         >
-          <LogoLong />
+          <Link
+            href="/"
+            onClick={() => {
+              dispatch(setCurrentChatID(null));
+            }}
+          >
+            <LogoLong />
+          </Link>
+
           <HStack>
             <IconButton
               variant="icon_btn"

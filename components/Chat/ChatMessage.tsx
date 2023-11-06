@@ -52,11 +52,6 @@ const ChatMessage = ({ message, onCreateImage }: Props) => {
                 backdropBlur="blur(2.5px)"
                 mb={2}
                 position="relative"
-                onContextMenu={e => {
-                  /*   e.preventDefault(); */
-                  /*   onToggle(); */
-                  /* console.log('Right Click Message', e.pageX, e.pageY); */
-                }}
               >
                 <Text> {!isHtml && content}</Text>
                 {isHtml && (

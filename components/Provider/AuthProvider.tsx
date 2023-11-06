@@ -17,8 +17,6 @@ const AuthProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
     /* console.log('Auth Check Access Token', accessToken); */
     if (accessToken) {
       checkAuth();
-    } else {
-      router.push('/auth/signin');
     }
   }, []);
 
