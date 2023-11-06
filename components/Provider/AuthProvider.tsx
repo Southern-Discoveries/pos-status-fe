@@ -4,7 +4,7 @@ import { FC, PropsWithChildren, useEffect } from 'react';
 
 import { useActions } from '@/hooks/useActions';
 import { useAuth } from '@/hooks/useAuth';
-import { EnumTokens, getAccessToken } from '@/redux/user/auth-helper';
+import { EnumTokens, getAccessToken } from '@/redux/user/user-helper';
 
 const AuthProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   const { user } = useAuth();

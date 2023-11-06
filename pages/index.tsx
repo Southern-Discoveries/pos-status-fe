@@ -20,6 +20,8 @@ import { useEffect, useRef, useState } from 'react';
 
 import DefaultBG from '@/components/Logo/DefaultBG';
 import Scrollbar from '@/components/Scrollbar';
+import { useActions } from '@/hooks/useActions';
+import { useChat } from '@/hooks/useChat';
 import ChatScreen from '@/layouts/ChatScreen';
 import Header from '@/layouts/Header';
 import ActivityTopic from '@/layouts/RightSidebar/ActivityTopic';
@@ -27,7 +29,7 @@ import TrainingChatScreen from '@/layouts/RightSidebar/TrainingChat';
 import Sidebar from '@/layouts/Sidebar';
 import chatService from '@/redux/chat/chat-service';
 import imageService from '@/redux/images/image-service';
-import { getAccessToken } from '@/redux/user/auth-helper';
+import { getAccessToken } from '@/redux/user/user-helper';
 import { colors } from '@/theme/theme';
 import { Message, PostOption, EngineConfig } from '@/types';
 
@@ -100,19 +102,21 @@ export default function Home() {
       },
     ]);
   };
+  const { createNewChat } = useActions();
+  const { currentChatID } = useChat();
+  console.log('CurrentChat ID', currentChatID);
   async function createChatIfNot(title: string) {
-    if (!chatID) {
-      const response = await chatService.createNewChat(title);
-      if (response.status === 200) {
-        setChatID(response.data.id);
-        return response;
-      }
+    if (!currentChatID) {
+      const response: any = await createNewChat(title);
+      console.log('Current Response', response);
+      setChatID(response.payload.id);
+      return response.payload.id;
     }
   }
   const handleChatSend = async (message: Message) => {
     const updatedMessages = [...chatMessages, message];
     setChatMessages(updatedMessages);
-    const res_new = await createChatIfNot(message.content);
+    const new_chatID = await createChatIfNot(message.content);
     setChatLoading(true);
 
     try {
@@ -124,7 +128,7 @@ export default function Home() {
       };
       const accessToken = getAccessToken();
       const response = await fetch(
-        `/api/stream/chat/${res_new?.data.id || chatID}`,
+        `/api/stream/chat/${new_chatID || currentChatID}`,
         {
           method: 'PUT',
           headers: {

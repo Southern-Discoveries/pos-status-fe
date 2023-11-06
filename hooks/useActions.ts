@@ -2,9 +2,11 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 
-import * as userActions from '@/redux/user/user.action';
+import * as chatAction from '@/redux/chat/chat-action';
+import * as userActions from '@/redux/user/user-action';
 const rootActions = {
   ...userActions,
+  ...chatAction,
 };
 
 export const useActions = () => {

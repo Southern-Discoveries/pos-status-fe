@@ -1,15 +1,14 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-import { instance } from '../../utils/helper/api/api-interupt';
+import { EnumTokens, saveTokensStorage } from './user-helper';
 
-import { EnumTokens, saveTokensStorage } from './auth-helper';
-
+import { instance } from '@/axios/api-interupt';
 import {
   ICreateUserInfo,
   ILoginInfo,
   IUser,
-} from '@/redux/user/user.interface';
+} from '@/redux/user/user-interface';
 
 export class AuthService {
   private AUTH_URL = '/auth';
@@ -27,7 +26,7 @@ export class AuthService {
       this.login(data);
     }
 
-    return response.data;
+    return response;
   }
   async logout() {
     const response = await instance<string, {}>({
@@ -47,7 +46,7 @@ export class AuthService {
       await this.getAuthUser();
     }
 
-    return response.data;
+    return response;
   }
 
   async getAuthUser() {
@@ -59,7 +58,7 @@ export class AuthService {
         Authorization: `Bearer ${access_token}`,
       },
     });
-    return response.data;
+    return response;
   }
   async getNewTokens() {
     const refreshToken = Cookies.get(EnumTokens.REFRESHTOKEN);
@@ -78,7 +77,7 @@ export class AuthService {
     if (response.data.access_token) {
       Cookies.set(EnumTokens.ACCESSTOKEN, response.data.access_token);
     }
-    return response.data;
+    return response;
   }
 }
 

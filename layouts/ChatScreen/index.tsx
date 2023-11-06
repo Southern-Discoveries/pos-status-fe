@@ -30,7 +30,7 @@ const ChatScreen = ({
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-  console.log(messages);
+
   return (
     <>
       <Box position="relative" height="full" width="full">

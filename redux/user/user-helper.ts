@@ -2,7 +2,7 @@
 /* eslint-disable no-use-before-define */
 import Cookies from 'js-cookie';
 
-import { ITokens } from '@/redux/user/user.interface';
+import { ITokens } from '@/redux/user/user-interface';
 
 export const getAccessToken = () => {
   const accessToken = Cookies.get(EnumTokens.ACCESSTOKEN);

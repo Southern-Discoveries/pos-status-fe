@@ -1,8 +1,9 @@
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
+import { useChat } from '@/hooks/useChat';
+import { IChatData } from '@/redux/chat/chat-interface';
 import chatService from '@/redux/chat/chat-service';
-import { IChatData } from '@/redux/chat/chat.interface';
 
 const ActivityTopic = () => {
   const [listChats, setListChat] = useState<Array<IChatData> | null>(null);
@@ -20,7 +21,7 @@ const ActivityTopic = () => {
     };
     fetchList();
   }, []);
-
+  const { currentChatID } = useChat();
   return (
     <>
       <Box padding={4}>
@@ -38,6 +39,7 @@ const ActivityTopic = () => {
                   }}
                   key={list.id}
                   width="full"
+                  bg={currentChatID === list.id ? 'primary.a.300' : undefined}
                   padding={3}
                   borderRadius="xl"
                   border="0.063rem solid"

@@ -1,6 +1,6 @@
-import { instance } from '../../utils/helper/api/api-interupt';
+import { IFilterData } from './chat-interface';
 
-import { IFilterData } from './chat.interface';
+import { instance } from '@/axios/api-interupt';
 
 export class ChatService {
   private CHAT_URL = '/chat';

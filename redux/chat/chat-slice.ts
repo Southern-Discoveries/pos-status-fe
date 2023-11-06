@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { IChatData } from './chat.interface';
+import { createNewChat } from './chat-action';
+import { IChatData } from './chat-interface';
 
 interface ConversationsState {
   listChat: IChatData[];
@@ -21,6 +22,20 @@ export const chatSlice = createSlice({
     setCurrentChatID: (state, action: PayloadAction<string | null>) => {
       state.currentChatID = action.payload;
     },
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(createNewChat.pending, state => {
+        state.isChatLoading = true;
+      })
+      .addCase(createNewChat.fulfilled, (state, action: any) => {
+        state.isChatLoading = false;
+        state.currentChatID = action.payload.id;
+      })
+      .addCase(createNewChat.rejected, state => {
+        state.isChatLoading = false;
+        state.currentChatID = null;
+      });
   },
 });
 export const { setCurrentChatID } = chatSlice.actions;
