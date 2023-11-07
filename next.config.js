@@ -14,7 +14,8 @@ const nextConfig = {
       {
         source: '/api/oaidalleapiprodscus/:path*',
         destination: 'https://oaidalleapiprodscus.blob.core.windows.net/:path*'
-      }
+      },
+
     ]
   },
   webpack(config) {

@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 
 import CategorySection from './components/CategorySection';
 
-import SelectListItem from '@/components/Select/SelectListItem';
-import SelectRadioItem from '@/components/Select/SelectRadioItem';
+import api from '@/axios/config';
+import SelectRadioItem from '@/components/Form/SelectRadioItem';
 import ArrowIcon from '@/public/assets/icons/line/arrow.svg';
 import FileIcon from '@/public/assets/icons/line/file.svg';
 import GlobalIcon from '@/public/assets/icons/line/global.svg';
@@ -60,11 +60,12 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
     });
   };
   // Fetch Data and log Error if exist
+
   async function fetchData(endpoint: string, category: string) {
     try {
-      const response = await fetch(endpoint);
-      if (response.ok) {
-        const data = await response.json();
+      const response = await api.get(endpoint); // Use Axios to make a GET request
+      if (response.status === 200) {
+        const data = response.data;
         setOptions((prevOptions: any) => ({
           ...prevOptions,
           [`${category}Options`]: data,
@@ -81,11 +82,11 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
 
   useEffect(() => {
     const endpoints: { [key: string]: string } = {
-      task: '/api/ai/tasks',
-      platform: '/api/ai/platforms',
-      target: '/api/ai/targets',
-      audience: '/api/ai/audiences',
-      engine: '/api/ai/engines',
+      task: '/public/tasks',
+      platform: '/public/platforms',
+      target: '/public/targets',
+      audience: '/public/audiences',
+      engine: '/public/engines',
     };
 
     // Fetch data for each category

@@ -1,19 +1,18 @@
+/* eslint-disable no-unused-vars */
 import { Box, Flex } from '@chakra-ui/react';
 import React, { useEffect, useRef } from 'react';
 
-import { ChatScreenProps } from '../Chat';
+import { ChatScreenProps } from '../ChatScreen';
 
-import ChatInputs from '@/components/Chats/ChatInputs';
-import ChatLoader from '@/components/Chats/ChatLoader';
-import ChatMessage from '@/components/Chats/ChatMessage';
-import { ChatReset } from '@/components/Chats/ChatReset';
+import ChatInputs from '@/components/Chat/ChatInput';
+import ChatLoader from '@/components/Chat/ChatLoader';
+import ChatMessage from '@/components/Chat/ChatMessage';
 import Scrollbar from '@/components/Scrollbar';
 
-const TrainingChat = ({
+const TrainingChatScreen = ({
   messages,
   loading,
   onSend,
-  onReset,
   onCreateImage,
 }: ChatScreenProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -24,31 +23,32 @@ const TrainingChat = ({
     scrollToBottom();
   }, [messages]);
   return (
-    <Flex flexDirection="column" height="full">
+    <Flex flexDirection="column" height="full" position="relative">
       <Box
         flexGrow={1}
         flexShrink={1}
         flexBasis={0}
-        padding={4}
         overflow="hidden"
-        pb="7rem"
+        pb="5rem"
       >
         <Box position="relative" height="full">
           <Scrollbar>
-            <Flex flexDirection="column" gap={4}>
+            <Flex flexDirection="column" gap={4} padding={4}>
               {messages.map((message, index) => (
-                <div key={index} className="my-1 sm:my-1.5">
+                <Box key={index}>
                   <ChatMessage
                     onCreateImage={onCreateImage}
                     message={message}
+                    sx={{
+                      maxWidth: 'full',
+                    }}
                   />
-                </div>
+                </Box>
               ))}
+              {loading && <ChatLoader />}
+              {/* <ChatReset onReset={onReset} /> */}
+              <Box ref={messagesEndRef} />
             </Flex>
-
-            {loading && <ChatLoader />}
-            <ChatReset onReset={onReset} />
-            <Box ref={messagesEndRef} />
           </Scrollbar>
         </Box>
       </Box>
@@ -58,16 +58,19 @@ const TrainingChat = ({
         padding={4}
         position="absolute"
         width="full"
-        bottom={0}
-        height="6rem"
         left={0}
+        bottom={0}
         bg="white"
-        pb={8}
       >
-        <ChatInputs onSend={onSend} />
+        <ChatInputs
+          onSend={onSend}
+          sx={{
+            placeholder: 'Type Trainning Data',
+          }}
+        />
       </Box>
     </Flex>
   );
 };
 
-export default TrainingChat;
+export default TrainingChatScreen;
