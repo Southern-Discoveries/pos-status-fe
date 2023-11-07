@@ -134,6 +134,24 @@ export default function ChatDetail() {
     ]);
   };
   const handleChatSend = async (message: Message) => {
+    if (
+      !postConfig ||
+      !postConfig.audiences.length ||
+      !postConfig?.targets.length ||
+      postConfig?.platform == null ||
+      postConfig?.task === null ||
+      !engineConfig?.engine ||
+      !engineConfig?.model
+    ) {
+      toast({
+        title: 'Choose Option',
+        description: "We've you choose all option in sidebar",
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
+      return;
+    }
     const updatedMessages = [...chatMessages, message];
     setChatMessages(updatedMessages);
     setChatLoading(true);

@@ -21,7 +21,6 @@ import { useEffect, useRef, useState } from 'react';
 import DefaultBG from '@/components/Logo/DefaultBG';
 import Scrollbar from '@/components/Scrollbar';
 import { useActions } from '@/hooks/useActions';
-import { useAuth } from '@/hooks/useAuth';
 import { useChat } from '@/hooks/useChat';
 import ChatScreen from '@/layouts/ChatScreen';
 import Header from '@/layouts/Header';
@@ -59,15 +58,19 @@ export default function Home() {
   };
 
   const { currentChatID } = useChat();
-
+  console.log('Current ID', currentChatID);
   const { createNewChat } = useActions();
   async function createChatIfNot(title: string) {
+    console.log('Value', postConfig);
+    console.log('vals', engineConfig);
     if (!currentChatID) {
+      console.log('Why load');
       const response: any = await createNewChat(title);
       const newURL = `${window.location.protocol}//${window.location.host}/chat/${response.payload.id}`;
       window.history.replaceState(null, '', newURL);
       return response.payload.id;
     }
+    return;
   }
 
   const handleCreateImage = async (msg: string) => {
@@ -117,11 +120,29 @@ export default function Home() {
   };
 
   const handleChatSend = async (message: Message) => {
+    if (
+      !postConfig ||
+      !postConfig.audiences.length ||
+      !postConfig?.targets.length ||
+      postConfig?.platform == null ||
+      postConfig?.task === null ||
+      !engineConfig?.engine ||
+      !engineConfig?.model
+    ) {
+      console.log('Why not run');
+      toast({
+        title: 'Choose Option',
+        description: "We've you choose all option in sidebar",
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
+      return;
+    }
     const updatedMessages = [...chatMessages, message];
     setChatMessages(updatedMessages);
     const res_new = await createChatIfNot(message.content);
     setChatLoading(true);
-    console.log('Traingning message', trainingMessages);
     try {
       let request_body = {
         content: message.content,
@@ -146,9 +167,7 @@ export default function Home() {
         setChatLoading(false);
         throw new Error(response.statusText);
       }
-      /// fetch chat message
-      /*  const test = await chatService.getChatMessage(res_new?.data.id || chatID);
-      console.log('Test Get', test); */
+
       const data = response.body;
 
       if (!data) {
