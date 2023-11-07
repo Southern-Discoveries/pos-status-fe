@@ -21,11 +21,11 @@ export default function App({ Component, pageProps }: AppProps<{}>) {
       </style>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <ChakraProvider theme={theme}>
-            <AuthProvider>
+          <AuthProvider>
+            <ChakraProvider theme={theme}>
               <Component {...pageProps} />
-            </AuthProvider>
-          </ChakraProvider>
+            </ChakraProvider>{' '}
+          </AuthProvider>
         </PersistGate>
       </Provider>
     </>
