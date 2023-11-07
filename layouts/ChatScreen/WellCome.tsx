@@ -1,4 +1,4 @@
-import { Box, HStack, Text, VStack } from '@chakra-ui/react';
+import { Box, HStack, Text, VStack, Image } from '@chakra-ui/react';
 import React from 'react';
 
 // This Start Screen of chat
@@ -7,7 +7,7 @@ const WellCome = () => {
   return (
     <>
       <VStack height="100vh" width="full">
-        <Box margin="auto" textAlign="center">
+        <Box margin="auto" textAlign="center" padding={{ md: 0, base: 4 }}>
           <HStack
             fontWeight="extrabold"
             fontSize="40px"
@@ -21,14 +21,7 @@ const WellCome = () => {
           <Text color="shader.a.500" mb="40px">
             Neque porro quisquam est qui dolorem ipsum quia dolor sit amet
           </Text>
-          <Box
-            bg="white"
-            width={{ md: '640px', base: '150px' }}
-            height={{ md: '320px', base: '100px' }}
-            borderRadius="12px"
-            border="0.063rem solid"
-            borderColor="shader.a.200"
-          ></Box>
+          <Image src="/assets/frame/banner.svg" />
         </Box>
       </VStack>
     </>

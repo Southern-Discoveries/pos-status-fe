@@ -137,7 +137,7 @@ export default function ChatDetail() {
     const updatedMessages = [...chatMessages, message];
     setChatMessages(updatedMessages);
     setChatLoading(true);
-
+    console.log('Traingning message', trainingMessages);
     try {
       let request_body = {
         content: message.content,
@@ -327,7 +327,15 @@ export default function ChatDetail() {
                           position="relative"
                           bg="white"
                           /*    h="calc(100vh - 65px)" */
-                        ></Box>
+                        >
+                          <TrainingChatScreen
+                            onCreateImage={handleCreateImage}
+                            messages={trainingMessages}
+                            loading={trainingLoading}
+                            onSend={handleTrainingSend}
+                            onReset={handleTrainingReset}
+                          />
+                        </Box>
                       </TabPanel>
                       <TabPanel padding={4}>
                         <ActivityTopic />
@@ -358,7 +366,15 @@ export default function ChatDetail() {
                     <Tab>Activity</Tab>
                   </TabList>
                   <TabPanels>
-                    <TabPanel></TabPanel>
+                    <TabPanel>
+                      <TrainingChatScreen
+                        onCreateImage={handleCreateImage}
+                        messages={trainingMessages}
+                        loading={trainingLoading}
+                        onSend={handleTrainingSend}
+                        onReset={handleTrainingReset}
+                      />
+                    </TabPanel>
                     <TabPanel>
                       <ActivityTopic />
                     </TabPanel>

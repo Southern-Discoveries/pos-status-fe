@@ -31,7 +31,14 @@ const ActivityTopic = () => {
     <>
       <Box padding={4}>
         <Flex flexDirection="column" gap={3}>
-          <Button variant="primary" width="full">
+          <Button
+            variant="primary"
+            width="full"
+            onClick={() => {
+              dispatch(setCurrentChatID(null));
+              router.push(`/`);
+            }}
+          >
             New Topic
           </Button>
           {listChats &&

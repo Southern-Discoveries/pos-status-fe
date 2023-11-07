@@ -115,14 +115,13 @@ export default function Home() {
       },
     ]);
   };
-  const { user } = useAuth();
-  console.log('Current User', user);
+
   const handleChatSend = async (message: Message) => {
     const updatedMessages = [...chatMessages, message];
     setChatMessages(updatedMessages);
     const res_new = await createChatIfNot(message.content);
     setChatLoading(true);
-
+    console.log('Traingning message', trainingMessages);
     try {
       let request_body = {
         content: message.content,
