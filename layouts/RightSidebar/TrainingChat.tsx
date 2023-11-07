@@ -7,7 +7,6 @@ import { ChatScreenProps } from '../ChatScreen';
 import ChatInputs from '@/components/Chat/ChatInput';
 import ChatLoader from '@/components/Chat/ChatLoader';
 import ChatMessage from '@/components/Chat/ChatMessage';
-import { ChatReset } from '@/components/Chat/ChatReset';
 import Scrollbar from '@/components/Scrollbar';
 
 const TrainingChatScreen = ({
@@ -40,6 +39,9 @@ const TrainingChatScreen = ({
                   <ChatMessage
                     onCreateImage={onCreateImage}
                     message={message}
+                    sx={{
+                      maxWidth: 'full',
+                    }}
                   />
                 </Box>
               ))}
@@ -60,7 +62,12 @@ const TrainingChatScreen = ({
         bottom={0}
         bg="white"
       >
-        <ChatInputs onSend={onSend} />
+        <ChatInputs
+          onSend={onSend}
+          sx={{
+            placeholder: 'Type Trainning Data',
+          }}
+        />
       </Box>
     </Flex>
   );

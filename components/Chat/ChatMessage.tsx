@@ -7,6 +7,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  StackProps,
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
@@ -20,8 +21,9 @@ import { Message } from '@/types';
 interface Props {
   message: Message;
   onCreateImage?: (msg: string) => void;
+  sx?: StackProps;
 }
-const ChatMessage = ({ message, onCreateImage }: Props) => {
+const ChatMessage = ({ message, onCreateImage, sx }: Props) => {
   let content = message.content;
   const isHtml = content.includes('```html');
   content = isHtml ? content.replace('```html', '') : content;
@@ -52,6 +54,7 @@ const ChatMessage = ({ message, onCreateImage }: Props) => {
                 backdropBlur="blur(2.5px)"
                 mb={2}
                 position="relative"
+                {...sx}
               >
                 <Text> {!isHtml && content}</Text>
                 {isHtml && (
@@ -96,6 +99,7 @@ const ChatMessage = ({ message, onCreateImage }: Props) => {
               maxW="67%"
               bg="primary.a.500"
               color="white"
+              {...sx}
             >
               <Text> {!isHtml && content}</Text>
               {isHtml && (

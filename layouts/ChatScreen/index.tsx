@@ -33,7 +33,7 @@ const ChatScreen = ({
 
   return (
     <>
-      <Box position="relative" height="full" width="full">
+      <Box position="relative" height="calc(100vh - 65px)" width="full">
         <Scrollbar>
           {messages.length ? (
             <>

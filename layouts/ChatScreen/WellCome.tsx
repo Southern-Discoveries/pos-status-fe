@@ -6,7 +6,7 @@ import React from 'react';
 const WellCome = () => {
   return (
     <>
-      <VStack height="100vh" width="full">
+      <VStack height="full" width="full">
         <Box margin="auto" textAlign="center" padding={{ md: 0, base: 4 }}>
           <HStack
             fontWeight="extrabold"

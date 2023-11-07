@@ -1,14 +1,15 @@
 /* eslint-disable no-unused-vars */
-import { HStack, IconButton, Textarea } from '@chakra-ui/react';
+import { HStack, IconButton, Textarea, TextareaProps } from '@chakra-ui/react';
 import { KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 import SendIcon from '@/public/assets/icons/line/send.svg';
 import { Message } from '@/types';
 interface Props {
   onSend: (message: Message) => void;
+  sx?: TextareaProps;
 }
 
-const ChatInputs = ({ onSend }: Props) => {
+const ChatInputs = ({ onSend, sx }: Props) => {
   const [messageContent, setMessageContent] = useState<string>('');
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -54,13 +55,14 @@ const ChatInputs = ({ onSend }: Props) => {
       <HStack position="relative" flexGrow={1} overflow="hidden">
         <Textarea
           value={messageContent}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
           ref={textareaRef}
           variant="chat_input"
           height="56px"
           rows={1}
-          placeholder="Type SomeThing"
+          placeholder="Write post's content - Send the message"
+          {...sx}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
         />
         <IconButton
           onClick={() => handleSend()}

@@ -27,7 +27,6 @@ import Header from '@/layouts/Header';
 import ActivityTopic from '@/layouts/RightSidebar/ActivityTopic';
 import TrainingChatScreen from '@/layouts/RightSidebar/TrainingChat';
 import Sidebar from '@/layouts/Sidebar';
-import chatService from '@/redux/chat/chat-service';
 import imageService from '@/redux/images/image-service';
 import { getAccessToken } from '@/redux/user/user-helper';
 import { colors } from '@/theme/theme';
@@ -58,16 +57,15 @@ export default function Home() {
   };
 
   const { currentChatID } = useChat();
-  console.log('Current ID', currentChatID);
+
   const { createNewChat } = useActions();
+
   async function createChatIfNot(title: string) {
-    console.log('Value', postConfig);
-    console.log('vals', engineConfig);
     if (!currentChatID) {
-      console.log('Why load');
       const response: any = await createNewChat(title);
       const newURL = `${window.location.protocol}//${window.location.host}/chat/${response.payload.id}`;
       window.history.replaceState(null, '', newURL);
+
       return response.payload.id;
     }
     return;
@@ -86,12 +84,6 @@ export default function Home() {
             data: trainingMessages.map(element => element.content),
           })
         );
-        /*      JSON.stringify({
-               post: postConfig,
-               content: msg.slice(0, 999),
-               data: trainingMessages.map(element => element.content),
-             }); */
-
         if (response) {
           for (const img of response.data.images) {
             const res = await imageService.getImage(img.raw);
@@ -129,7 +121,6 @@ export default function Home() {
       !engineConfig?.engine ||
       !engineConfig?.model
     ) {
-      console.log('Why not run');
       toast({
         title: 'Choose Option',
         description: "We've you choose all option in sidebar",

@@ -15,7 +15,6 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { setHttpClientAndAgentOptions } from 'next/dist/server/config';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
@@ -30,7 +29,6 @@ import Header from '@/layouts/Header';
 import ActivityTopic from '@/layouts/RightSidebar/ActivityTopic';
 import TrainingChatScreen from '@/layouts/RightSidebar/TrainingChat';
 import Sidebar from '@/layouts/Sidebar';
-import chatService from '@/redux/chat/chat-service';
 import { setCurrentChatID } from '@/redux/chat/chat-slice';
 import imageService from '@/redux/images/image-service';
 import { getAccessToken } from '@/redux/user/user-helper';
@@ -120,7 +118,6 @@ export default function ChatDetail() {
           }
         }
       }
-      console.log('Content HTNL', htmlMsg);
     } catch (error) {
     } finally {
       setChatLoading(false);
@@ -155,7 +152,7 @@ export default function ChatDetail() {
     const updatedMessages = [...chatMessages, message];
     setChatMessages(updatedMessages);
     setChatLoading(true);
-    console.log('Traingning message', trainingMessages);
+
     try {
       let request_body = {
         content: message.content,
@@ -177,9 +174,7 @@ export default function ChatDetail() {
         setChatLoading(false);
         throw new Error(response.statusText);
       }
-      /// fetch chat message
-      /*  const test = await chatService.getChatMessage(res_new?.data.id || chatID);
-      console.log('Test Get', test); */
+
       const data = response.body;
 
       if (!data) {
@@ -254,14 +249,16 @@ export default function ChatDetail() {
             role,
             content:
               content === null
-                ? '```html' +
-                  `<img src="${
-                    process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000'
-                  }/image/${images[0].raw}"/>
+                ? images.length
+                  ? '```html' +
+                    `<img src="${
+                      process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000'
+                    }/image/${images[0].raw}"/>
             <img src="${
               process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000'
             }/image/${images[0].text_banner}"/>
             `
+                  : ''
                 : content,
           })
         );
