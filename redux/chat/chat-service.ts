@@ -23,10 +23,10 @@ export class ChatService {
     });
     return response;
   }
-  async getChatMessage(chat_id: string) {
+  async getChatMessage(chat_id: string, data: IFilterData) {
     const response = await instance<any>({
       method: 'GET',
-      url: `${this.CHAT_URL}/messages/${chat_id}`,
+      url: `${this.CHAT_URL}/messages/${chat_id}?page=${data.page}&size=${data.limit}&order_by=${data.order_by}`,
     });
     return response;
   }

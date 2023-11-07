@@ -19,7 +19,7 @@ const persistConfig = {
   storage,
   version: 1,
   whitelist: [],
-  blacklist: ['chat'],
+  /*  blacklist: ['chat'], */
 };
 
 const rootReducer = combineReducers({

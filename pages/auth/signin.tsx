@@ -41,7 +41,6 @@ const SignIn = () => {
 
         if (response.payload.token) {
           await checkAuth();
-
           router.push('/');
         } else {
           setFieldError('error_message', 'Invalid Email or Password');

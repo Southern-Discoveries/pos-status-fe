@@ -27,7 +27,7 @@ interface IProps {
   hasSpecialChar?: string;
 }
 const RegisterPage = () => {
-  const { register } = useActions();
+  const { register, login, checkAuth } = useActions();
   // eslint-disable-next-line no-unused-vars
   const isPasswordValid = (password: string) => {
     const errors: IProps = {};
@@ -84,7 +84,9 @@ const RegisterPage = () => {
     }),
     onSubmit: async (values, { setFieldError }) => {
       try {
-        register({ email: values.email, password: values.password });
+        await register({ email: values.email, password: values.password });
+        await login({ email: values.email, password: values.password });
+        await checkAuth();
         router.push('/');
       } catch (error) {
         setFieldError('error_message', 'Invalid Email or Password');

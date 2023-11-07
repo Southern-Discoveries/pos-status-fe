@@ -28,7 +28,6 @@ export const chatSlice = createSlice({
       .addCase(createNewChat.fulfilled, (state, action: any) => {
         state.isChatLoading = false;
         state.currentChatID = action.payload.id;
-        console.log('Current P', action.payload.id);
       })
       .addCase(createNewChat.rejected, state => {
         state.isChatLoading = false;
@@ -40,6 +39,10 @@ export const chatSlice = createSlice({
       .addCase(getChatMessage.rejected, state => {
         state.isChatLoading = false;
         state.currentChatID = null;
+      })
+      .addCase(getChatMessage.fulfilled, state => {
+        state.isChatLoading = false;
+        /*    state.currentChatID = null; */
       })
       .addCase(deleteChat.pending, state => {
         state.isChatLoading = true;

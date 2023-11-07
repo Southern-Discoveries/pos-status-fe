@@ -31,7 +31,10 @@ export const getChatMessage = createAsyncThunk<any, any>(
   'chat/messages',
   async (data, thunkApi) => {
     try {
-      const response = await chatService.getChatMessage(data);
+      const response = await chatService.getChatMessage(
+        data.chat_id,
+        data.filter
+      );
       return response.data;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
