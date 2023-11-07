@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { checkAuth, login, logout, register } from './user.action';
-import { IInitialState } from './user.interface';
+import { checkAuth, login, logout, register } from './user-action';
+import { IInitialState } from './user-interface';
 
 import { getItemFromLocal } from '@/utils/getLocalStorage';
 

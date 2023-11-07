@@ -13,7 +13,7 @@ export interface ChatScreenProps {
   messages: Message[];
   loading: boolean;
   onSend: (message: Message) => void;
-  onReset: () => void;
+  onReset?: () => void;
   onCreateImage: (msg: string) => void;
 }
 const ChatScreen = ({

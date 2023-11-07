@@ -14,7 +14,6 @@ const TrainingChatScreen = ({
   messages,
   loading,
   onSend,
-  onReset,
   onCreateImage,
 }: ChatScreenProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);

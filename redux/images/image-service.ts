@@ -1,4 +1,4 @@
-import { instance } from '@/utils/helper/api/api-interupt';
+import { instance } from '@/axios/api-interupt';
 
 export class ImageService {
   private IMG_URL = '/image';

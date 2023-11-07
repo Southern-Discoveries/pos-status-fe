@@ -1,18 +1,16 @@
 import axios from 'axios';
 
-import {
-  getAccessToken,
-  removeFromStorage,
-} from '../../../redux/user/auth-helper';
-import authService from '../../../redux/user/user-service';
-
 import { getContentType } from './api-helper';
+
+import { getAccessToken, removeFromStorage } from '@/redux/user/user-helper';
+import authService from '@/redux/user/user-service';
 
 export const instance = axios.create({
   baseURL: process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000',
   headers: getContentType(),
 });
 
+// Add an interceptor to include the token in headers for authorized requests
 instance.interceptors.request.use(config => {
   const accessToken = getAccessToken();
 
@@ -23,6 +21,7 @@ instance.interceptors.request.use(config => {
   return config;
 });
 
+// Renew Access Token , if failed logout
 instance.interceptors.response.use(
   config => config,
   async error => {

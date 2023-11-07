@@ -5,18 +5,18 @@ import {
   ILoginInfo,
   ILoginResponse,
   IUser,
-} from './user.interface';
+} from './user-interface';
 
-import { removeFromStorage } from '@/redux/user/auth-helper';
+import { errorCatch } from '@/axios/api-helper';
+import { removeFromStorage } from '@/redux/user/user-helper';
 import authService from '@/redux/user/user-service';
-import { errorCatch } from '@/utils/helper/api/api-helper';
 
 export const register = createAsyncThunk<string, ICreateUserInfo>(
   'auth/register',
   async (data, thunkApi) => {
     try {
       const response = await authService.register(data);
-      return response;
+      return response.data;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
     }
@@ -31,7 +31,7 @@ export const login = createAsyncThunk<ILoginResponse, ILoginInfo>(
       if (response.status != 200) {
         return thunkApi.rejectWithValue(response);
       }
-      return response;
+      return response.data;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
     }
@@ -52,7 +52,7 @@ export const checkAuth = createAsyncThunk<IUser>(
   async (_, thunkApi) => {
     try {
       const response = await authService.getAuthUser();
-      return response;
+      return response.data;
     } catch (error) {
       if (errorCatch(error) === 'Token has expired') {
         thunkApi.dispatch(logout());

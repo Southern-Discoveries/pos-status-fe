@@ -15,8 +15,11 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
+import { setHttpClientAndAgentOptions } from 'next/dist/server/config';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import DefaultBG from '@/components/Logo/DefaultBG';
 import Scrollbar from '@/components/Scrollbar';
@@ -28,12 +31,13 @@ import ActivityTopic from '@/layouts/RightSidebar/ActivityTopic';
 import TrainingChatScreen from '@/layouts/RightSidebar/TrainingChat';
 import Sidebar from '@/layouts/Sidebar';
 import chatService from '@/redux/chat/chat-service';
+import { setCurrentChatID } from '@/redux/chat/chat-slice';
 import imageService from '@/redux/images/image-service';
 import { getAccessToken } from '@/redux/user/user-helper';
 import { colors } from '@/theme/theme';
 import { Message, PostOption, EngineConfig } from '@/types';
 
-export default function Home() {
+export default function ChatDetail() {
   const toast = useToast();
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
 
@@ -42,6 +46,7 @@ export default function Home() {
 
   const [trainingMessages, setTrainingMessages] = useState<Message[]>([]);
 
+  const messageFirstRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const [postConfig, setPostConfig] = useState<PostOption>();
@@ -57,21 +62,35 @@ export default function Home() {
     setTrainingMessages(updatedMessages);
   };
 
+  const router = useRouter();
+
+  const { getChatMessage } = useActions();
+
+  const handleTrainingReset = () => {
+    setTrainingMessages([]);
+  };
+
+  const handleChatReset = () => {
+    setChatMessages([]);
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatMessages]);
+
+  useEffect(() => {
+    setChatMessages([]);
+  }, []);
+  const isMobileScreen = useBreakpointValue({ base: true, md: false });
+  const {
+    isOpen: isOpenSetting,
+    onToggle: onToggleSetting,
+    onClose: onCloseSetting,
+    getDisclosureProps,
+  } = useDisclosure({ defaultIsOpen: true });
+  const [hidden, setHidden] = useState(!isOpenSetting);
+
   const { currentChatID } = useChat();
-  console.log('Current ID', currentChatID);
-  const { createNewChat } = useActions();
-  async function createChatIfNot(title: string) {
-    console.log('Value', postConfig);
-    console.log('vals', engineConfig);
-    if (!currentChatID) {
-      console.log('Why load');
-      const response: any = await createNewChat(title);
-      const newURL = `${window.location.protocol}//${window.location.host}/chat/${response.payload.id}`;
-      window.history.replaceState(null, '', newURL);
-      return response.payload.id;
-    }
-    return;
-  }
 
   const handleCreateImage = async (msg: string) => {
     setChatLoading(true);
@@ -86,11 +105,6 @@ export default function Home() {
             data: trainingMessages.map(element => element.content),
           })
         );
-        /*      JSON.stringify({
-               post: postConfig,
-               content: msg.slice(0, 999),
-               data: trainingMessages.map(element => element.content),
-             }); */
 
         if (response) {
           for (const img of response.data.images) {
@@ -106,6 +120,7 @@ export default function Home() {
           }
         }
       }
+      console.log('Content HTNL', htmlMsg);
     } catch (error) {
     } finally {
       setChatLoading(false);
@@ -118,7 +133,6 @@ export default function Home() {
       },
     ]);
   };
-
   const handleChatSend = async (message: Message) => {
     if (
       !postConfig ||
@@ -129,7 +143,6 @@ export default function Home() {
       !engineConfig?.engine ||
       !engineConfig?.model
     ) {
-      console.log('Why not run');
       toast({
         title: 'Choose Option',
         description: "We've you choose all option in sidebar",
@@ -141,8 +154,8 @@ export default function Home() {
     }
     const updatedMessages = [...chatMessages, message];
     setChatMessages(updatedMessages);
-    const res_new = await createChatIfNot(message.content);
     setChatLoading(true);
+    console.log('Traingning message', trainingMessages);
     try {
       let request_body = {
         content: message.content,
@@ -151,23 +164,22 @@ export default function Home() {
         data: trainingMessages.map(element => element.content),
       };
       const accessToken = getAccessToken();
-      const response = await fetch(
-        `/api/stream/chat/${res_new || currentChatID}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify(request_body),
-        }
-      );
+      const response = await fetch(`/api/stream/chat/${currentChatID}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(request_body),
+      });
 
       if (!response.ok) {
         setChatLoading(false);
         throw new Error(response.statusText);
       }
-
+      /// fetch chat message
+      /*  const test = await chatService.getChatMessage(res_new?.data.id || chatID);
+      console.log('Test Get', test); */
       const data = response.body;
 
       if (!data) {
@@ -217,30 +229,48 @@ export default function Home() {
     }
   };
 
-  const handleTrainingReset = () => {
-    setTrainingMessages([]);
-  };
+  const dispatch = useDispatch();
+  const { id } = router.query;
 
-  const handleChatReset = () => {
-    setChatMessages([]);
-  };
-
+  const loadHistoryMessage = async () => {};
   useEffect(() => {
-    scrollToBottom();
-  }, [chatMessages]);
+    if (typeof id == 'string') {
+      const fetchMessage = async () => {
+        const request_body = {
+          chat_id: id,
+          filter: {
+            page: 1,
+            limit: 10,
+            order_by: 'updated_at',
+          },
+        };
 
-  useEffect(() => {
-    setChatMessages([]);
-  }, []);
-  const isMobileScreen = useBreakpointValue({ base: true, md: false });
-  const {
-    isOpen: isOpenSetting,
-    onToggle: onToggleSetting,
-    onClose: onCloseSetting,
-    getDisclosureProps,
-  } = useDisclosure({ defaultIsOpen: true });
-  const [hidden, setHidden] = useState(!isOpenSetting);
+        const res: any = await getChatMessage(request_body);
+        const message = res.payload;
 
+        dispatch(setCurrentChatID(id));
+        const filteredMessages = message.data.map(
+          ({ role, content, images }: any) => ({
+            role,
+            content:
+              content === null
+                ? '```html' +
+                  `<img src="${
+                    process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000'
+                  }/image/${images[0].raw}"/>
+            <img src="${
+              process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000'
+            }/image/${images[0].text_banner}"/>
+            `
+                : content,
+          })
+        );
+        setChatMessages(filteredMessages);
+        return res;
+      };
+      fetchMessage();
+    }
+  }, [id]);
   return (
     <>
       <Head>
