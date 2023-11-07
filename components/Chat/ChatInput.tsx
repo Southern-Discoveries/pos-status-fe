@@ -9,7 +9,7 @@ interface Props {
   sx?: TextareaProps;
 }
 
-const ChatInputs = ({ onSend, sx }: Props) => {
+const ChatInput = ({ onSend, sx }: Props) => {
   const [messageContent, setMessageContent] = useState<string>('');
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -79,4 +79,4 @@ const ChatInputs = ({ onSend, sx }: Props) => {
   );
 };
 
-export default ChatInputs;
+export default ChatInput;
