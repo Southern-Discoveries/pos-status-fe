@@ -18,7 +18,7 @@ import LogoutIcon from '@/public/assets/icons/line/log-out.svg';
 import SunIcon from '@/public/assets/icons/line/sun.svg';
 import UserIcon from '@/public/assets/icons/line/user-2.svg';
 export const AccountMenu = () => {
-  const { colorMode, toggleColorMode } = useColorMode();
+  const { colorMode } = useColorMode();
   const { logout } = useActions();
   const router = useRouter();
   return (
@@ -51,8 +51,9 @@ export const AccountMenu = () => {
               <Text>{colorMode == 'light' ? 'Light Mode' : 'Dark mode'}</Text>
             </Flex>
             <Switch
+              isDisabled={true}
               variant="toggle"
-              onChange={toggleColorMode}
+              /*     onChange={toggleColorMode} */
               isChecked={colorMode === 'light'}
             />
           </MenuItem>

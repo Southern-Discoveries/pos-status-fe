@@ -28,6 +28,10 @@ npm install
 ```bash
 npm run build
 npm start
+```
+
 or
+
+```bash
 npm run dev
 ```

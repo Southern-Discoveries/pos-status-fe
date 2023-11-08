@@ -13,4 +13,11 @@ export class TrainService {
     });
     return response;
   }
+  async deleteBrain(bran_id: string) {
+    const response = await instance<any>({
+      method: 'DELETE',
+      url: `${this.TRAIN_URL}/brain/${bran_id}`,
+    });
+    return response;
+  }
 }
