@@ -108,12 +108,8 @@ export default function ChatDetail() {
           for (const img of response.data.images) {
             const res = await imageService.getImage(img.raw);
             await imageService.getImage(img.text);
-            htmlMsg += `<img src="${
-              process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000'
-            }/image/${img.raw}"/>
-            <img src="${
-              process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000'
-            }/image/${img.text_banner}"/>
+            htmlMsg += `<img src="${process.env.NEXT_PUBLIC_AI_SERVICE_URL}/image/${img.raw}"/>
+            <img src="${process.env.NEXT_PUBLIC_AI_SERVICE_URL}/image/${img.text_banner}"/>
             `;
           }
         }
@@ -252,10 +248,11 @@ export default function ChatDetail() {
                 ? images.length
                   ? '```html' +
                     `<img src="${
-                      process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000'
+                      process.env.NEXT_PUBLIC_AI_SERVICE_URL ||
+                      'http://127.0.0.1:8000'
                     }/image/${images[0].raw}"/>
             <img src="${
-              process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000'
+              process.env.NEXT_PUBLIC_AI_SERVICE_URL || 'http://127.0.0.1:8000'
             }/image/${images[0].text_banner}"/>
             `
                   : ''
