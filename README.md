@@ -14,7 +14,7 @@ Start Terminal in directory of project
 Create a .env.local file in the root of the repo with your OpenAI API Key:
 
 ```bash
-AI_SERVICE_URL=<YOUR_URL>
+NEXT_PUBLIC_AI_SERVICE_URL=<YOUR_URL>
 ```
 
 **3. Install Dependences**
@@ -26,5 +26,8 @@ npm install
 **4. Run Local**
 
 ```bash
+npm run build
+npm start
+or
 npm run dev
 ```
