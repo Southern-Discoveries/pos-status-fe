@@ -6,7 +6,7 @@ import { getAccessToken, removeFromStorage } from '@/redux/user/user-helper';
 import authService from '@/redux/user/user-service';
 
 export const instance = axios.create({
-  baseURL: process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000',
+  baseURL: process.env.NEXT_PUBLIC_AI_SERVICE_URL,
   headers: getContentType(),
 });
 
