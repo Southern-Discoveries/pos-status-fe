@@ -19,6 +19,7 @@ const AuthProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
       checkAuth();
     } else {
       router.push('/auth/signin');
+      logout();
     }
   }, []);
 

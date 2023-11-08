@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import { AccountMenu } from './AccountMenu';
+import { AccountMenu } from '../../components/Menu/AccountMenu';
 
 import LogoLong from '@/components/Logo/LogoLong';
 import BookIcon from '@/public/assets/icons/line/book.svg';

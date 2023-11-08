@@ -3,16 +3,16 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import DotMenuActivity from '@/components/Menu/DotMenuActivity';
 import { useChat } from '@/hooks/useChat';
 import { IChatData } from '@/redux/chat/chat-interface';
 import chatService from '@/redux/chat/chat-service';
 import { setCurrentChatID } from '@/redux/chat/chat-slice';
 import { colors } from '@/theme/theme';
 import { convertHex } from '@/utils';
-
 const ActivityTopic = () => {
   const [listChats, setListChat] = useState<Array<IChatData> | null>(null);
-  const { currentChatID } = useChat();
+  const { currentChatID, isChatLoading } = useChat();
   useEffect(() => {
     const fetchList = async () => {
       const response = await chatService.getOwnChats({
@@ -20,15 +20,15 @@ const ActivityTopic = () => {
         limit: 10,
         order_by: '-updated_at',
       });
+
       if (response.status === 200) {
         setListChat(response.data.data);
       }
     };
     fetchList();
-  }, [currentChatID]);
+  }, [currentChatID, isChatLoading]);
   const router = useRouter();
   const dispatch = useDispatch();
-
   return (
     <>
       <Box padding={4}>
@@ -47,34 +47,57 @@ const ActivityTopic = () => {
           {listChats &&
             listChats.map(list => (
               <>
-                <Box
-                  cursor="pointer"
-                  _hover={{
-                    borderColor: 'primary.a.400',
-                  }}
-                  onClick={() => {
-                    dispatch(setCurrentChatID(list.id));
-                    router.push(`/chat/${list.id}`);
-                  }}
-                  key={list.id}
-                  width="full"
-                  bg={
-                    currentChatID === list.id
-                      ? convertHex(colors.primary.a[500], 0.05)
-                      : undefined
-                  }
-                  padding={3}
-                  borderRadius="xl"
-                  border="0.063rem solid"
-                  borderColor="shader.a.200"
-                >
-                  <Text
-                    color={
-                      currentChatID == list.id ? 'shader.a.900' : 'shader.a.600'
+                <Box position="relative" role="group">
+                  <Box
+                    _hover={{
+                      borderColor: 'primary.a.400',
+                    }}
+                    onClick={() => {
+                      dispatch(setCurrentChatID(list.id));
+                      router.push(`/chat/${list.id}`);
+                    }}
+                    key={list.id}
+                    width="full"
+                    bg={
+                      currentChatID === list.id
+                        ? convertHex(colors.primary.a[500], 0.05)
+                        : undefined
                     }
+                    padding={3}
+                    cursor="pointer"
+                    borderRadius="xl"
+                    border="0.063rem solid"
+                    borderColor="shader.a.200"
                   >
-                    {list.title}
-                  </Text>
+                    <Text
+                      whiteSpace="nowrap"
+                      textOverflow="ellipsis"
+                      maxWidth="200"
+                      overflow="hidden"
+                      color={
+                        currentChatID == list.id
+                          ? 'shader.a.900'
+                          : 'shader.a.600'
+                      }
+                    >
+                      {list.title}
+                    </Text>
+                  </Box>
+                  <Box
+                    zIndex="popover"
+                    top={0}
+                    right={0}
+                    display="none"
+                    _groupHover={{
+                      display: 'block',
+                    }}
+                    position="absolute"
+                    onClick={e => {
+                      e.preventDefault();
+                    }}
+                  >
+                    <DotMenuActivity chat_id={list.id} />
+                  </Box>
                 </Box>
               </>
             ))}
