@@ -1,19 +1,6 @@
 /* eslint-disable no-unused-vars */
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  StackProps,
-  Text,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, StackProps, Text } from '@chakra-ui/react';
 import React from 'react';
-
-import ChatEdit from './ChatEdit';
 
 import ImageIcon from '@/public/assets/icons/line/image.svg';
 import RefreshIcon from '@/public/assets/icons/line/refresh.svg';
@@ -27,7 +14,6 @@ const ChatMessage = ({ message, onCreateImage, sx }: Props) => {
   let content = message.content;
   const isHtml = content.includes('```html');
   content = isHtml ? content.replace('```html', '') : content;
-  const { onOpen, onClose, isOpen, onToggle } = useDisclosure();
   return (
     <>
       <Flex
@@ -45,7 +31,6 @@ const ChatMessage = ({ message, onCreateImage, sx }: Props) => {
                 py={3}
                 whiteSpace="pre-wrap"
                 alignItems="center"
-                maxW="67%"
                 bg="white"
                 gap={0}
                 color="shader.a.800"
@@ -96,7 +81,6 @@ const ChatMessage = ({ message, onCreateImage, sx }: Props) => {
               gap={0}
               whiteSpace="pre-wrap"
               alignItems="center"
-              maxW="67%"
               bg="primary.a.500"
               color="white"
               {...sx}

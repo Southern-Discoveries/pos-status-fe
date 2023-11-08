@@ -31,8 +31,8 @@ const DotMenuActivity = ({ chat_id }: IProps) => {
       <Popover placement="left-start">
         <PopoverTrigger>
           <IconButton
-            height={10}
-            width={10}
+            /*  height={10}
+            width={10} */
             variant="unstyled"
             icon={<Icon as={DotIcon} height={4} width={4} />}
             position="relative"

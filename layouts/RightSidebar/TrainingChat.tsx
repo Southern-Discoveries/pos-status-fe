@@ -39,9 +39,6 @@ const TrainingChatScreen = ({
                   <ChatMessage
                     onCreateImage={onCreateImage}
                     message={message}
-                    sx={{
-                      maxWidth: 'full',
-                    }}
                   />
                 </Box>
               ))}
