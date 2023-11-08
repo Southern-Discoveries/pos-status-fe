@@ -15,6 +15,7 @@ interface IProps {
 }
 const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
   const dispatch = useDispatch();
+
   return (
     <>
       <Box
@@ -36,13 +37,21 @@ const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
           py={3}
         >
           <Link
-            href="/"
+            href="/chat"
             onClick={() => {
               dispatch(setCurrentChatID(null));
             }}
           >
             <LogoLong />
           </Link>
+          {/*   <Box
+            onClick={() => {
+              window.location.href = '/chat';
+              dispatch(setCurrentChatID(null));
+            }}
+          >
+            <LogoLong />
+          </Box> */}
 
           <HStack>
             <IconButton

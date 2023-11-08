@@ -29,7 +29,7 @@ const AuthProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
       router.push('/auth/signin');
       logout();
     }
-  }, [pathname]);
+  }, [pathname, user]);
 
   return <>{children}</>;
 };

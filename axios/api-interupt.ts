@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { getContentType } from './api-helper';
+import { errorCatch, getContentType } from './api-helper';
 
 import { getAccessToken, removeFromStorage } from '@/redux/user/user-helper';
 import authService from '@/redux/user/user-service';
@@ -26,8 +26,12 @@ instance.interceptors.response.use(
   config => config,
   async error => {
     const originalRequest = error.config;
-
-    if (error?.response?.status === 401) {
+    if (
+      error?.response?.status === 401 ||
+      (errorCatch(error) === 'Token are expired' &&
+        error.config &&
+        !error.config._isRetry)
+    ) {
       originalRequest._isRetry = true;
       try {
         await authService.getNewTokens();

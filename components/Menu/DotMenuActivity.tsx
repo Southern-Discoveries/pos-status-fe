@@ -9,11 +9,13 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
 import { useActions } from '@/hooks/useActions';
 import { useChat } from '@/hooks/useChat';
 import DeleteIcon from '@/public/assets/icons/line/delete.svg';
 import DotIcon from '@/public/assets/icons/line/dot.svg';
+import { setCurrentChatID } from '@/redux/chat/chat-slice';
 
 // Dot Menu Activitys
 interface IProps {
@@ -23,6 +25,7 @@ const DotMenuActivity = ({ chat_id }: IProps) => {
   const { deleteChat } = useActions();
   const router = useRouter();
   const { currentChatID } = useChat();
+  const dispatch = useDispatch();
   return (
     <>
       <Popover placement="left-start">
@@ -50,6 +53,7 @@ const DotMenuActivity = ({ chat_id }: IProps) => {
             onClick={async () => {
               await deleteChat(chat_id);
               if (currentChatID == chat_id) {
+                dispatch(setCurrentChatID(null));
                 router.push('/chat');
               }
             }}
