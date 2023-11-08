@@ -118,9 +118,9 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTask, selectedPlatform, selectedAudiences, selectedTargets]);
   useEffect(() => {
-    if (selectedEngine && !model) {
+    if (selectedEngine) {
       setModelOptions(selectedEngine[0].models);
-      setModel(selectedEngine[0].models[0]);
+      /*   setModel(selectedEngine[0].models[0]); */
     }
 
     let new_config = {
@@ -131,7 +131,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
 
     setEngineConfig(new_config);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedEngine, model]);
+  }, [selectedEngine, model, temperature]);
   // Handle the click of a Task button
   const handleTaskClick = (task: any) => {
     setSelectedTask([task]);
@@ -268,7 +268,6 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
         <FormControl padding={4}>
           <FormLabel>Model</FormLabel>{' '}
           <Select
-            placeholder="Select Model"
             onChange={e => {
               handleModelChange(e.target.value);
             }}
