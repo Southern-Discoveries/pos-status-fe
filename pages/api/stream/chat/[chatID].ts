@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { NextApiRequest, NextApiResponse } from 'next';
-const AI_SERVICE_URL =
-  process.env.NEXT_PUBLIC_AI_SERVICE_URL || 'http://127.0.0.1:8000';
+const AI_SERVICE_URL = process.env.NEXT_PUBLIC_AI_SERVICE_URL;
 
 const streamForward = async (
   chatID: any,
