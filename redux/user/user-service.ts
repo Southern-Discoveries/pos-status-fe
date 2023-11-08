@@ -66,7 +66,7 @@ export class AuthService {
       string,
       { data: { access_token: string } }
     >(
-      `http://127.0.0.1:8000${this.AUTH_URL}/refresh`,
+      `${process.env.NEXT_PUBLIC_AI_SERVICE_URL}${this.AUTH_URL}/refresh`,
       { token: refreshToken },
       {
         headers: {
