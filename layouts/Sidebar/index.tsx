@@ -1,5 +1,16 @@
 /* eslint-disable no-unused-vars */
-import { Box, Collapse, Flex, HStack, Icon, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Collapse,
+  Flex,
+  FormControl,
+  FormLabel,
+  HStack,
+  Icon,
+  Input,
+  Select,
+  Text,
+} from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
 import CategorySection from './components/CategorySection';
@@ -29,7 +40,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
   const [selectedAudiences, setSelectedAudiences] = useState<Selected[]>([]);
 
   const [modelOptions, setModelOptions] = useState([]);
-  const [model, setModel] = useState(); // Initial model
+  const [model, setModel] = useState<string>(); // Initial model
   const [temperature, setTemperature] = useState(0.7);
 
   // Set State Open Toggle
@@ -107,7 +118,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTask, selectedPlatform, selectedAudiences, selectedTargets]);
   useEffect(() => {
-    if (selectedEngine) {
+    if (selectedEngine && !model) {
       setModelOptions(selectedEngine[0].models);
       setModel(selectedEngine[0].models[0]);
     }
@@ -120,7 +131,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
 
     setEngineConfig(new_config);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedEngine, model, temperature]);
+  }, [selectedEngine, model]);
   // Handle the click of a Task button
   const handleTaskClick = (task: any) => {
     setSelectedTask([task]);
@@ -153,10 +164,8 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
     }
   };
 
-  const handleModelChange = (selectedModel: any) => {
-    // Update the selected model in the component's state
+  const handleModelChange = (selectedModel: string) => {
     setModel(selectedModel);
-    // You can also perform other actions, like making API requests, based on the selected model.
   };
 
   const handleTemperatureChange = (newTemperature: any) => {
@@ -256,40 +265,33 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
           </Collapse>
         </Flex>
 
-        <div className="bg-gray-100 p-4">
-          <div className="flex justify-center items-center">
-            <label htmlFor="modelSelect" className="mr-2">
-              Model:
-            </label>
-            <select
-              id="modelSelect"
-              className="px-2 py-1 border rounded"
-              onChange={e => handleModelChange(e.target.value)}
-              value={model}
-            >
-              {modelOptions.map(option => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="flex justify-center items-center mt-2">
-            <label htmlFor="temperatureInput" className="mr-2">
-              Temperature:
-            </label>
-            <input
-              id="temperatureInput"
-              type="number"
-              step="0.1"
-              min="0.1"
-              max="1.0"
-              value={temperature}
-              onChange={e => handleTemperatureChange(e.target.value)}
-              className="px-2 py-1 border rounded"
-            />
-          </div>
-        </div>
+        <FormControl padding={4}>
+          <FormLabel>Model</FormLabel>{' '}
+          <Select
+            placeholder="Select Model"
+            onChange={e => {
+              handleModelChange(e.target.value);
+            }}
+            value={model}
+          >
+            {modelOptions.map(option => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl padding={4}>
+          <FormLabel>Temperature</FormLabel>
+          <Input
+            type="number"
+            step="0.1"
+            min="0.1"
+            max="1.0"
+            value={temperature}
+            onChange={e => handleTemperatureChange(e.target.value)}
+          />
+        </FormControl>
       </Box>
     </>
   );

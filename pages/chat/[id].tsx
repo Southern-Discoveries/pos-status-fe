@@ -223,7 +223,6 @@ export default function ChatDetail() {
   const dispatch = useDispatch();
   const { id } = router.query;
 
-  const loadHistoryMessage = async () => {};
   useEffect(() => {
     if (typeof id == 'string') {
       const fetchMessage = async () => {

@@ -52,7 +52,6 @@ export const chatSlice = createSlice({
       })
       .addCase(deleteChat.fulfilled, state => {
         state.isChatLoading = false;
-        state.currentChatID = null;
       });
   },
 });

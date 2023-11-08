@@ -37,7 +37,7 @@ const ChatScreen = ({
         <Scrollbar>
           {messages.length ? (
             <>
-              <Box padding={6} py={8} pb="6rem">
+              <Box padding={6} py={8} mb="6rem">
                 {/* <ChatReset onReset={onReset} /> */}
                 <Flex flexDirection="column" gap={4}>
                   {messages.map((message, index) => (
