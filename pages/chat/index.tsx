@@ -117,9 +117,7 @@ export default function Home() {
       !postConfig.audiences.length ||
       !postConfig?.targets.length ||
       postConfig?.platform == null ||
-      postConfig?.task === null ||
-      !engineConfig?.engine ||
-      !engineConfig?.model
+      postConfig?.task === null
     ) {
       toast({
         title: 'Choose Option',
@@ -239,14 +237,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Flex
-        flexDirection="column"
-        gap={0}
-        /*  onContextMenu={e => {
-          e.preventDefault(); // prevent the default behaviour when right clicked
-          console.log('Right Click');
-        }} */
-      >
+      <Flex flexDirection="column" gap={0}>
         <Header
           isOpenSetting={isOpenSetting}
           onToggleSetting={onToggleSetting}
@@ -288,7 +279,7 @@ export default function Home() {
                 placement="right"
               >
                 <DrawerOverlay />
-                <DrawerContent mt="64px">
+                <DrawerContent mt="65px">
                   <Tabs variant="right_sidebar">
                     <TabList height="54px">
                       <Tab>Trainning</Tab>

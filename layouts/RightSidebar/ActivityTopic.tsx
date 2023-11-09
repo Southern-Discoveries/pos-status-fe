@@ -36,11 +36,10 @@ const ActivityTopic = () => {
           <Button
             variant="primary"
             width="full"
-            isDisabled={true}
-            /*   onClick={() => {
+            onClick={() => {
               dispatch(setCurrentChatID(null));
               router.push(`/`);
-            }} */
+            }}
           >
             New Topic
           </Button>

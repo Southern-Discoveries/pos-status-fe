@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react';
 
 import WellCome from './WellCome';
 
-import ChatInputs from '@/components/Chat/ChatInput';
+import ChatInput from '@/components/Chat/ChatInput';
 import ChatLoader from '@/components/Chat/ChatLoader';
 import ChatMessage from '@/components/Chat/ChatMessage';
 import Scrollbar from '@/components/Scrollbar';
@@ -79,7 +79,7 @@ const ChatScreen = ({
           height="4rem"
         >
           <Box padding={4}>
-            <ChatInputs onSend={onSend} isLoading={loading} />
+            <ChatInput onSend={onSend} isLoading={loading} />
           </Box>
         </Box>
       </Box>

@@ -119,7 +119,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
     setPostConfig(new_config);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTask, selectedPlatform, selectedAudiences, selectedTargets]);
-  useEffect(() => {
+  /*   useEffect(() => {
     if (selectedEngine) {
       setModelOptions(selectedEngine[0].models);
       setModel(selectedEngine[0].models[0]);
@@ -131,18 +131,18 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     setEngineConfig(new_config);
-  }, [selectedEngine]);
+  }, [selectedEngine]); */
 
   useEffect(() => {
     let new_config = {
-      engine: selectedEngine ? selectedEngine[0].name : null,
-      model: model,
+      /*  engine: selectedEngine ? selectedEngine[0].name : null,
+      model: model, */
       temperature: temperature,
     };
 
     setEngineConfig(new_config);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [model, temperature]);
+  }, [temperature]);
   // Hndle the click of a Task button
   const handleTaskClick = (task: any) => {
     setSelectedTask([task]);
@@ -153,9 +153,9 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
     setSelectedPlatform([platform]);
   };
 
-  const handleEngineClick = (engine: any) => {
+  /* const handleEngineClick = (engine: any) => {
     setSelectedEngine([engine]);
-  };
+  }; */
 
   // Handle the click of a Target button
   const handleTargetClick = (target: any) => {
@@ -175,9 +175,9 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
     }
   };
 
-  const handleModelChange = (selectedModel: string) => {
+  /*  const handleModelChange = (selectedModel: string) => {
     setModel(selectedModel);
-  };
+  }; */
 
   const handleTemperatureChange = (newTemperature: any) => {
     // Ensure the temperature is within the range 0.1 to 1.0
@@ -187,6 +187,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
       // You can also perform other actions based on the new temperature.
     }
   };
+
   const handleReset = () => {
     setSelectedTask(null);
     setSelectedPlatform(null);
@@ -195,11 +196,15 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
     setSelectedEngine(null);
   };
   useEffect(() => {
+    console.log('Reset');
     if (currentChatID == null) {
-      console.log('Why not run');
       handleReset();
+      console.log('Selected Task', selectedTask);
+      console.log('Selected Target', selectedAudiences);
+      console.log('Selected Audience', selectedTargets);
+      console.log('Selected Task', selectedPlatform);
     }
-  }, [currentChatID]);
+  }, []);
   return (
     <>
       <Box
@@ -250,7 +255,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
           onItemClick={handleAudienceClick}
         />
 
-        <Flex
+        {/*   <Flex
           flexDirection="column"
           borderBottom="0.063rem solid"
           borderBottomColor="shader.a.200"
@@ -287,9 +292,9 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
               onItemClick={handleEngineClick}
             />
           </Collapse>
-        </Flex>
+        </Flex> */}
 
-        <FormControl padding={4}>
+        {/*  <FormControl padding={4}>
           <FormLabel>Model</FormLabel>{' '}
           <Select
             onChange={e => {
@@ -303,7 +308,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
               </option>
             ))}
           </Select>
-        </FormControl>
+        </FormControl> */}
         <FormControl padding={4}>
           <FormLabel>Temperature</FormLabel>
           <Input

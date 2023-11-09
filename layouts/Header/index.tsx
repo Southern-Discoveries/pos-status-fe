@@ -1,4 +1,13 @@
-import { Box, HStack, IconButton } from '@chakra-ui/react';
+import {
+  Box,
+  Drawer,
+  DrawerContent,
+  DrawerOverlay,
+  HStack,
+  Icon,
+  IconButton,
+  useDisclosure,
+} from '@chakra-ui/react';
 import Link from 'next/link';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -7,15 +16,15 @@ import { AccountMenu } from '../../components/Menu/AccountMenu';
 
 import LogoLong from '@/components/Logo/LogoLong';
 import BookIcon from '@/public/assets/icons/line/book.svg';
+import MenuIcon from '@/public/assets/icons/line/menu.svg';
 import { setCurrentChatID } from '@/redux/chat/chat-slice';
-
 interface IProps {
   isOpenSetting?: boolean;
   onToggleSetting?: () => void;
 }
 const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
   const dispatch = useDispatch();
-
+  const { isOpen, onToggle, onClose } = useDisclosure();
   return (
     <>
       <Box
@@ -36,23 +45,32 @@ const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
           px={6}
           py={3}
         >
-          <Link
-            href="/chat"
-            onClick={() => {
-              dispatch(setCurrentChatID(null));
-            }}
-          >
-            <LogoLong />
-          </Link>
-          {/* <Box
-            cursor="pointer"
-            onClick={() => {
-              window.location.href = '/chat';
-              dispatch(setCurrentChatID(null));
-            }}
-          >
-            <LogoLong />
-          </Box> */}
+          <HStack>
+            <Link
+              href="/chat"
+              onClick={() => {
+                dispatch(setCurrentChatID(null));
+              }}
+            >
+              <LogoLong />
+            </Link>
+            <IconButton
+              aria-label=""
+              variant="unstyled"
+              onClick={onToggle}
+              display={{ md: 'none', base: 'flex' }}
+              icon={<Icon as={MenuIcon} height={5} width={5} />}
+            />
+            {/*      <Box
+              cursor="pointer"
+              onClick={() => {
+                window.location.href = '/chat';
+                dispatch(setCurrentChatID(null));
+              }}
+            >
+              <LogoLong />
+            </Box> */}
+          </HStack>
 
           <HStack>
             <IconButton
@@ -67,6 +85,11 @@ const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
           </HStack>
         </HStack>
       </Box>
+
+      <Drawer size="full" isOpen={isOpen} onClose={onClose} placement="left">
+        <DrawerOverlay />
+        <DrawerContent mt="65px">sad</DrawerContent>
+      </Drawer>
     </>
   );
 };

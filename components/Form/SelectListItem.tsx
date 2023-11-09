@@ -9,13 +9,14 @@ interface IProps {
 /// List select check
 const SelectListItem = ({ items, selectedItems, onItemClick }: IProps) => {
   // eslint-disable-next-line no-unused-vars
-  selectedItems = selectedItems || [];
+  selectedItems = selectedItems;
 
   return (
     <>
       <Flex flexDirection="column" gap={2} py={2}>
         {items.map((item: any) => (
           <Checkbox
+            isChecked={selectedItems !== null && selectedItems.includes(item)}
             key={item.name}
             variant="primary"
             onChange={() => {
