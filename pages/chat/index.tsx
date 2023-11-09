@@ -208,21 +208,17 @@ export default function Home() {
     }
   };
 
-  const handleTrainingReset = () => {
-    setTrainingMessages([]);
-  };
-
-  const handleChatReset = () => {
-    setChatMessages([]);
-  };
-
   useEffect(() => {
     scrollToBottom();
   }, [chatMessages]);
 
   useEffect(() => {
-    setChatMessages([]);
-  }, []);
+    if (currentChatID == null) {
+      setChatMessages([]);
+      setPostConfig(undefined);
+      setEngineConfig(undefined);
+    }
+  }, [currentChatID]);
   const isMobileScreen = useBreakpointValue({ base: true, md: false });
   const {
     isOpen: isOpenSetting,
@@ -280,19 +276,19 @@ export default function Home() {
               messages={chatMessages}
               loading={chatLoading}
               onSend={handleChatSend}
-              onReset={handleChatReset}
             />
           </DefaultBG>
 
           {isMobileScreen ? (
             <>
               <Drawer
+                size="full"
                 isOpen={isOpenSetting}
                 onClose={onCloseSetting}
                 placement="right"
               >
                 <DrawerOverlay />
-                <DrawerContent>
+                <DrawerContent mt="64px">
                   <Tabs variant="right_sidebar">
                     <TabList height="54px">
                       <Tab>Trainning</Tab>
@@ -312,7 +308,6 @@ export default function Home() {
                             messages={trainingMessages}
                             loading={trainingLoading}
                             onSend={handleTrainingSend}
-                            onReset={handleTrainingReset}
                           />
                         </Box>
                       </TabPanel>
@@ -351,7 +346,6 @@ export default function Home() {
                         messages={trainingMessages}
                         loading={trainingLoading}
                         onSend={handleTrainingSend}
-                        onReset={handleTrainingReset}
                       />
                     </TabPanel>
                     <TabPanel>

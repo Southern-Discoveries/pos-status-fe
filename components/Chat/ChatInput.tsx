@@ -5,11 +5,12 @@ import { KeyboardEvent, useEffect, useRef, useState } from 'react';
 import SendIcon from '@/public/assets/icons/line/send.svg';
 import { Message } from '@/types';
 interface Props {
+  isLoading: boolean;
   onSend: (message: Message) => void;
   sx?: TextareaProps;
 }
 
-const ChatInput = ({ onSend, sx }: Props) => {
+const ChatInput = ({ isLoading, onSend, sx }: Props) => {
   const [messageContent, setMessageContent] = useState<string>('');
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -28,12 +29,14 @@ const ChatInput = ({ onSend, sx }: Props) => {
       alert('Please enter a message');
       return;
     }
-    onSend({ role: 'user', content: messageContent });
-    setMessageContent('');
+    if (!isLoading) {
+      onSend({ role: 'user', content: messageContent });
+      setMessageContent('');
+    }
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey && !isLoading) {
       e.preventDefault();
       handleSend();
     }

@@ -23,7 +23,7 @@ const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
         as="header"
         height="65px"
         position="sticky"
-        zIndex={11}
+        zIndex="popover"
         top={0}
         left={0}
         right={0}
@@ -44,7 +44,8 @@ const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
           >
             <LogoLong />
           </Link>
-          {/*   <Box
+          {/* <Box
+            cursor="pointer"
             onClick={() => {
               window.location.href = '/chat';
               dispatch(setCurrentChatID(null));

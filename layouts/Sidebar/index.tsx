@@ -17,6 +17,7 @@ import CategorySection from './components/CategorySection';
 
 import api from '@/axios/config';
 import SelectRadioItem from '@/components/Form/SelectRadioItem';
+import { useChat } from '@/hooks/useChat';
 import ArrowIcon from '@/public/assets/icons/line/arrow.svg';
 import FileIcon from '@/public/assets/icons/line/file.svg';
 import GlobalIcon from '@/public/assets/icons/line/global.svg';
@@ -42,6 +43,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
   const [modelOptions, setModelOptions] = useState([]);
   const [model, setModel] = useState<string>(); // Initial model
   const [temperature, setTemperature] = useState(0.7);
+  const { currentChatID } = useChat();
 
   // Set State Open Toggle
   const [sectionState, setSectionState] = useState<SectionState>({
@@ -120,9 +122,18 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
   useEffect(() => {
     if (selectedEngine) {
       setModelOptions(selectedEngine[0].models);
-      /*   setModel(selectedEngine[0].models[0]); */
+      setModel(selectedEngine[0].models[0]);
     }
+    let new_config = {
+      engine: selectedEngine ? selectedEngine[0].name : null,
+      model: model,
+      temperature: temperature,
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setEngineConfig(new_config);
+  }, [selectedEngine]);
 
+  useEffect(() => {
     let new_config = {
       engine: selectedEngine ? selectedEngine[0].name : null,
       model: model,
@@ -131,8 +142,8 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
 
     setEngineConfig(new_config);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedEngine, model, temperature]);
-  // Handle the click of a Task button
+  }, [model, temperature]);
+  // Hndle the click of a Task button
   const handleTaskClick = (task: any) => {
     setSelectedTask([task]);
   };
@@ -176,6 +187,19 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
       // You can also perform other actions based on the new temperature.
     }
   };
+  const handleReset = () => {
+    setSelectedTask(null);
+    setSelectedPlatform(null);
+    setSelectedTargets([]);
+    setSelectedAudiences([]);
+    setSelectedEngine(null);
+  };
+  useEffect(() => {
+    if (currentChatID == null) {
+      console.log('Why not run');
+      handleReset();
+    }
+  }, [currentChatID]);
   return (
     <>
       <Box

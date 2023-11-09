@@ -24,7 +24,7 @@ export default function App({ Component, pageProps }: AppProps<{}>) {
           <AuthProvider>
             <ChakraProvider theme={theme}>
               <Component {...pageProps} />
-            </ChakraProvider>{' '}
+            </ChakraProvider>
           </AuthProvider>
         </PersistGate>
       </Provider>
