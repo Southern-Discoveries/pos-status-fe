@@ -1,15 +1,33 @@
 import { Box, Flex, HStack, Icon, Input, Text } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import ChatInput from '@/components/Chat/ChatInput';
+import { useTrain } from '@/hooks/userTrain';
 import ArrowIcon from '@/public/assets/icons/line/arrow-2.svg';
 import EditIcon from '@/public/assets/icons/line/edit-1.svg';
+import trainService from '@/redux/train/train-service';
 interface IProps {
   onClose: () => void;
 }
+// Todo Feedback remove content brain when create
 const BrainDetail = ({ onClose }: IProps) => {
   const [title, setTitle] = useState('United');
+  const [chatMessages, setChatMessages] = useState<[]>([]);
+  const { currentBrainID } = useTrain();
 
+  const handleCreateBrain = async (title: string) => {
+    // content not need
+    const data = {
+      title: title,
+      description: 'IT not used',
+    };
+    const response = await trainService.createBrain(data);
+    return response;
+  };
+  useEffect(() => {
+    if (currentBrainID) {
+    }
+  }, []);
   return (
     <Box position="relative" height="full">
       <HStack width="full" justifyContent="space-between" padding={4}>
@@ -41,14 +59,29 @@ const BrainDetail = ({ onClose }: IProps) => {
           cursor="pointer"
           color="primary.a.500"
           fontWeight="medium"
-          opacity={0.35}
+          onClick={() => {
+            handleCreateBrain(title);
+          }}
+          /*   opacity={0.35} */
         >
           Save
         </Text>
       </HStack>
-      <Box left={0} bottom={-5} width="full" position="absolute" height="4rem">
+      {chatMessages.map((list, index) => (
+        <Box key={index}>{list}</Box>
+      ))}
+      <Box
+        left={0}
+        bottom={0}
+        padding={4}
+        width="full"
+        borderTop="0.063rem solid"
+        borderTopColor="shader.a.200"
+        position="absolute"
+        height="4rem"
+      >
         <ChatInput
-          onSend={() => {}}
+          onSend={() => setChatMessages}
           isLoading={false}
           sx={{
             placeholder: 'Type Trainning Data',

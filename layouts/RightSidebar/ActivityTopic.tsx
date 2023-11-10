@@ -49,7 +49,8 @@ const ActivityTopic = () => {
                 <Box position="relative" role="group" key={list.id}>
                   <Box
                     _hover={{
-                      borderColor: 'primary.a.400',
+                      border: '0.125rem solid',
+                      borderColor: 'primary.a.500',
                     }}
                     onClick={() => {
                       dispatch(setCurrentChatID(list.id));
@@ -64,8 +65,16 @@ const ActivityTopic = () => {
                     padding={3}
                     cursor="pointer"
                     borderRadius="xl"
-                    border="0.063rem solid"
-                    borderColor="shader.a.200"
+                    border={
+                      currentChatID === list.id
+                        ? '0.125rem solid'
+                        : '0.063rem solid'
+                    }
+                    borderColor={
+                      currentChatID === list.id
+                        ? 'primary.a.500'
+                        : 'shader.a.200'
+                    }
                   >
                     <Text
                       whiteSpace="nowrap"
@@ -83,8 +92,8 @@ const ActivityTopic = () => {
                   </Box>
                   <Box
                     zIndex="popover"
-                    top={0}
-                    right={0}
+                    top={'20%'}
+                    right={2}
                     display="none"
                     _groupHover={{
                       display: 'block',

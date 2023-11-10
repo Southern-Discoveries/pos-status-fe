@@ -1,42 +1,27 @@
-import {
-  Box,
-  Drawer,
-  DrawerContent,
-  DrawerOverlay,
-  HStack,
-  Icon,
-  IconButton,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Box, HStack, Icon, IconButton, Text } from '@chakra-ui/react';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { AccountMenu } from '../../components/Menu/AccountMenu';
 
 import LogoLong from '@/components/Logo/LogoLong';
-import { useAuth } from '@/hooks/useAuth';
 import BookIcon from '@/public/assets/icons/line/book.svg';
 import MenuIcon from '@/public/assets/icons/line/menu.svg';
 import { setCurrentChatID } from '@/redux/chat/chat-slice';
-import userService from '@/redux/user/user-service';
+
 interface IProps {
   isOpenSetting?: boolean;
   onToggleSetting?: () => void;
+  onToogleSidebar?: () => void;
 }
-const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
+const Header = ({
+  isOpenSetting,
+  onToggleSetting,
+  onToogleSidebar,
+}: IProps) => {
   const dispatch = useDispatch();
-  const { isOpen, onToggle, onClose } = useDisclosure();
-  const { user } = useAuth();
-  useEffect(() => {
-    const fetchBalnce = async () => {
-      if (user) {
-        const response = await userService.getCurrentBalance(user?.id);
-        console.log('Current Balnce', response);
-      }
-    };
-    fetchBalnce();
-  }, []);
+
   return (
     <>
       <Box
@@ -61,7 +46,7 @@ const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
             <IconButton
               aria-label=""
               variant="unstyled"
-              onClick={onToggle}
+              onClick={onToogleSidebar}
               display={{ md: 'none', base: 'flex' }}
               icon={<Icon as={MenuIcon} height={5} width={5} />}
             />
@@ -73,18 +58,13 @@ const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
             >
               <LogoLong />
             </Link>
-            {/*  <Box
-              cursor="pointer"
-              onClick={() => {
-                window.location.href = '/chat';
-                dispatch(setCurrentChatID(null));
-              }}
-            >
-              <LogoLong />
-            </Box> */}
           </HStack>
 
           <HStack>
+            <Text color="primary.a.500" fontWeight="bold">
+              Credits
+            </Text>
+
             <IconButton
               variant="icon_btn"
               aria-label="Book Button"
@@ -97,11 +77,6 @@ const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
           </HStack>
         </HStack>
       </Box>
-
-      <Drawer size="full" isOpen={isOpen} onClose={onClose} placement="left">
-        <DrawerOverlay />
-        <DrawerContent mt="65px">sad</DrawerContent>
-      </Drawer>
     </>
   );
 };

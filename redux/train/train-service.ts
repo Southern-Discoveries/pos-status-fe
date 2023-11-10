@@ -1,18 +1,17 @@
 import { IFilterData } from '../chat/chat-interface';
 
+import { IBrainInfo } from './train-interface';
+
 import { instance } from '@/axios/api-interupt';
 
 export class TrainService {
   private TRAIN_URL = 'training';
   private KNOW_URL = 'knowledge';
-  async createBrain(title: string, description: string) {
+  async createBrain(data: IBrainInfo) {
     const response = await instance<any>({
       method: 'PUT',
       url: `/${this.TRAIN_URL}/brain`,
-      data: {
-        title,
-        description,
-      },
+      data,
     });
     return response;
   }
@@ -58,3 +57,4 @@ export class TrainService {
     return response;
   }
 }
+export default new TrainService();

@@ -10,3 +10,4 @@ export class PaymentService {
     return response;
   }
 }
+export default new PaymentService();

@@ -66,6 +66,7 @@ export class AuthService {
         Authorization: `Bearer ${access_token}`,
       },
     });
+
     return response;
   }
   async getNewTokens() {
