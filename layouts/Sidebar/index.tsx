@@ -1,28 +1,15 @@
 /* eslint-disable no-unused-vars */
-import {
-  Box,
-  Collapse,
-  Flex,
-  FormControl,
-  FormLabel,
-  HStack,
-  Icon,
-  Input,
-  Select,
-  Text,
-} from '@chakra-ui/react';
+import { Box, FormControl, FormLabel, Input, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
 import CategorySection from './components/CategorySection';
 
 import api from '@/axios/config';
-import SelectRadioItem from '@/components/Form/SelectRadioItem';
-import ArrowIcon from '@/public/assets/icons/line/arrow.svg';
 import FileIcon from '@/public/assets/icons/line/file.svg';
 import GlobalIcon from '@/public/assets/icons/line/global.svg';
 import TargetIcon from '@/public/assets/icons/line/target.svg';
 import UserIcon from '@/public/assets/icons/line/user.svg';
-import { Options, SectionState, Selected } from '@/types/option';
+import { Options, Selected } from '@/types/option';
 
 interface IProps {
   setPostConfig: any;
@@ -39,18 +26,7 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
   const [selectedTargets, setSelectedTargets] = useState<Selected[]>([]);
   const [selectedAudiences, setSelectedAudiences] = useState<Selected[]>([]);
 
-  const [modelOptions, setModelOptions] = useState([]);
-  const [model, setModel] = useState<string>(); // Initial model
   const [temperature, setTemperature] = useState(0.7);
-
-  // Set State Open Toggle
-  const [sectionState, setSectionState] = useState<SectionState>({
-    taskSectionOpen: true,
-    targetSectionOpen: true,
-    audienceSectionOpen: true,
-    platformSectionOpen: true,
-    engineSectionOpen: true,
-  });
 
   // This is Option get from api
   const [options, setOptions] = useState<Options>({
@@ -58,19 +34,8 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
     targetOptions: [],
     audienceOptions: [],
     platformOptions: [],
-    engineOptions: [],
-    modelOptions: [],
   });
-
-  // OnToggle Function for many Section
-  const toggleSection = (sectionName: string) => {
-    setSectionState({
-      ...sectionState,
-      [`${sectionName}SectionOpen`]:
-        !sectionState[`${sectionName}SectionOpen` as keyof SectionState],
-    });
-  };
-  // Fetch Data and log Error if exist
+  const toast = useToast();
 
   async function fetchData(endpoint: string, category: string) {
     try {
@@ -82,12 +47,22 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
           [`${category}Options`]: data,
         }));
       } else {
-        console.error(
-          `Error fetching data from ${endpoint}: ${response.status}`
-        );
+        toast({
+          title: 'Error Fetch Data',
+          description: `Error fetching data from ${endpoint}: ${response.status}`,
+          status: 'error',
+          duration: 9000,
+          isClosable: true,
+        });
       }
     } catch (error) {
-      console.error(`Error fetching data from ${endpoint}: ${error}`);
+      toast({
+        title: 'Error Fetch Data',
+        description: `Error fetching data from ${endpoint}: ${error}`,
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
     }
   }
 
@@ -117,22 +92,16 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
     setPostConfig(new_config);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTask, selectedPlatform, selectedAudiences, selectedTargets]);
-  useEffect(() => {
-    if (selectedEngine) {
-      setModelOptions(selectedEngine[0].models);
-      /*   setModel(selectedEngine[0].models[0]); */
-    }
 
+  useEffect(() => {
     let new_config = {
-      engine: selectedEngine ? selectedEngine[0].name : null,
-      model: model,
       temperature: temperature,
     };
 
     setEngineConfig(new_config);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedEngine, model, temperature]);
-  // Handle the click of a Task button
+  }, [temperature]);
+
   const handleTaskClick = (task: any) => {
     setSelectedTask([task]);
   };
@@ -140,10 +109,6 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
   // Handle the click of a Platform button
   const handlePlatformClick = (platform: any) => {
     setSelectedPlatform([platform]);
-  };
-
-  const handleEngineClick = (engine: any) => {
-    setSelectedEngine([engine]);
   };
 
   // Handle the click of a Target button
@@ -164,18 +129,14 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
     }
   };
 
-  const handleModelChange = (selectedModel: string) => {
-    setModel(selectedModel);
-  };
-
   const handleTemperatureChange = (newTemperature: any) => {
     // Ensure the temperature is within the range 0.1 to 1.0
     const parsedTemperature = parseFloat(newTemperature);
     if (parsedTemperature >= 0.1 && parsedTemperature <= 1.0) {
       setTemperature(parsedTemperature);
-      // You can also perform other actions based on the new temperature.
     }
   };
+
   return (
     <>
       <Box
@@ -188,8 +149,6 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
           type="radio"
           icon={FileIcon}
           label={'Task'}
-          isOpen={sectionState.taskSectionOpen}
-          onToggle={() => toggleSection('task')}
           items={options.taskOptions}
           selectedItems={selectedTask}
           onItemClick={handleTaskClick}
@@ -198,8 +157,6 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
           type="select"
           icon={TargetIcon}
           label={'Target'}
-          isOpen={sectionState.targetSectionOpen}
-          onToggle={() => toggleSection('target')}
           items={options.targetOptions}
           selectedItems={selectedTargets}
           onItemClick={handleTargetClick}
@@ -208,8 +165,6 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
           type="radio"
           icon={GlobalIcon}
           label={'Media Platform'}
-          isOpen={sectionState.platformSectionOpen}
-          onToggle={() => toggleSection('platform')}
           items={options.platformOptions}
           selectedItems={selectedPlatform}
           onItemClick={handlePlatformClick}
@@ -219,67 +174,11 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
           type="select"
           icon={UserIcon}
           label={'Audience'}
-          isOpen={sectionState.audienceSectionOpen}
-          onToggle={() => toggleSection('audience')}
           items={options.audienceOptions}
           selectedItems={selectedAudiences}
           onItemClick={handleAudienceClick}
         />
 
-        <Flex
-          flexDirection="column"
-          borderBottom="0.063rem solid"
-          borderBottomColor="shader.a.200"
-        >
-          <HStack justifyContent="space-between" padding={4}>
-            <Flex gap={2} alignItems="center">
-              <Icon as={GlobalIcon} height={5} w={5} color="primary.a.500" />
-              <Text fontWeight="600">Engine</Text>
-            </Flex>
-            <Icon
-              cursor="pointer"
-              as={ArrowIcon}
-              transform={
-                sectionState.engineSectionOpen
-                  ? 'rotate(-90deg)'
-                  : 'rotate(90deg)'
-              }
-              height={5}
-              width={5}
-              onClick={() => toggleSection('engine')}
-            />
-          </HStack>
-          <Collapse
-            in={sectionState.engineSectionOpen}
-            animateOpacity
-            style={{
-              padding: 4,
-              paddingTop: 2,
-            }}
-          >
-            <SelectRadioItem
-              items={options.engineOptions}
-              selectedItems={selectedEngine}
-              onItemClick={handleEngineClick}
-            />
-          </Collapse>
-        </Flex>
-
-        <FormControl padding={4}>
-          <FormLabel>Model</FormLabel>{' '}
-          <Select
-            onChange={e => {
-              handleModelChange(e.target.value);
-            }}
-            value={model}
-          >
-            {modelOptions.map(option => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </Select>
-        </FormControl>
         <FormControl padding={4}>
           <FormLabel>Temperature</FormLabel>
           <Input

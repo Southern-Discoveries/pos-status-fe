@@ -110,16 +110,13 @@ export default function Home() {
       },
     ]);
   };
-
   const handleChatSend = async (message: Message) => {
     if (
       !postConfig ||
       !postConfig.audiences.length ||
       !postConfig?.targets.length ||
       postConfig?.platform == null ||
-      postConfig?.task === null ||
-      !engineConfig?.engine ||
-      !engineConfig?.model
+      postConfig?.task === null
     ) {
       toast({
         title: 'Choose Option',
@@ -143,10 +140,14 @@ export default function Home() {
       };
       const accessToken = getAccessToken();
       const response = await fetch(
-        `/api/stream/chat/${res_new || currentChatID}`,
+        `${process.env.NEXT_PUBLIC_AI_SERVICE_URL}/public/message/${
+          res_new || currentChatID
+        }`,
         {
           method: 'PUT',
           headers: {
+            'Content-Encoding': 'none',
+            'Cache-Control': 'no-cache, must-revalidate',
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
@@ -208,21 +209,10 @@ export default function Home() {
     }
   };
 
-  const handleTrainingReset = () => {
-    setTrainingMessages([]);
-  };
-
-  const handleChatReset = () => {
-    setChatMessages([]);
-  };
-
   useEffect(() => {
     scrollToBottom();
   }, [chatMessages]);
 
-  useEffect(() => {
-    setChatMessages([]);
-  }, []);
   const isMobileScreen = useBreakpointValue({ base: true, md: false });
   const {
     isOpen: isOpenSetting,
@@ -243,14 +233,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Flex
-        flexDirection="column"
-        gap={0}
-        /*  onContextMenu={e => {
-          e.preventDefault(); // prevent the default behaviour when right clicked
-          console.log('Right Click');
-        }} */
-      >
+      <Flex flexDirection="column" gap={0}>
         <Header
           isOpenSetting={isOpenSetting}
           onToggleSetting={onToggleSetting}
@@ -280,19 +263,19 @@ export default function Home() {
               messages={chatMessages}
               loading={chatLoading}
               onSend={handleChatSend}
-              onReset={handleChatReset}
             />
           </DefaultBG>
 
           {isMobileScreen ? (
             <>
               <Drawer
+                size="full"
                 isOpen={isOpenSetting}
                 onClose={onCloseSetting}
                 placement="right"
               >
                 <DrawerOverlay />
-                <DrawerContent>
+                <DrawerContent mt="65px">
                   <Tabs variant="right_sidebar">
                     <TabList height="54px">
                       <Tab>Trainning</Tab>
@@ -312,7 +295,6 @@ export default function Home() {
                             messages={trainingMessages}
                             loading={trainingLoading}
                             onSend={handleTrainingSend}
-                            onReset={handleTrainingReset}
                           />
                         </Box>
                       </TabPanel>
@@ -351,7 +333,6 @@ export default function Home() {
                         messages={trainingMessages}
                         loading={trainingLoading}
                         onSend={handleTrainingSend}
-                        onReset={handleTrainingReset}
                       />
                     </TabPanel>
                     <TabPanel>

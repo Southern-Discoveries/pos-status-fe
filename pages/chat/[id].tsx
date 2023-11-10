@@ -29,6 +29,7 @@ import Header from '@/layouts/Header';
 import ActivityTopic from '@/layouts/RightSidebar/ActivityTopic';
 import TrainingChatScreen from '@/layouts/RightSidebar/TrainingChat';
 import Sidebar from '@/layouts/Sidebar';
+import chatService from '@/redux/chat/chat-service';
 import { setCurrentChatID } from '@/redux/chat/chat-slice';
 import imageService from '@/redux/images/image-service';
 import { getAccessToken } from '@/redux/user/user-helper';
@@ -37,6 +38,11 @@ import { Message, PostOption, EngineConfig } from '@/types';
 
 export default function ChatDetail() {
   const toast = useToast();
+  const router = useRouter();
+
+  const { getChatMessage } = useActions();
+  const { id } = router.query;
+
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
 
   const [chatLoading, setChatLoading] = useState<boolean>(false);
@@ -60,18 +66,6 @@ export default function ChatDetail() {
     setTrainingMessages(updatedMessages);
   };
 
-  const router = useRouter();
-
-  const { getChatMessage } = useActions();
-
-  const handleTrainingReset = () => {
-    setTrainingMessages([]);
-  };
-
-  const handleChatReset = () => {
-    setChatMessages([]);
-  };
-
   useEffect(() => {
     scrollToBottom();
   }, [chatMessages]);
@@ -87,7 +81,6 @@ export default function ChatDetail() {
     getDisclosureProps,
   } = useDisclosure({ defaultIsOpen: true });
   const [hidden, setHidden] = useState(!isOpenSetting);
-
   const { currentChatID } = useChat();
 
   const handleCreateImage = async (msg: string) => {
@@ -126,15 +119,14 @@ export default function ChatDetail() {
       },
     ]);
   };
+
   const handleChatSend = async (message: Message) => {
     if (
       !postConfig ||
       !postConfig.audiences.length ||
       !postConfig?.targets.length ||
       postConfig?.platform == null ||
-      postConfig?.task === null ||
-      !engineConfig?.engine ||
-      !engineConfig?.model
+      postConfig?.task === null
     ) {
       toast({
         title: 'Choose Option',
@@ -157,15 +149,24 @@ export default function ChatDetail() {
         data: trainingMessages.map(element => element.content),
       };
       const accessToken = getAccessToken();
-      const response = await fetch(`/api/stream/chat/${currentChatID}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(request_body),
-      });
-
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_AI_SERVICE_URL}/public/message/${currentChatID}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Encoding': 'none',
+            'Cache-Control': 'no-cache, must-revalidate',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(request_body),
+        }
+      );
+      /*  const response: any = await chatService.streamChat(
+        currentChatID,
+        JSON.stringify(request_body)
+      );
+ */
       if (!response.ok) {
         setChatLoading(false);
         throw new Error(response.statusText);
@@ -221,7 +222,6 @@ export default function ChatDetail() {
   };
 
   const dispatch = useDispatch();
-  const { id } = router.query;
 
   useEffect(() => {
     if (typeof id == 'string') {
@@ -275,14 +275,7 @@ export default function ChatDetail() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Flex
-        flexDirection="column"
-        gap={0}
-        /*  onContextMenu={e => {
-          e.preventDefault(); // prevent the default behaviour when right clicked
-          console.log('Right Click');
-        }} */
-      >
+      <Flex flexDirection="column" gap={0}>
         <Header
           isOpenSetting={isOpenSetting}
           onToggleSetting={onToggleSetting}
@@ -312,7 +305,6 @@ export default function ChatDetail() {
               messages={chatMessages}
               loading={chatLoading}
               onSend={handleChatSend}
-              onReset={handleChatReset}
             />
           </DefaultBG>
 
@@ -324,7 +316,7 @@ export default function ChatDetail() {
                 placement="right"
               >
                 <DrawerOverlay />
-                <DrawerContent>
+                <DrawerContent mt="65px">
                   <Tabs variant="right_sidebar">
                     <TabList height="54px">
                       <Tab>Trainning</Tab>
@@ -344,7 +336,6 @@ export default function ChatDetail() {
                             messages={trainingMessages}
                             loading={trainingLoading}
                             onSend={handleTrainingSend}
-                            onReset={handleTrainingReset}
                           />
                         </Box>
                       </TabPanel>
@@ -383,7 +374,6 @@ export default function ChatDetail() {
                         messages={trainingMessages}
                         loading={trainingLoading}
                         onSend={handleTrainingSend}
-                        onReset={handleTrainingReset}
                       />
                     </TabPanel>
                     <TabPanel>

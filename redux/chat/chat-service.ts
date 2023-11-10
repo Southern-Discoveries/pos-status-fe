@@ -37,5 +37,20 @@ export class ChatService {
     });
     return response;
   }
+  async streamChat(chat_id: any, data: any) {
+    const response = await instance<any>({
+      method: 'PUT',
+      headers: {
+        'Content-Encoding': 'none',
+        'Cache-Control': 'no-cache, must-revalidate',
+        'Content-Type': 'application/json',
+      },
+      url: `/public/message/${chat_id}`,
+      data: data,
+    });
+    console.log('Current Response', response);
+    return response;
+  }
 }
+
 export default new ChatService();

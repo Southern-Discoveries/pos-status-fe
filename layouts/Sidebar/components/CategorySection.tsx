@@ -1,4 +1,12 @@
-import { Box, Collapse, Flex, HStack, Icon, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Collapse,
+  Flex,
+  HStack,
+  Icon,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import React from 'react';
 
 import SelectListItem from '@/components/Form/SelectListItem';
@@ -6,10 +14,9 @@ import SelectRadioItem from '@/components/Form/SelectRadioItem';
 import ArrowIcon from '@/public/assets/icons/line/arrow.svg';
 
 interface IProps {
-  icon: any; // Icon of filter list
-  label: string; // label text of filter list
-  isOpen: boolean;
-  onToggle: any;
+  icon: any;
+  label: string;
+
   type: 'radio' | 'select';
   items: any;
   selectedItems: any;
@@ -18,13 +25,12 @@ interface IProps {
 const CategorySection = ({
   icon,
   label,
-  isOpen,
   type,
   items,
   selectedItems,
   onItemClick,
-  onToggle,
 }: IProps) => {
+  const { isOpen, onToggle } = useDisclosure({ defaultIsOpen: true });
   return (
     <>
       <Flex
