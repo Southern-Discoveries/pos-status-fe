@@ -16,7 +16,7 @@ export class ImageService {
       const imageUrl = URL.createObjectURL(blob);
       console.log('IMG URL', imageUrl);
     } */
-    console.log('Response Image', response);
+
     return response;
   }
   async generateImage(chat_id: string, data: any) {
@@ -26,6 +26,15 @@ export class ImageService {
       data,
     });
     return response.data;
+  }
+  // Setting Recreate Image
+  async recreateImage(image_id: string, data: any) {
+    const response = await instance<any, any>({
+      method: 'PUT',
+      url: `/public/recreate-image/${image_id}`,
+      data,
+    });
+    return response;
   }
 }
 export default new ImageService();

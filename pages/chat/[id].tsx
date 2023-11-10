@@ -120,6 +120,49 @@ export default function ChatDetail() {
     ]);
   };
 
+  const dispatch = useDispatch();
+  const fetchMessage = async () => {
+    const request_body = {
+      chat_id: id,
+      filter: {
+        page: 1,
+        limit: 10,
+        order_by: 'updated_at',
+      },
+    };
+
+    const res: any = await getChatMessage(request_body);
+    const message = res.payload;
+
+    const filteredMessages = message.data.map(
+      ({ role, content, images }: any) => ({
+        role,
+        content:
+          content === null
+            ? images.length
+              ? '```html' +
+                `<img src="${
+                  process.env.NEXT_PUBLIC_AI_SERVICE_URL ||
+                  'http://127.0.0.1:8000'
+                }/image/${images[0].raw}"/>
+            <img src="${
+              process.env.NEXT_PUBLIC_AI_SERVICE_URL || 'http://127.0.0.1:8000'
+            }/image/${images[0].text_banner}"/>
+            `
+              : ''
+            : content,
+      })
+    );
+    setChatMessages(filteredMessages);
+    console.log('Message', message);
+    return res;
+  };
+  useEffect(() => {
+    if (typeof id == 'string') {
+      dispatch(setCurrentChatID(id));
+      fetchMessage();
+    }
+  }, [id]);
   const handleChatSend = async (message: Message) => {
     if (
       !postConfig ||
@@ -162,11 +205,7 @@ export default function ChatDetail() {
           body: JSON.stringify(request_body),
         }
       );
-      /*  const response: any = await chatService.streamChat(
-        currentChatID,
-        JSON.stringify(request_body)
-      );
- */
+      console.log('Current Message', response);
       if (!response.ok) {
         setChatLoading(false);
         throw new Error(response.statusText);
@@ -220,50 +259,6 @@ export default function ChatDetail() {
       });
     }
   };
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (typeof id == 'string') {
-      const fetchMessage = async () => {
-        const request_body = {
-          chat_id: id,
-          filter: {
-            page: 1,
-            limit: 10,
-            order_by: 'updated_at',
-          },
-        };
-
-        const res: any = await getChatMessage(request_body);
-        const message = res.payload;
-
-        dispatch(setCurrentChatID(id));
-        const filteredMessages = message.data.map(
-          ({ role, content, images }: any) => ({
-            role,
-            content:
-              content === null
-                ? images.length
-                  ? '```html' +
-                    `<img src="${
-                      process.env.NEXT_PUBLIC_AI_SERVICE_URL ||
-                      'http://127.0.0.1:8000'
-                    }/image/${images[0].raw}"/>
-            <img src="${
-              process.env.NEXT_PUBLIC_AI_SERVICE_URL || 'http://127.0.0.1:8000'
-            }/image/${images[0].text_banner}"/>
-            `
-                  : ''
-                : content,
-          })
-        );
-        setChatMessages(filteredMessages);
-        return res;
-      };
-      fetchMessage();
-    }
-  }, [id]);
   return (
     <>
       <Head>

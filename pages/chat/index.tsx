@@ -85,7 +85,7 @@ export default function Home() {
             data: trainingMessages.map(element => element.content),
           })
         );
-        console.log('Current Response', response);
+
         if (response) {
           for (const img of response.data.images) {
             const res = await imageService.getImage(img.raw);

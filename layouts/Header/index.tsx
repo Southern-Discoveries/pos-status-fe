@@ -8,15 +8,17 @@ import {
   IconButton,
   useDisclosure,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { AccountMenu } from '../../components/Menu/AccountMenu';
 
 import LogoLong from '@/components/Logo/LogoLong';
+import { useAuth } from '@/hooks/useAuth';
 import BookIcon from '@/public/assets/icons/line/book.svg';
 import MenuIcon from '@/public/assets/icons/line/menu.svg';
 import { setCurrentChatID } from '@/redux/chat/chat-slice';
+import userService from '@/redux/user/user-service';
 interface IProps {
   isOpenSetting?: boolean;
   onToggleSetting?: () => void;
@@ -24,6 +26,16 @@ interface IProps {
 const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
   const dispatch = useDispatch();
   const { isOpen, onToggle, onClose } = useDisclosure();
+  const { user } = useAuth();
+  useEffect(() => {
+    const fetchBalnce = async () => {
+      if (user) {
+        const response = await userService.getCurrentBalance(user?.id);
+        console.log('Current Balnce', response);
+      }
+    };
+    fetchBalnce();
+  }, []);
   return (
     <>
       <Box
