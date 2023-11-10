@@ -61,6 +61,7 @@ export default function Home() {
   const { createNewChat } = useActions();
 
   async function createChatIfNot(title: string) {
+    console.log('Current Chat ID', currentChatID);
     if (!currentChatID) {
       const response: any = await createNewChat(title);
       const newURL = `${window.location.protocol}//${window.location.host}/chat/${response.payload.id}`;
@@ -84,21 +85,23 @@ export default function Home() {
             data: trainingMessages.map(element => element.content),
           })
         );
+        console.log('Current Response', response);
         if (response) {
           for (const img of response.data.images) {
             const res = await imageService.getImage(img.raw);
-            await imageService.getImage(img.text);
+            await imageService.getImage(img.text_banner);
             htmlMsg += `<img src="${
-              process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000'
+              process.env.NEXT_PUBLIC_AI_SERVICE_URL || 'http://127.0.0.1:8000'
             }/image/${img.raw}"/>
             <img src="${
-              process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000'
+              process.env.NEXT_PUBLIC_AI_SERVICE_URL || 'http://127.0.0.1:8000'
             }/image/${img.text_banner}"/>
             `;
           }
         }
       }
     } catch (error) {
+      console.log('Error Image Generate', error);
     } finally {
       setChatLoading(false);
     }
@@ -198,14 +201,24 @@ export default function Home() {
           });
         }
       }
-    } catch (error) {
-      toast({
-        title: 'Choose Option',
-        description: "We've you choose all option in sidebar",
-        status: 'error',
-        duration: 9000,
-        isClosable: true,
-      });
+    } catch (error: any) {
+      if (error.message == 'FORBIDDEN') {
+        toast({
+          title: 'Credit ',
+          description: 'Your Credit Not Enough',
+          status: 'error',
+          duration: 9000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: 'Retry',
+          description: 'Some Thing Wrong',
+          status: 'error',
+          duration: 9000,
+          isClosable: true,
+        });
+      }
     }
   };
 
