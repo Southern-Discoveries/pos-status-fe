@@ -61,7 +61,6 @@ export default function Home() {
   const { createNewChat } = useActions();
 
   async function createChatIfNot(title: string) {
-    console.log('Current Chat ID', currentChatID);
     if (!currentChatID) {
       const response: any = await createNewChat(title);
       const newURL = `${window.location.protocol}//${window.location.host}/chat/${response.payload.id}`;
@@ -259,7 +258,7 @@ export default function Home() {
             borderRight="0.063rem solid"
             borderRightColor="shader.a.200"
             overscrollBehavior="contain"
-            minW="400px"
+            minW="380px"
           >
             <Scrollbar overflowY="auto" overflow="hidden">
               <Box padding={4}>
@@ -330,9 +329,10 @@ export default function Home() {
                 onAnimationComplete={() => setHidden(!isOpenSetting)}
                 style={{
                   borderLeft: '0.063rem solid',
+
                   borderLeftColor: colors.shader.a[200],
                 }}
-                animate={{ width: isOpenSetting ? 500 : 0 }}
+                animate={{ width: isOpenSetting ? 550 : 0 }}
               >
                 <Tabs variant="right_sidebar">
                   <TabList height="54px">

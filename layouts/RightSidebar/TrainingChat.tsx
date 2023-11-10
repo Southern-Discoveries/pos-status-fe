@@ -1,8 +1,10 @@
 /* eslint-disable no-unused-vars */
-import { Box, Button, Flex } from '@chakra-ui/react';
+import { Box, Button, Flex, useDisclosure } from '@chakra-ui/react';
 import React, { useEffect, useRef } from 'react';
 
 import { ChatScreenProps } from '../ChatScreen';
+
+import BrainDetail from './BrainDetail';
 
 import Scrollbar from '@/components/Scrollbar';
 
@@ -14,7 +16,7 @@ const TrainingChatScreen = ({ messages }: ChatScreenProps) => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
+  const { onOpen, onClose, isOpen } = useDisclosure();
   return (
     <>
       <Flex
@@ -23,11 +25,17 @@ const TrainingChatScreen = ({ messages }: ChatScreenProps) => {
         position="relative"
         padding={4}
       >
-        <Button variant="primary" py={3}>
-          + Knowledger Data
-        </Button>
+        {!isOpen && (
+          <Button variant="primary" py={3} onClick={onOpen}>
+            + Knowledger Data
+          </Button>
+        )}
+        {isOpen && (
+          <>
+            <BrainDetail onClose={onClose} />
+          </>
+        )}
       </Flex>
-      vi
     </>
   );
 };

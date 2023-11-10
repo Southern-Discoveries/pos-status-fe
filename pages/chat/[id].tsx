@@ -126,7 +126,7 @@ export default function ChatDetail() {
       chat_id: id,
       filter: {
         page: 1,
-        limit: 10,
+        limit: 30,
         order_by: 'updated_at',
       },
     };
@@ -154,7 +154,7 @@ export default function ChatDetail() {
       })
     );
     setChatMessages(filteredMessages);
-    console.log('Message', message);
+
     return res;
   };
   useEffect(() => {
@@ -205,7 +205,7 @@ export default function ChatDetail() {
           body: JSON.stringify(request_body),
         }
       );
-      console.log('Current Message', response);
+
       if (!response.ok) {
         setChatLoading(false);
         throw new Error(response.statusText);
@@ -220,6 +220,7 @@ export default function ChatDetail() {
       setChatLoading(false);
 
       const reader = data.getReader();
+
       const decoder = new TextDecoder();
       let done = false;
       let isFirst = true;
@@ -227,6 +228,7 @@ export default function ChatDetail() {
       while (!done) {
         const { value, done: doneReading } = await reader.read();
         done = doneReading;
+
         const chunkValue = decoder.decode(value);
 
         if (isFirst) {
