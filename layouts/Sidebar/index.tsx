@@ -5,6 +5,8 @@ import React, { useEffect, useState } from 'react';
 import CategorySection from './components/CategorySection';
 
 import api from '@/axios/config';
+import { useAuth } from '@/hooks/useAuth';
+import { useChat } from '@/hooks/useChat';
 import FileIcon from '@/public/assets/icons/line/file.svg';
 import GlobalIcon from '@/public/assets/icons/line/global.svg';
 import TargetIcon from '@/public/assets/icons/line/target.svg';
@@ -101,7 +103,15 @@ const Sidebar = ({ setPostConfig, setEngineConfig }: IProps) => {
     setEngineConfig(new_config);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [temperature]);
-
+  const { currentChatID } = useChat();
+  useEffect(() => {
+    if (currentChatID == null) {
+      setSelectedTask(null);
+      setSelectedAudiences([]);
+      setSelectedTargets([]);
+      setSelectedPlatform(null);
+    }
+  }, [currentChatID]);
   const handleTaskClick = (task: any) => {
     setSelectedTask([task]);
   };

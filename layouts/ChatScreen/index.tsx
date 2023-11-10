@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react';
 
 import WellCome from './WellCome';
 
+import ChatControl from '@/components/Chat/ChatControl';
 import ChatInput from '@/components/Chat/ChatInput';
 import ChatLoader from '@/components/Chat/ChatLoader';
 import ChatMessage from '@/components/Chat/ChatMessage';
@@ -40,28 +41,21 @@ const ChatScreen = ({
                   {messages.map((message, index) => (
                     <Box key={index} role="group" position="relative">
                       <ChatMessage
-                        onCreateImage={onCreateImage}
                         message={message}
                         sx={{
                           maxWidth: { md: '67%', base: 'full' },
                         }}
                       />
-                      {/*  <Box
-                        display="none"
-                        _groupHover={{
-                          display: 'block',
-                        }}
-                        bg="red"
-                        top={0}
-                        right="28%"
-                        position="absolute"
-                      >
-                        DOT
-                      </Box> */}
                     </Box>
                   ))}
                 </Flex>
                 {loading && <ChatLoader />}
+
+                <ChatControl
+                  isLoading={loading}
+                  onCreateImage={onCreateImage}
+                  lastMessage={messages[messages.length - 1].content}
+                />
                 <Box ref={messagesEndRef} />
               </Box>
             </>
@@ -71,6 +65,7 @@ const ChatScreen = ({
             </>
           )}
         </Scrollbar>
+
         <Box
           left={0}
           bottom={10}

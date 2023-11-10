@@ -100,7 +100,7 @@ export default function ChatDetail() {
         if (response) {
           for (const img of response.data.images) {
             const res = await imageService.getImage(img.raw);
-            await imageService.getImage(img.text);
+            await imageService.getImage(img.text_banner);
             htmlMsg += `<img src="${process.env.NEXT_PUBLIC_AI_SERVICE_URL}/image/${img.raw}"/>
             <img src="${process.env.NEXT_PUBLIC_AI_SERVICE_URL}/image/${img.text_banner}"/>
             `;
@@ -120,6 +120,49 @@ export default function ChatDetail() {
     ]);
   };
 
+  const dispatch = useDispatch();
+  const fetchMessage = async () => {
+    const request_body = {
+      chat_id: id,
+      filter: {
+        page: 1,
+        limit: 30,
+        order_by: 'updated_at',
+      },
+    };
+
+    const res: any = await getChatMessage(request_body);
+    const message = res.payload;
+
+    const filteredMessages = message.data.map(
+      ({ role, content, images }: any) => ({
+        role,
+        content:
+          content === null
+            ? images.length
+              ? '```html' +
+                `<img src="${
+                  process.env.NEXT_PUBLIC_AI_SERVICE_URL ||
+                  'http://127.0.0.1:8000'
+                }/image/${images[0].raw}"/>
+            <img src="${
+              process.env.NEXT_PUBLIC_AI_SERVICE_URL || 'http://127.0.0.1:8000'
+            }/image/${images[0].text_banner}"/>
+            `
+              : ''
+            : content,
+      })
+    );
+    setChatMessages(filteredMessages);
+
+    return res;
+  };
+  useEffect(() => {
+    if (typeof id == 'string') {
+      dispatch(setCurrentChatID(id));
+      fetchMessage();
+    }
+  }, [id]);
   const handleChatSend = async (message: Message) => {
     if (
       !postConfig ||
@@ -162,11 +205,7 @@ export default function ChatDetail() {
           body: JSON.stringify(request_body),
         }
       );
-      /*  const response: any = await chatService.streamChat(
-        currentChatID,
-        JSON.stringify(request_body)
-      );
- */
+
       if (!response.ok) {
         setChatLoading(false);
         throw new Error(response.statusText);
@@ -181,6 +220,7 @@ export default function ChatDetail() {
       setChatLoading(false);
 
       const reader = data.getReader();
+
       const decoder = new TextDecoder();
       let done = false;
       let isFirst = true;
@@ -188,6 +228,7 @@ export default function ChatDetail() {
       while (!done) {
         const { value, done: doneReading } = await reader.read();
         done = doneReading;
+
         const chunkValue = decoder.decode(value);
 
         if (isFirst) {
@@ -220,50 +261,6 @@ export default function ChatDetail() {
       });
     }
   };
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (typeof id == 'string') {
-      const fetchMessage = async () => {
-        const request_body = {
-          chat_id: id,
-          filter: {
-            page: 1,
-            limit: 10,
-            order_by: 'updated_at',
-          },
-        };
-
-        const res: any = await getChatMessage(request_body);
-        const message = res.payload;
-
-        dispatch(setCurrentChatID(id));
-        const filteredMessages = message.data.map(
-          ({ role, content, images }: any) => ({
-            role,
-            content:
-              content === null
-                ? images.length
-                  ? '```html' +
-                    `<img src="${
-                      process.env.NEXT_PUBLIC_AI_SERVICE_URL ||
-                      'http://127.0.0.1:8000'
-                    }/image/${images[0].raw}"/>
-            <img src="${
-              process.env.NEXT_PUBLIC_AI_SERVICE_URL || 'http://127.0.0.1:8000'
-            }/image/${images[0].text_banner}"/>
-            `
-                  : ''
-                : content,
-          })
-        );
-        setChatMessages(filteredMessages);
-        return res;
-      };
-      fetchMessage();
-    }
-  }, [id]);
   return (
     <>
       <Head>

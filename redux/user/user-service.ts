@@ -12,6 +12,7 @@ import {
 
 export class AuthService {
   private AUTH_URL = '/auth';
+  private USER_URL = '/user';
 
   async register(data: ICreateUserInfo) {
     // Current API no  return any thing
@@ -48,6 +49,13 @@ export class AuthService {
 
     return response;
   }
+  async getCurrentBalance(user_id: string) {
+    const response = await instance<any>({
+      method: 'GET',
+      url: `${this.USER_URL}/${user_id}/balance`,
+    });
+    return response;
+  }
 
   async getAuthUser() {
     const access_token = Cookies.get(EnumTokens.ACCESSTOKEN);
@@ -58,6 +66,7 @@ export class AuthService {
         Authorization: `Bearer ${access_token}`,
       },
     });
+
     return response;
   }
   async getNewTokens() {

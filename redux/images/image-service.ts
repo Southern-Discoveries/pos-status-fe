@@ -27,5 +27,14 @@ export class ImageService {
     });
     return response.data;
   }
+  // Setting Recreate Image
+  async recreateImage(image_id: string, data: any) {
+    const response = await instance<any, any>({
+      method: 'PUT',
+      url: `/public/recreate-image/${image_id}`,
+      data,
+    });
+    return response;
+  }
 }
 export default new ImageService();
