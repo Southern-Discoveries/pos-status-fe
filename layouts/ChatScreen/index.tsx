@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react';
 
 import WellCome from './WellCome';
 
-import ChatInputs from '@/components/Chat/ChatInput';
+import ChatInput from '@/components/Chat/ChatInput';
 import ChatLoader from '@/components/Chat/ChatLoader';
 import ChatMessage from '@/components/Chat/ChatMessage';
 import Scrollbar from '@/components/Scrollbar';
@@ -13,14 +13,12 @@ export interface ChatScreenProps {
   messages: Message[];
   loading: boolean;
   onSend: (message: Message) => void;
-  onReset?: () => void;
   onCreateImage: (msg: string) => void;
 }
 const ChatScreen = ({
   messages,
   loading,
   onSend,
-  onReset,
   onCreateImage,
 }: ChatScreenProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -38,15 +36,17 @@ const ChatScreen = ({
           {messages.length ? (
             <>
               <Box padding={6} py={8} mb="6rem">
-                {/* <ChatReset onReset={onReset} /> */}
                 <Flex flexDirection="column" gap={4}>
                   {messages.map((message, index) => (
                     <Box key={index} role="group" position="relative">
                       <ChatMessage
                         onCreateImage={onCreateImage}
                         message={message}
+                        sx={{
+                          maxWidth: { md: '67%', base: 'full' },
+                        }}
                       />
-                      <Box
+                      {/*  <Box
                         display="none"
                         _groupHover={{
                           display: 'block',
@@ -57,7 +57,7 @@ const ChatScreen = ({
                         position="absolute"
                       >
                         DOT
-                      </Box>
+                      </Box> */}
                     </Box>
                   ))}
                 </Flex>
@@ -79,7 +79,7 @@ const ChatScreen = ({
           height="4rem"
         >
           <Box padding={4}>
-            <ChatInputs onSend={onSend} />
+            <ChatInput onSend={onSend} isLoading={loading} />
           </Box>
         </Box>
       </Box>

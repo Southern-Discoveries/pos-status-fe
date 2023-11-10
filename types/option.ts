@@ -8,14 +8,6 @@ export type SelectedOptions = {
   targets: PostOption[];
   audiences: PostOption[];
 };
-// Instead of Using
-export type SectionState = {
-  taskSectionOpen: boolean;
-  targetSectionOpen: boolean;
-  audienceSectionOpen: boolean;
-  platformSectionOpen: boolean;
-  engineSectionOpen: boolean;
-};
 
 // Basic Info Of Model
 export interface Selected {
@@ -29,8 +21,6 @@ export type Options = {
   targetOptions: Selected[];
   audienceOptions: Selected[];
   platformOptions: Selected[];
-  engineOptions: PostOption[];
-  modelOptions: string[];
 };
 
 // Model Train Setting

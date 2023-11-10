@@ -13,8 +13,8 @@ export interface PostOption {
 }
 
 export interface EngineConfig {
-  engine: string;
-  model: string;
+  /* engine: string;
+  model: string; */
   temperature: string;
 }
 

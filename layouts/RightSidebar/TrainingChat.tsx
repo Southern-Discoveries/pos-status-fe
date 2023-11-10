@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Button, Flex } from '@chakra-ui/react';
 import React, { useEffect, useRef } from 'react';
 
 import { ChatScreenProps } from '../ChatScreen';
@@ -23,7 +23,21 @@ const TrainingChatScreen = ({
     scrollToBottom();
   }, [messages]);
   return (
-    <Flex flexDirection="column" height="full" position="relative">
+    <>
+      <Flex
+        flexDirection="column"
+        height="full"
+        position="relative"
+        padding={4}
+      >
+        <Button variant="primary" py={3}>
+          + Knowledger Data
+        </Button>
+      </Flex>
+    </>
+  );
+};
+/* <Flex flexDirection="column" height="full" position="relative">
       <Box
         flexGrow={1}
         flexShrink={1}
@@ -43,7 +57,7 @@ const TrainingChatScreen = ({
                 </Box>
               ))}
               {loading && <ChatLoader />}
-              {/* <ChatReset onReset={onReset} /> */}
+
               <Box ref={messagesEndRef} />
             </Flex>
           </Scrollbar>
@@ -66,8 +80,5 @@ const TrainingChatScreen = ({
           }}
         />
       </Box>
-    </Flex>
-  );
-};
-
+    </Flex> */
 export default TrainingChatScreen;
