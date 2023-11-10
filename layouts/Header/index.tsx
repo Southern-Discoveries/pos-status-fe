@@ -8,7 +8,6 @@ import {
   IconButton,
   useDisclosure,
 } from '@chakra-ui/react';
-import Link from 'next/link';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -46,14 +45,6 @@ const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
           py={3}
         >
           <HStack>
-            <Link
-              href="/chat"
-              onClick={() => {
-                dispatch(setCurrentChatID(null));
-              }}
-            >
-              <LogoLong />
-            </Link>
             <IconButton
               aria-label=""
               variant="unstyled"
@@ -61,7 +52,15 @@ const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
               display={{ md: 'none', base: 'flex' }}
               icon={<Icon as={MenuIcon} height={5} width={5} />}
             />
-            {/*      <Box
+            {/*  <Link
+              href="/chat"
+              onClick={() => {
+                dispatch(setCurrentChatID(null));
+              }}
+            >
+              <LogoLong />
+            </Link> */}
+            <Box
               cursor="pointer"
               onClick={() => {
                 window.location.href = '/chat';
@@ -69,7 +68,7 @@ const Header = ({ isOpenSetting, onToggleSetting }: IProps) => {
               }}
             >
               <LogoLong />
-            </Box> */}
+            </Box>
           </HStack>
 
           <HStack>

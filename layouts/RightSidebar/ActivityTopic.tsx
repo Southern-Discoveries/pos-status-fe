@@ -46,7 +46,7 @@ const ActivityTopic = () => {
           {listChats &&
             listChats.map(list => (
               <>
-                <Box position="relative" role="group">
+                <Box position="relative" role="group" key={list.id}>
                   <Box
                     _hover={{
                       borderColor: 'primary.a.400',
@@ -55,7 +55,6 @@ const ActivityTopic = () => {
                       dispatch(setCurrentChatID(list.id));
                       router.push(`/chat/${list.id}`);
                     }}
-                    key={list.id}
                     width="full"
                     bg={
                       currentChatID === list.id

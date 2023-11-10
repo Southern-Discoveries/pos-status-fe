@@ -110,7 +110,6 @@ export default function Home() {
       },
     ]);
   };
-
   const handleChatSend = async (message: Message) => {
     if (
       !postConfig ||
@@ -141,10 +140,14 @@ export default function Home() {
       };
       const accessToken = getAccessToken();
       const response = await fetch(
-        `/api/stream/chat/${res_new || currentChatID}`,
+        `${process.env.NEXT_PUBLIC_AI_SERVICE_URL}/public/message/${
+          res_new || currentChatID
+        }`,
         {
           method: 'PUT',
           headers: {
+            'Content-Encoding': 'none',
+            'Cache-Control': 'no-cache, must-revalidate',
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
@@ -210,13 +213,6 @@ export default function Home() {
     scrollToBottom();
   }, [chatMessages]);
 
-  useEffect(() => {
-    if (currentChatID == null) {
-      setChatMessages([]);
-      setPostConfig(undefined);
-      setEngineConfig(undefined);
-    }
-  }, [currentChatID]);
   const isMobileScreen = useBreakpointValue({ base: true, md: false });
   const {
     isOpen: isOpenSetting,
